@@ -1,0 +1,28 @@
+{
+	"name": "News",
+	"slug": "news",
+	"tasks": [
+		{
+			"name": "Create Assignment",
+			"slug": "create-assignment"
+			"has_assignee": true,
+			"default_assignee": ""
+			"can_assign_to_group": false,
+			"next_steps": [
+				"write-draft"
+			],
+			"fields": {
+				"assignee": {
+					"type": "user",
+					"required": true,
+					"default": "self"
+
+				}
+			}
+		},
+		{
+			"name": "Write Draft",
+			"slug": "write-draft"
+		}
+	]
+}

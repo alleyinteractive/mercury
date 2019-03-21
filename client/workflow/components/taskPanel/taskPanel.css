@@ -1,0 +1,40 @@
+.mercury__task {
+	background: #CCC;
+	margin-bottom: 5px;
+}
+
+.mercury__task:last-of-child {
+	margin: none;
+}
+
+.mercury__task[data-active="true"] button {
+	background: #EEE;
+}
+
+.mercury__task[data-viewing="true"] button {
+	background: #AAA;
+}
+
+.mercury__task__header {
+	display: flex;
+	width: 100%;
+}
+
+.mercury__task__header__name {
+	border: none;
+	flex-grow: 1;
+	padding: 10px;
+}
+
+.mercury__task__header__toggle {
+	border: none;
+	padding: 10px;
+	width: 40px;
+}
+
+.mercury__task__expanded {
+	border-top: 1px solid #333;
+	display: flex;
+	flex-direction: column;
+	padding: 10px;
+}

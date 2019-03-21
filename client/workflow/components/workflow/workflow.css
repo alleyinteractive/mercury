@@ -1,0 +1,25 @@
+.mercury__wrapper {
+  display: flex;
+
+  * {
+    box-sizing: border-box;
+  }
+}
+
+.mercury__tasks {
+  background: #999;
+  padding: 10px;
+  width: 20%;
+}
+
+.mercury__settings__wrapper {
+  background: #AAA;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.mercury__settings {
+  flex-grow: 1;
+  padding: 10px;
+}

@@ -32,7 +32,7 @@ class Endpoints {
 
 		$meta_fields = [
 			'mercury_active_workflow_slug',
-			'mercury_active_task_slug',
+			'mercury_in_progress_task_slug',
 		];
 
 		$tasks_query = new \WP_Query(

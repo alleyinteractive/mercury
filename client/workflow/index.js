@@ -3,6 +3,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import domReady from '@wordpress/dom-ready';
 import App from './components/app';
+import './stores';
 
 const rootEl = document.getElementById('mercury-workflow-ui');
 

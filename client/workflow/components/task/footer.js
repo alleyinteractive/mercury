@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import React from 'react';
 import PropTypes from 'prop-types';
 // import { getMeta } from '../../services/fieldHelpers';
@@ -13,27 +15,25 @@ const Footer = (props) => {
     nextTasks,
     isActive,
     setNextTaskSlug,
+    workflows,
   } = props;
 
   return (
     <footer className="mercury__footer">
       <div className="mercury__footer__assigned">
-        <span>Assigned To: James Burke</span>
-        <span>Due Date: June 03</span>
+        <Assignee
+          task={nextTaskSlug}
+        />
+        <span>
+          <strong>Assigned to </strong>
+          <button>James Burke</button>
+        </span>
       </div>
-      <div className="mercury__footer__complete">
-        <NextTask
-          nextTaskSlug={nextTaskSlug}
-          nextTasks={nextTasks}
-          setNextTaskSlug={setNextTaskSlug}
-          isActive={isActive}
-        />
-        <Assignee />
-        <CompleteButton
-          completeTask={completeTask}
-          nextTasks={nextTasks}
-          isActive={isActive}
-        />
+      <div className="mercury__footer__assigned">
+        <span>Due Date: June 3rd, 1990</span>
+      </div>
+      <div className="mercury__footer__assigned">
+        <span>Complete Button</span>
       </div>
     </footer>
   );
@@ -42,7 +42,7 @@ const Footer = (props) => {
 Footer.propTypes = {
   completeTask: PropTypes.func.isRequired,
   setNextTaskSlug: PropTypes.func.isRequired,
-  nextTaskSlug: PropTypes.string.isRequired,
+  nextTask: PropTypes.object.isRequired,
   nextTasks: PropTypes.arrayOf(
     PropTypes.shape({
       label: PropTypes.string.isRequired,

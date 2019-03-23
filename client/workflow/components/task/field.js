@@ -10,10 +10,7 @@ const Field = (props) => {
     slug,
   } = props;
 
-  console.log(props, getMeta(slug));
-
-  const [value, setValue] = useState(slug);
-  setMeta(slug, value);
+  const [value, setValue] = useState(getMeta(slug));
 
   return (
     <div className="mercury__field">
@@ -22,6 +19,7 @@ const Field = (props) => {
         <FormikField
           className="mercury__field__input"
           type="text"
+          id={slug}
           name={slug}
           onChange={(event) => {
             setMeta(slug, event.target.value);

@@ -1,20 +1,71 @@
 /* global wp */
+/* eslint-disable */
+
+import { getMeta, setMeta } from './meta';
 
 /**
- * WordPress dependencies.
+ * Get the workflows from the custom mercury/workflows data store.
  */
-const {
-  apiFetch,
-} = wp;
+export default function getWorkflows() {
+  return wp.data.select('mercury/workflows').receiveWorkflows();
+}
 
 /**
- * Get a meta value from Gutenberg.
+ * Get a workflow by slug.
+ *
+ * @param  {string} slug Workflow slug.
+ * @return {object|bool} Workflow object or false.
  */
-export default async function getWorkflows(setWorkflows) {
-  const fetchArgs = {
-    path: '/mercury/v1/workflows',
-    method: 'GET',
-  };
-  const workflows = await apiFetch(fetchArgs).then((data) => data);
-  setWorkflows(workflows);
+export function getWorkflow(slug) {
+	const workflow = getWorkflows().find((workflow) => workflow.slug === slug);
+	if (undefined === workflow) {
+		return false;
+	}
+	return workflow;
+}
+
+/**
+ * Set the active workflow slug to the first workflow in the list of workflows.
+ */
+export function setDefaultActiveWorkflowSlug() {
+  return setActiveWorkflowSlug(getWorkflows()[0].slug);
+}
+
+/**
+ * Get the active workflow.
+ *
+ * @return {object} Workflow object.
+ */
+export function getActiveWorkflow() {
+  return getWorkflow(getActiveWorkflowSlug());
+}
+
+/**
+ * Get the active workflow slug, or fallback to the first workflow.
+ *
+ * @return {string} Active workflow slug.
+ */
+export function getActiveWorkflowSlug() {
+  const workflowSlug = getMeta('mercury_active_workflow_slug');
+
+  // Is `workflowSlug` correspond to a valid workflow?
+  if (getWorkflow(workflowSlug)) {
+    return workflowSlug;
+  }
+
+  return setDefaultActiveWorkflowSlug();
+}
+
+/**
+ * Helper to set the active workflow slug.
+ *
+ * @param {string} slug Slug of the active workflow.
+ * @return {string} slug Updated value.
+ */
+export function setActiveWorkflowSlug(slug) {
+  // Ensure the slug is a real workflow.
+  if (getWorkflow(slug)) {
+    return setMeta('mercury_active_workflow_slug', slug);
+  }
+  return setDefaultActiveWorkflowSlug();
 }

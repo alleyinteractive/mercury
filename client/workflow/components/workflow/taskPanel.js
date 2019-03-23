@@ -1,29 +1,35 @@
-import React, { useState } from 'react';
-import { Tab } from 'react-tabs';
+/* eslint-disable */
+
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import useInProgressTaskSlug from '../../hooks/tasks';
+import { setMeta } from '../../services/meta';
+import { setInProgressTaskSlug } from '../../services/tasks';
 import './taskPanel.css';
 
 const TaskPanel = (props) => {
   const {
     name,
     slug,
-    isActive,
-    isViewing,
   } = props;
+
+  const inProgressTaskSlug = useInProgressTaskSlug();
+  const isInProgress = inProgressTaskSlug === slug;
+  const isSelected = inProgressTaskSlug === slug;
 
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
-    <Tab
+    <div
       className="mercury__task"
-      data-active={isActive}
-      data-viewing={isViewing}
+      data-active={isInProgress}
+      data-viewing={isSelected}
     >
       <heading className="mercury__task__header">
         <button
           className="mercury__task__header__name"
-          data-task={slug}
           type="button"
+          onClick={() => setInProgressTaskSlug(slug)}
         >
           {name}
         </button>
@@ -35,22 +41,20 @@ const TaskPanel = (props) => {
           V
         </button>
       </heading>
-      {(isExpanded || isViewing) && (
+      {(isExpanded || isSelected) && (
         <div className="mercury__task__expanded">
           <span>Assigned To: James Burke</span>
           <span>Due Date: June 3rd</span>
           <span>Status: In Progress</span>
         </div>
       )}
-    </Tab>
+    </div>
   );
 };
 
 TaskPanel.propTypes = {
   name: PropTypes.string.isRequired,
   slug: PropTypes.string.isRequired,
-  isActive: PropTypes.bool.isRequired,
-  isViewing: PropTypes.bool.isRequired,
 };
 
 export default TaskPanel;

@@ -1,17 +1,24 @@
-.mercury__settings__footer {
-	position: relative;
-	bottom: 0;
-	height: 50px;
+.mercury__task__header {
 	background: yellow;
-	padding: 10px;
 	display: flex;
+	flex-direction: row;
 	justify-content: space-between;
+	min-height: 50px;
+	padding: 10px;
+	position: relative;
+	top: 0;
 }
 
-.mercury__settings__footer__assigned{
+.mercury__task__header section {
 	display: flex;
+	flex-direction: column;
 }
 
-.mercury__settings__footer__complete{
-	display: flex;
+.mercury__task__header__right {
+	text-align: right;
+}
+
+.mercury__task__header__name {
+	font-weight: bold;
+	font-size: 1.4rem;
 }

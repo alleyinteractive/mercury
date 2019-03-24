@@ -2,13 +2,13 @@
 /**
  * Get a meta value from Gutenberg.
  */
-export function getMeta(field, defaultValue) {
+export function getMeta(field) {
   const currentMeta = wp.data.select('core/editor')
     .getEditedPostAttribute('meta');
+  console.log('getMeta (field, currentMeta): ', field, currentMeta);
   if (undefined === currentMeta[field]) {
-    console.log('usingDefault: ', currentMeta[field]);
-    setMeta(field, defaultValue);
-    return defaultValue;
+    console.log('Undefined getMeta for ', field);
+    return '';
   }
   return currentMeta[field];
 }

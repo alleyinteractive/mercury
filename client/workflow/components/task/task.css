@@ -1,4 +1,7 @@
 .mercury__task__settings {
-  flex-grow: 1;
-  padding: 10px;
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1;
+	justify-content: space-between;
+	padding: 10px;
 }

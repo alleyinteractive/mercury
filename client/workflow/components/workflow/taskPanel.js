@@ -2,39 +2,36 @@
 
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import useInProgressTaskSlug from '../../hooks/tasks';
 import { setMeta } from '../../services/meta';
-import { setInProgressTaskSlug } from '../../services/tasks';
+import { setSelectedTaskSlug } from '../../services/tasks';
 import './taskPanel.css';
 
 const TaskPanel = (props) => {
   const {
     name,
     slug,
+    isInProgress,
+    isSelected,
   } = props;
-
-  const inProgressTaskSlug = useInProgressTaskSlug();
-  const isInProgress = inProgressTaskSlug === slug;
-  const isSelected = inProgressTaskSlug === slug;
 
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
     <div
-      className="mercury__task"
-      data-active={isInProgress}
-      data-viewing={isSelected}
+      className="mercury__task-panel"
+      data-active={isSelected}
+      data-viewing={isInProgress}
     >
-      <heading className="mercury__task__header">
+      <heading className="mercury__task-panel__header">
         <button
-          className="mercury__task__header__name"
+          className="mercury__task-panel__header__name"
           type="button"
-          onClick={() => setInProgressTaskSlug(slug)}
+          onClick={() => setSelectedTaskSlug(slug)}
         >
           {name}
         </button>
         <button
-          className="mercury__task__header__toggle"
+          className="mercury__task-panel__header__toggle"
           onClick={() => setIsExpanded(! isExpanded)}
           type="button"
         >
@@ -42,7 +39,7 @@ const TaskPanel = (props) => {
         </button>
       </heading>
       {(isExpanded || isSelected) && (
-        <div className="mercury__task__expanded">
+        <div className="mercury__task-panel__expanded">
           <span>Assigned To: James Burke</span>
           <span>Due Date: June 3rd</span>
           <span>Status: In Progress</span>

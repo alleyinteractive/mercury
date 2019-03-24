@@ -2,14 +2,20 @@
 /* eslint-disable */
 
 import { useState, useEffect } from 'react';
-import { getInProgressTaskSlug, setInProgressTaskSlug } from '../services/tasks';
+import {
+  getInProgressTaskSlug,
+  setInProgressTaskSlug,
+  getSelectedTaskSlug,
+  setSelectedTaskSlug,
+  setDefaultSelectedTaskSlug,
+} from '../services/tasks';
 
 /**
  * Custom hook that manages the active task state.
  *
- * @return {string} IN PROGRESS task slug.
+ * @return {string} In progress task slug.
  */
-export default function useInProgressTaskSlug() {
+export function useInProgressTaskSlug() {
   const [
     inProgressTaskSlug,
     setInProgressTaskSlug,
@@ -24,4 +30,26 @@ export default function useInProgressTaskSlug() {
   }));
 
   return inProgressTaskSlug;
+}
+
+/**
+ * Custom hook that manages the active task state.
+ *
+ * @return {string} Selected task slug.
+ */
+export function useSelectedTaskSlug() {
+  const [
+    selectedTaskSlug,
+    setSelectedTaskSlug,
+  ] = useState(setDefaultSelectedTaskSlug());
+
+  // Subscribe to changes in the store.
+  useEffect(() => wp.data.subscribe(() => {
+      const newSlug = getSelectedTaskSlug();
+      if (selectedTaskSlug !== newSlug) {
+        setSelectedTaskSlug(newSlug);
+      }
+  }));
+
+  return selectedTaskSlug;
 }

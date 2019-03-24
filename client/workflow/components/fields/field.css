@@ -1,0 +1,20 @@
+.mercury__field {
+	background: #EEE;
+	padding: 10px;
+}
+
+.mercury__field__label {
+	display: flex;
+	flex-direction: row;
+}
+
+.mercury__field_label_text {
+	font-size: 16px;
+	margin-right: 10px;
+	text-align: right;
+	width: 35%;
+}
+
+.mercury__field__input {
+	width: 50%;
+}

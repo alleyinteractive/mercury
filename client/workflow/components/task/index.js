@@ -1,17 +1,37 @@
 /* eslint-disable */
 
 import React from 'react';
-import useInProgressTaskSlug from '../../hooks/tasks';
-import { getInProgressTask } from '../../services/tasks';
+import { Formik } from 'formik';
+import { useSelectedTaskSlug } from '../../hooks/tasks';
+import { getSelectedTask } from '../../services/tasks';
+import Header from './header';
+import Fields from './fields';
+import Footer from './footer';
 import './task.css';
 
 const Workflow = () => {
-  const inProgressTaskSlug = useInProgressTaskSlug();
-  console.log('Full task: ', getInProgressTask().slug);
+  const selectedTaskSlug = useSelectedTaskSlug();
 
   return (
     <div className="mercury__task__settings">
-      {inProgressTaskSlug}
+    <Formik
+      onSubmit={(values, actions) => {
+        setTimeout(() => {
+          alert(JSON.stringify(values, null, 2));
+          actions.setSubmitting(false);
+        }, 1000);
+      }}
+      render={props => (
+        <form
+          className="mercury__task__form"
+          onSubmit={props.handleSubmit}
+        >
+          <Header/>
+          <Fields/>
+          <Footer/>
+        </form>
+      )}
+    />
     </div>
   );
 };

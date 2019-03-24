@@ -275,6 +275,7 @@ class Task {
 						]
 					),
 					'read_only'      => new \Fieldmanager_Checkbox( __( 'Read only?', 'mercury' ) ),
+					'required'       => new \Fieldmanager_Checkbox( __( 'Required?', 'mercury' ) ),
 					'options_source' => new \Fieldmanager_Select(
 						[
 							'label' => __( 'Source', 'mercury' ),
@@ -285,6 +286,15 @@ class Task {
 							'display_if' => [
 								'src'   => 'type',
 								'value' => 'select,checkboxes'
+							],
+						]
+					),
+					'options_first_empty' => new \Fieldmanager_Checkbox(
+						[
+							'label'          => __( 'First Empty?', 'mercury' ),
+							'display_if' => [
+								'src'   => 'options_source',
+								'value' => 'list'
 							],
 						]
 					),
@@ -429,8 +439,6 @@ class Task {
 	 */
 	public static function clean_field( $field ) {
 
-		// print_r($field);
-
 		// Validate required fields.
 		if (
 			empty( $field['label'] )
@@ -444,17 +452,21 @@ class Task {
 		$field = wp_parse_args(
 			$field,
 			[
-				'read_only'           => false,
 				'label'               => '',
+				'options_first_empty' => false,
 				'options_source'      => '',
 				'options_source_list' => '',
+				'read_only'           => false,
+				'required'            => false,
 				'slug'                => '',
 				'type'                => '',
 			]
 		);
 
 		// Type cast as needed.
-		$field['read_only'] = filter_var( $field['read_only'], FILTER_VALIDATE_BOOLEAN );
+		$field['options_first_empty'] = filter_var( $field['options_first_empty'], FILTER_VALIDATE_BOOLEAN );
+		$field['read_only']           = filter_var( $field['read_only'], FILTER_VALIDATE_BOOLEAN );
+		$field['required']            = filter_var( $field['required'], FILTER_VALIDATE_BOOLEAN );
 
 		return $field;
 	}

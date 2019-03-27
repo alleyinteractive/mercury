@@ -1,12 +1,9 @@
-/* global wp */
 /* eslint-disable */
 
 import { useState, useEffect } from 'react';
 import {
   getInProgressTaskSlug,
-  setInProgressTaskSlug,
   getSelectedTaskSlug,
-  setSelectedTaskSlug,
   setDefaultSelectedTaskSlug,
 } from '../services/tasks';
 
@@ -27,7 +24,7 @@ export function useInProgressTaskSlug() {
       if (inProgressTaskSlug !== newSlug) {
         setInProgressTaskSlug(newSlug);
       }
-  }));
+  }), []);
 
   return inProgressTaskSlug;
 }
@@ -49,7 +46,7 @@ export function useSelectedTaskSlug() {
       if (selectedTaskSlug !== newSlug) {
         setSelectedTaskSlug(newSlug);
       }
-  }));
+  }),[]);
 
   return selectedTaskSlug;
 }

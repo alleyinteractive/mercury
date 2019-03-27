@@ -4,29 +4,33 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { setMeta } from '../../services/meta';
 import { setSelectedTaskSlug } from '../../services/tasks';
+import { useInProgressTaskSlug, useSelectedTaskSlug } from '../../hooks/tasks';
 import './taskPanel.css';
 
 const TaskPanel = (props) => {
   const {
     name,
     slug,
-    isInProgress,
-    isSelected,
   } = props;
 
+  // Custom hooks.
+  const inProgressTaskSlug = useInProgressTaskSlug();
+  const selectedTaskSlug = useSelectedTaskSlug();
+
+  // Task panel expanded.
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
     <div
       className="mercury__task-panel"
-      data-active={isSelected}
-      data-viewing={isInProgress}
+      data-viewing={inProgressTaskSlug === slug}
+      data-active={selectedTaskSlug === slug}
     >
       <heading className="mercury__task-panel__header">
         <button
           className="mercury__task-panel__header__name"
-          type="button"
           onClick={() => setSelectedTaskSlug(slug)}
+          type="button"
         >
           {name}
         </button>
@@ -38,7 +42,7 @@ const TaskPanel = (props) => {
           V
         </button>
       </heading>
-      {(isExpanded || isSelected) && (
+      {(isExpanded || selectedTaskSlug === slug) && (
         <div className="mercury__task-panel__expanded">
           <span>Assigned To: James Burke</span>
           <span>Due Date: June 3rd</span>

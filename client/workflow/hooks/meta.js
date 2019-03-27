@@ -1,6 +1,6 @@
-/* global wp */
 /* eslint-disable */
 
+import PubSub from 'pubsub-js';
 import { useState, useEffect } from 'react';
 import { getMeta, setMeta } from '../services/meta';
 import getWorkflows from '../services/workflows';
@@ -22,7 +22,12 @@ export default function useMeta(metaKey, defaultValue) {
 
   // Setup local state.
   const [value, setValue] = useState(metaValue);
+
   // Subscribe to changes in the store.
+  // PubSub.subscribe(`setMeta:${metaKey}`, (msg, value) => {
+  //   setValue(value);
+  // });
+
   useEffect(() => wp.data.subscribe(() => {
       const newMeta = getMeta(metaKey);
       if (value !== newMeta) {

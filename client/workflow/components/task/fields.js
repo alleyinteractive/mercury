@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useSelectedTaskSlug } from '../../hooks/tasks';
-import { getSelectedTask } from '../../services/tasks';
+import { getTask } from '../../services/tasks';
 import Field from '../fields';
 
 const Fields = () => {
@@ -11,7 +11,7 @@ const Fields = () => {
     name,
     slug,
     fields,
-  } = getSelectedTask();
+  } = getTask(selectedTaskSlug);
 
   return (
     <section class="mercury__task__fields">

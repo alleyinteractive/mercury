@@ -1,7 +1,8 @@
 /* global wp */
 /* eslint-disable */
 
-import { useState, useEffect } from 'react';
+import PubSub from 'pubsub-js';
+import { useState, useEffect, useCallback } from 'react';
 import getWorkflows, { getActiveWorkflowSlug } from '../services/workflows';
 
 /**
@@ -33,11 +34,11 @@ export function useActiveWorkflowSlug() {
 
   // Subscribe to changes in the store.
   useEffect(() => wp.data.subscribe(() => {
-      const newSlug = getActiveWorkflowSlug();
-      if (activeWorkflowSlug !== newSlug) {
-        setCurrentWorkflowSlug(newSlug);
-        // @todo update active and viewing tasks when the workflow changes.
-      }
+    const newSlug = getActiveWorkflowSlug();
+    if (activeWorkflowSlug !== newSlug) {
+      setCurrentWorkflowSlug(newSlug);
+      // @todo update active and viewing tasks when the workflow changes.
+    }
   }));
 
   return activeWorkflowSlug;

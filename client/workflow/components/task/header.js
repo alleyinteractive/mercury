@@ -2,15 +2,15 @@
 
 import React from 'react';
 import { useSelectedTaskSlug } from '../../hooks/tasks';
-import { getSelectedTask } from '../../services/tasks';
+import { getTask } from '../../services/tasks';
 import './header.css';
 
-const Header = () => {
+const Header = (props) => {
   const selectedTaskSlug = useSelectedTaskSlug();
   const {
     name,
     slug,
-  } = getSelectedTask();
+  } = getTask(selectedTaskSlug);
 
   return (
     <header className="mercury__task__header">

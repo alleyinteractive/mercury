@@ -10,7 +10,8 @@ import getWorkflows, { getActiveWorkflow, getActiveWorkflowSlug } from './workfl
  * @return {object|bool} Task object or false.
  */
 export function getTask(slug) {
-  const task = getActiveWorkflow().tasks.find((task) => task.slug === slug);
+  const workflow = getActiveWorkflow();
+  const task = workflow.tasks.find((task) => task.slug === slug);
   if (undefined === task) {
     return false;
   }

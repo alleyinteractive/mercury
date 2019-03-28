@@ -19,8 +19,10 @@
     "@wordpress/dom-ready": "^2.1.0",
     "classnames": "^2.2.5",
     "formik": "^1.5.1",
+    "nanobus": "^4.4.0",
     "papaparse": "^4.6.1",
     "prop-types": "^15.6.2",
+    "pubsub-js": "^1.7.0",
     "react": "^16.6.0",
     "react-dom": "^16.6.0",
     "react-tabs": "^3.0.0"

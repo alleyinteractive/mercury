@@ -1,38 +1,38 @@
-.mercury__task {
+.mercury__task-panel {
 	background: #CCC;
 	margin-bottom: 5px;
 }
 
-.mercury__task:last-of-child {
+.mercury__task-panel:last-of-child {
 	margin: none;
 }
 
-.mercury__task[data-active="true"] button {
+.mercury__task-panel[data-active="true"] button {
 	background: #EEE;
 }
 
-.mercury__task[data-viewing="true"] button {
+.mercury__task-panel[data-viewing="true"] button {
 	background: #AAA;
 }
 
-.mercury__task__header {
+.mercury__task-panel__header {
 	display: flex;
 	width: 100%;
 }
 
-.mercury__task__header__name {
+.mercury__task-panel__header__name {
 	border: none;
 	flex-grow: 1;
 	padding: 10px;
 }
 
-.mercury__task__header__toggle {
+.mercury__task-panel__header__toggle {
 	border: none;
 	padding: 10px;
 	width: 40px;
 }
 
-.mercury__task__expanded {
+.mercury__task-panel__expanded {
 	border-top: 1px solid #333;
 	display: flex;
 	flex-direction: column;

@@ -1,0 +1,4 @@
+.mercury__complete-task {
+	display: flex;
+	flex-direction: column;
+}

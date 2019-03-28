@@ -27,7 +27,6 @@ const Workflow = () => {
   return (
     <div>
       <SelectWorkflow/>
-      {currentWorkflowSlug}
       <div className="mercury__wrapper">
         <aside className="mercury__tasks-panel">
           {getTaskPanels()}

@@ -29,7 +29,7 @@ const TaskPanel = (props) => {
       <heading className="mercury__task-panel__header">
         <button
           className="mercury__task-panel__header__name"
-          onClick={() => setSelectedTaskSlug(slug)}
+          onClick={() => setSelectedTaskSlug(slug, 'task panel click')}
           type="button"
         >
           {name}

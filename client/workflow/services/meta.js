@@ -1,7 +1,5 @@
 /* eslint-disable */
 
-import PubSub from 'pubsub-js';
-
 /**
  * Get a meta value from Gutenberg.
  */
@@ -24,7 +22,6 @@ export function setMeta(field, value) {
   // Only change the value if it's different.
   if (value !== getMeta(field)) {
     wp.data.dispatch('core/editor').editPost({ meta: newMeta });
-    PubSub.publish(`setMeta:${field}`, value);
   }
   return value;
 }

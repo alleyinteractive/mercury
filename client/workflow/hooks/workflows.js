@@ -29,14 +29,14 @@ export function useActiveWorkflowSlug() {
   // Initialize a new state for the current workflow slug.
   const [
     activeWorkflowSlug,
-    setCurrentWorkflowSlug,
+    setCurrentWorkflowSlugState,
   ] = useState(getActiveWorkflowSlug());
 
   // Subscribe to changes in the store.
   useEffect(() => wp.data.subscribe(() => {
     const newSlug = getActiveWorkflowSlug();
     if (activeWorkflowSlug !== newSlug) {
-      setCurrentWorkflowSlug(newSlug);
+      setCurrentWorkflowSlugState(newSlug);
       // @todo update active and viewing tasks when the workflow changes.
     }
   }));

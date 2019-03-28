@@ -7,17 +7,17 @@ import Field from '../fields';
 
 const Fields = () => {
   const selectedTaskSlug = useSelectedTaskSlug();
-  console.log(selectedTaskSlug);
   const {
     name,
     slug,
     fields,
   } = getSelectedTask();
-  console.log(getSelectedTask());
 
   if (! fields || 0 === fields.length) {
     return (
-      <p>No custom fields for this task. Proceed to the next task whenever ready.</p>
+      <section class="mercury__task__fields">
+        <p>No custom fields for this task. Proceed to the next task whenever ready.</p>
+      </section>
     );
   }
 

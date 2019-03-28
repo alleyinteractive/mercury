@@ -15,16 +15,16 @@ import {
 export function useInProgressTaskSlug() {
   const [
     inProgressTaskSlug,
-    setInProgressTaskSlug,
+    setInProgressTaskSlugState,
   ] = useState(getInProgressTaskSlug());
 
   // Subscribe to changes in the store.
   useEffect(() => wp.data.subscribe(() => {
       const newSlug = getInProgressTaskSlug();
       if (inProgressTaskSlug !== newSlug) {
-        setInProgressTaskSlug(newSlug);
+        setInProgressTaskSlugState(newSlug);
       }
-  }), []);
+  }));
 
   return inProgressTaskSlug;
 }
@@ -37,16 +37,16 @@ export function useInProgressTaskSlug() {
 export function useSelectedTaskSlug() {
   const [
     selectedTaskSlug,
-    setSelectedTaskSlug,
-  ] = useState(setDefaultSelectedTaskSlug());
+    setSelectedTaskSlugState,
+  ] = useState(getSelectedTaskSlug());
 
   // Subscribe to changes in the store.
   useEffect(() => wp.data.subscribe(() => {
       const newSlug = getSelectedTaskSlug();
       if (selectedTaskSlug !== newSlug) {
-        setSelectedTaskSlug(newSlug);
+        setSelectedTaskSlugState(newSlug);
       }
-  }),[]);
+  }));
 
   return selectedTaskSlug;
 }

@@ -67,7 +67,7 @@ export function setInProgressTaskSlug(slug) {
  * Set the selected task slug as the in progress task slug.
  */
 export function setDefaultSelectedTaskSlug() {
-  return setSelectedTaskSlug(getInProgressTaskSlug());
+  return setSelectedTaskSlug(getInProgressTaskSlug(), 'default setting');
 }
 
 /**
@@ -101,9 +101,35 @@ export function getSelectedTaskSlug() {
  * @param {string} slug Slug of the active workflow.
  * @return {string} slug Updated value.
  */
-export function setSelectedTaskSlug(slug) {
+export function setSelectedTaskSlug(slug, context = 'unknown') {
   if (getTask(slug)) {
     return setMeta('mercury_selected_task_slug', slug);
   }
   return setDefaultSelectedTaskSlug();
+}
+
+/**
+ * Set the status for a given task.
+ *
+ * @param {string} taskSlug Task slug.
+ * @param {string} status   Status.
+ */
+export function setTaskStatus(taskSlug, status) {
+  const activeWorkflowSlug = getActiveWorkflowSlug();
+  setMeta(`mercury_${taskSlug}_status`, status);
+}
+
+/**
+ * Complete a task and transition to a new one.
+ *
+ * @param  {string} currentTaskSlug Slug of the task to complete.
+ * @param  {string} nextTaskSlug    Slug of the task to transition to.
+ */
+export function completeTask(currentTaskSlug, nextTaskSlug) {
+  // Mark as complete in meta.
+  setTaskStatus(currentTaskSlug, 'complete');
+
+  // Set the InProgress and Selected tasks to the next task.
+  setInProgressTaskSlug(nextTaskSlug);
+  setSelectedTaskSlug(nextTaskSlug);
 }

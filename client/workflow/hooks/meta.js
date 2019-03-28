@@ -23,11 +23,6 @@ export default function useMeta(metaKey, defaultValue) {
   // Setup local state.
   const [value, setValue] = useState(metaValue);
 
-  // Subscribe to changes in the store.
-  // PubSub.subscribe(`setMeta:${metaKey}`, (msg, value) => {
-  //   setValue(value);
-  // });
-
   useEffect(() => wp.data.subscribe(() => {
       const newMeta = getMeta(metaKey);
       if (value !== newMeta) {

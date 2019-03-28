@@ -1,12 +1,13 @@
 /* eslint-disable */
 
 import React from 'react';
+import CompleteTask from './completeTask';
 import './footer.css';
 
 const Footer = () => {
   return (
     <footer class="mercury__task__footer">
-      Footer
+      <CompleteTask />
     </footer>
   );
 };

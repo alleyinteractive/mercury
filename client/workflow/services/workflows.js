@@ -2,6 +2,7 @@
 /* eslint-disable */
 
 import { getMeta, setMeta } from './meta';
+import { setInProgressTaskSlug } from './tasks';
 
 /**
  * Get the workflows from the custom mercury/workflows data store.
@@ -28,7 +29,10 @@ export function getWorkflow(slug) {
  * Set the active workflow slug to the first workflow in the list of workflows.
  */
 export function setDefaultActiveWorkflowSlug() {
-  return setActiveWorkflowSlug(getWorkflows()[0].slug);
+  const defaultWorkflow = getWorkflows()[0];
+  console.log('setInProgressTaskSlug', defaultWorkflow);
+  setInProgressTaskSlug(defaultWorkflow.tasks[0].slug);
+  return setActiveWorkflowSlug(defaultWorkflow.slug);
 }
 
 /**
@@ -63,8 +67,11 @@ export function getActiveWorkflowSlug() {
  * @return {string} slug Updated value.
  */
 export function setActiveWorkflowSlug(slug) {
+  const soonToBeActiveWorkflow = getWorkflow(slug);
   // Ensure the slug is a real workflow.
-  if (getWorkflow(slug)) {
+  if (soonToBeActiveWorkflow) {
+    console.log('setInProgressTaskSlug', soonToBeActiveWorkflow);
+    setInProgressTaskSlug(soonToBeActiveWorkflow.tasks[0].slug);
     return setMeta('mercury_active_workflow_slug', slug);
   }
   return setDefaultActiveWorkflowSlug();

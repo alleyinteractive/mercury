@@ -2,16 +2,24 @@
 
 import React from 'react';
 import { useSelectedTaskSlug } from '../../hooks/tasks';
-import { getTask } from '../../services/tasks';
+import { getTask, getSelectedTask } from '../../services/tasks';
 import Field from '../fields';
 
 const Fields = () => {
   const selectedTaskSlug = useSelectedTaskSlug();
+  console.log(selectedTaskSlug);
   const {
     name,
     slug,
     fields,
-  } = getTask(selectedTaskSlug);
+  } = getSelectedTask();
+  console.log(getSelectedTask());
+
+  if (! fields || 0 === fields.length) {
+    return (
+      <p>No custom fields for this task. Proceed to the next task whenever ready.</p>
+    );
+  }
 
   return (
     <section class="mercury__task__fields">

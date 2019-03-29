@@ -1,9 +1,14 @@
+/* eslint-disable */
+
 /**
  * Get a meta value from Gutenberg.
  */
 export function getMeta(field) {
   const currentMeta = wp.data.select('core/editor')
     .getEditedPostAttribute('meta');
+  if (undefined === currentMeta[field]) {
+    return '';
+  }
   return currentMeta[field];
 }
 
@@ -13,5 +18,10 @@ export function getMeta(field) {
 export function setMeta(field, value) {
   const newMeta = {};
   newMeta[field] = value;
-  return wp.data.dispatch('core/editor').editPost({ meta: newMeta });
+
+  // Only change the value if it's different.
+  if (value !== getMeta(field)) {
+    wp.data.dispatch('core/editor').editPost({ meta: newMeta });
+  }
+  return value;
 }

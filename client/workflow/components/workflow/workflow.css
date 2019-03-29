@@ -6,20 +6,26 @@
   }
 }
 
-.mercury__tasks {
+.mercury__tasks-panel {
   background: #999;
   padding: 10px;
   width: 20%;
 }
 
-.mercury__settings__wrapper {
+.mercury__task__wrapper {
   background: #AAA;
   display: flex;
   flex-direction: column;
   flex-grow: 1;
 }
 
-.mercury__settings {
+.mercury__task__form {
+  display: flex;
+  flex-direction: column;
   flex-grow: 1;
-  padding: 10px;
+  width: 100%;
+}
+
+.mercury__task__fields {
+  flex-grow: 1;
 }

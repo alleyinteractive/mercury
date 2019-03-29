@@ -25,10 +25,12 @@ define( 'MERCURY_VERSION', '1.0.0' );
 define( 'MERCURY_PATH', dirname( __FILE__ ) );
 
 // Base functionality.
+require_once MERCURY_PATH . '/inc/class-assignments.php';
 require_once MERCURY_PATH . '/inc/class-endpoints.php';
 require_once MERCURY_PATH . '/inc/class-post-type.php';
 
 // GUI workflow management.
+require_once MERCURY_PATH . '/inc/gui/class-assignments-table.php';
 require_once MERCURY_PATH . '/inc/gui/class-task.php';
 require_once MERCURY_PATH . '/inc/gui/class-workflow.php';
 
@@ -36,6 +38,7 @@ require_once MERCURY_PATH . '/inc/gui/class-workflow.php';
 add_action(
 	'init',
 	function() {
+		new Assignments();
 		new Endpoints();
 		new Post_Type();
 

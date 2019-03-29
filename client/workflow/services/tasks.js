@@ -128,7 +128,7 @@ export function setTaskStatus(taskSlug, status) {
 export function completeTask(currentTaskSlug, nextTaskSlug) {
   // Mark as complete in meta.
   setTaskStatus(currentTaskSlug, 'complete');
-  setTaskStatus(nextTaskSlug, 'complete');
+  setTaskStatus(nextTaskSlug, 'active');
 
   // Set the InProgress and Selected tasks to the next task.
   setInProgressTaskSlug(nextTaskSlug);

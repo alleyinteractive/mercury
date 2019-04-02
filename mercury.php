@@ -28,6 +28,7 @@ define( 'MERCURY_PATH', dirname( __FILE__ ) );
 require_once MERCURY_PATH . '/inc/class-assignments.php';
 require_once MERCURY_PATH . '/inc/class-endpoints.php';
 require_once MERCURY_PATH . '/inc/class-post-type.php';
+require_once MERCURY_PATH . '/inc/class-users.php';
 
 // GUI workflow management.
 require_once MERCURY_PATH . '/inc/gui/class-assignments-table.php';

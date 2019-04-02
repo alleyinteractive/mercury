@@ -49,11 +49,6 @@ class Task {
 	}
 
 	public function assignments_meta_box() {
-		// $user_groups        = new \EF_User_Groups();
-		$user_group_options = [];
-		// foreach ( $user_groups->get_usergroups() as $user_group ) {
-		// 	$user_group_options[ $user_group->term_id ] = $user_group->name;
-		// }
 
 		$fm = new \Fieldmanager_Group(
 			[
@@ -71,17 +66,13 @@ class Task {
 							],
 						]
 					),
-					'default_user' => new \Fieldmanager_Select(
+					'default_user' => new \Fieldmanager_Autocomplete(
 						[
 							'display_if' => [
 								'src'   => 'default_assignee',
 								'value' => 'user',
 							],
-							'options' => [
-								'james'  => 'James',
-								'owen' => 'Owen',
-							],
-							//  datasource users
+							'datasource' => new \Fieldmanager_Datasource_User(),
 						]
 					),
 					'enable_assignee_selection' => new \Fieldmanager_Checkbox(
@@ -130,18 +121,15 @@ class Task {
 					'label' => __( 'Include the following users as options.', 'mercury' ),
 				]
 			),
-			'filter_users' => new \Fieldmanager_Select(
+			'filter_users' => new \Fieldmanager_Autocomplete(
 				[
-					'limit' => 0,
-					'display_if' => [
+					'limit'          => 0,
+					'add_more_label' => __( 'Add User', 'healthline' ),
+					'display_if'     => [
 						'src'   => 'enable_users',
 						'value' => true,
 					],
-					'options' => [
-						'james'  => 'James',
-						'owen' => 'Owen',
-					],
-					//  datasource users
+					'datasource' => new \Fieldmanager_Datasource_User(),
 				]
 			),
 			'enable_groups' => new \Fieldmanager_Checkbox(
@@ -151,16 +139,13 @@ class Task {
 			),
 			'filter_groups' => new \Fieldmanager_Select(
 				[
-					'limit' => 0,
-					'display_if' => [
+					'limit'          => 0,
+					'add_more_label' => __( 'Add Group', 'healthline' ),
+					'display_if'     => [
 						'src'   => 'enable_groups',
 						'value' => true,
 					],
-					'options' => [
-						'writers'  => 'Writers',
-						'med reviewers' => 'Med Reviewers',
-					],
-					//  datasource users
+					'options' => \Mercury\Users::get_usergroup_options(),
 				]
 			),
 			'enable_roles' => new \Fieldmanager_Checkbox(
@@ -170,16 +155,13 @@ class Task {
 			),
 			'filter_roles' => new \Fieldmanager_Select(
 				[
-					'limit' => 0,
-					'display_if' => [
+					'limit'          => 0,
+					'add_more_label' => __( 'Add Role', 'healthline' ),
+					'display_if'     => [
 						'src'   => 'enable_roles',
 						'value' => true,
 					],
-					'options' => [
-						'admin'  => 'Admin',
-						'editor' => 'Editor',
-					],
-					//  datasource users
+					'options' => \Mercury\Users::get_role_options(),
 				]
 			),
 		];
@@ -346,7 +328,8 @@ class Task {
 			'default_assignee'          => 'none',
 			'default_user'              => 0,
 			'enable_assignee_selection' => false,
-			'assignee'                  => [
+			'assignee_options'          => [],
+			'assignee_selection'        => [
 				'enable_users'  => false,
 				'filter_users'  => [],
 				'enable_groups' => false,
@@ -372,31 +355,22 @@ class Task {
 		}
 
 		$settings = wp_parse_args( $assignments, $settings_template );
-		$settings = self::recursive_array_intersect_key( $settings, $settings_template );
 
 		// Assignees.
 		$settings['enable_assignee_selection'] = filter_var( $settings['enable_assignee_selection'], FILTER_VALIDATE_BOOLEAN );
-		$settings['assignee']['enable_users'] = filter_var( $settings['assignee']['enable_users'], FILTER_VALIDATE_BOOLEAN );
-		$settings['assignee']['enable_users'] = filter_var( $settings['assignee']['enable_users'], FILTER_VALIDATE_BOOLEAN );
-		$settings['assignee']['enable_users'] = filter_var( $settings['assignee']['enable_users'], FILTER_VALIDATE_BOOLEAN );
+		$settings['assignee_selection']['enable_users']  = filter_var($settings['assignee_selection']['enable_users'], FILTER_VALIDATE_BOOLEAN );
+		$settings['assignee_selection']['enable_groups'] = filter_var($settings['assignee_selection']['enable_groups'], FILTER_VALIDATE_BOOLEAN );
+		$settings['assignee_selection']['enable_roles']  = filter_var($settings['assignee_selection']['enable_roles'], FILTER_VALIDATE_BOOLEAN );
 
 		// Ask/Reject.
-		$settings['enable_ask_reject'] = filter_var( $settings['enable_ask_reject'], FILTER_VALIDATE_BOOLEAN );
-		$settings['ask_reject']['enable_users'] = filter_var( $settings['ask_reject']['enable_users'], FILTER_VALIDATE_BOOLEAN );
-		$settings['ask_reject']['enable_users'] = filter_var( $settings['ask_reject']['enable_users'], FILTER_VALIDATE_BOOLEAN );
-		$settings['ask_reject']['enable_users'] = filter_var( $settings['ask_reject']['enable_users'], FILTER_VALIDATE_BOOLEAN );
+		$settings['enable_ask_reject']           = filter_var( $settings['enable_ask_reject'], FILTER_VALIDATE_BOOLEAN );
+		$settings['ask_reject']['enable_users']  = filter_var( $settings['ask_reject']['enable_users'], FILTER_VALIDATE_BOOLEAN );
+		$settings['ask_reject']['enable_groups'] = filter_var( $settings['ask_reject']['enable_groups'], FILTER_VALIDATE_BOOLEAN );
+		$settings['ask_reject']['enable_roles']  = filter_var( $settings['ask_reject']['enable_roles'], FILTER_VALIDATE_BOOLEAN );
+
+		$settings['assignee_options'] = \Mercury\Users::create_user_list_from_assignee_data( $settings['assignee_selection'] );
 
 		return $settings;
-	}
-
-	public static function recursive_array_intersect_key( array $array1, array $array2 ) {
-		$array1 = array_intersect_key( $array1, $array2 );
-		foreach ( $array1 as $key => &$value ) {
-			if ( is_array( $value ) && is_array( $array2[ $key ] ) ) {
-				$value = self::recursive_array_intersect_key( $value, $array2[ $key ] );
-			}
-		}
-		return $array1;
 	}
 
 	/**

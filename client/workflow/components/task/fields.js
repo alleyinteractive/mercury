@@ -1,9 +1,11 @@
 import React from 'react';
-import { getSelectedTask } from 'services/tasks';
+import { useSelectedTaskSlug } from 'hooks/tasks';
+import { getTask } from 'services/tasks';
 import Field from 'components/fields';
 
 const Fields = () => {
-  const { fields } = getSelectedTask();
+  const selectedTaskSlug = useSelectedTaskSlug();
+  const { fields } = getTask(selectedTaskSlug);
 
   if (! fields || 0 === fields.length) {
     return (

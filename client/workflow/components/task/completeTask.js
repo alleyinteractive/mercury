@@ -15,7 +15,7 @@ const CompleteTask = () => {
   const [
     nextTaskSlug,
     setNextTaskSlug,
-  ] = useState(nextTasks[0].slug);
+  ] = useState(nextTasks.length ? nextTasks[0].slug : '');
 
   useEffect(() => {
     setSelectedTask(getTask(selectedTaskSlug));

@@ -11,9 +11,12 @@ import getWorkflows, { getActiveWorkflowSlug } from 'services/workflows';
  */
 export default function useWorkflows() {
   const [workflows, setWorkflows] = useState(getWorkflows());
-  wp.data.subscribe(() => {
-    setWorkflows(getWorkflows());
-  });
+
+  useEffect(() => (
+    wp.data.subscribe(() => {
+      setWorkflows(getWorkflows());
+    })
+  ));
   return workflows;
 }
 

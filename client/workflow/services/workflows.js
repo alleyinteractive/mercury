@@ -30,8 +30,11 @@ export function getWorkflow(slug) {
  */
 export function setDefaultActiveWorkflowSlug() {
   const defaultWorkflow = getWorkflows()[0];
-  setInProgressTaskSlug(defaultWorkflow.tasks[0].slug);
-  return setActiveWorkflowSlug(defaultWorkflow.slug);
+  setMeta(
+    'mercury_in_progress_task_slug',
+    defaultWorkflow.tasks[0].slug
+  );
+  return setMeta('mercury_active_workflow_slug', defaultWorkflow.slug);
 }
 
 /**

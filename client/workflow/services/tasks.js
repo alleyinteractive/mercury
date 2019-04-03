@@ -22,7 +22,10 @@ export function getTask(slug) {
  * Set the in progress task slug to the first task in the active workflow.
  */
 export function setDefaultInProgressTaskSlug() {
-  return setInProgressTaskSlug(getActiveWorkflow().tasks[0].slug);
+  return setMeta(
+    'mercury_in_progress_task_slug',
+    getActiveWorkflow().tasks[0].slug
+  );
 }
 
 /**

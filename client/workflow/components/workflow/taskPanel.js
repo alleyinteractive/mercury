@@ -2,7 +2,13 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { setSelectedTaskSlug } from 'services/tasks';
 import { useInProgressTaskSlug, useSelectedTaskSlug } from 'hooks/tasks';
-import './taskPanel.css';
+import {
+  Wrapper,
+  Header,
+  HeaderName,
+  HeaderToggle,
+  PanelExpaned,
+} from './taskPanelStyles.js';
 
 const TaskPanel = (props) => {
   const {
@@ -18,35 +24,32 @@ const TaskPanel = (props) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
-    <div
-      className="mercury__task-panel"
+    <Wrapper
       data-viewing={inProgressTaskSlug === slug}
       data-active={selectedTaskSlug === slug}
     >
-      <header className="mercury__task-panel__header">
-        <button
-          className="mercury__task-panel__header__name"
+      <Header>
+        <HeaderName
           onClick={() => setSelectedTaskSlug(slug, 'task panel click')}
           type="button"
         >
           {name}
-        </button>
-        <button
-          className="mercury__task-panel__header__toggle"
+        </HeaderName>
+        <HeaderToggle
           onClick={() => setIsExpanded(! isExpanded)}
           type="button"
         >
           V
-        </button>
-      </header>
+        </HeaderToggle>
+      </Header>
       {(isExpanded || selectedTaskSlug === slug) && (
-        <div className="mercury__task-panel__expanded">
+        <PanelExpaned>
           <span>Assigned To: James Burke</span>
           <span>Due Date: June 3rd</span>
           <span>Status: In Progress</span>
-        </div>
+        </PanelExpaned>
       )}
-    </div>
+    </Wrapper>
   );
 };
 

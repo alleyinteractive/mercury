@@ -4,7 +4,11 @@ import { getWorkflow } from 'services/workflows';
 import Task from 'components/task';
 import SelectWorkflow from './selectWorkflow';
 import TaskPanel from './taskPanel';
-import './workflow.css';
+import {
+  Wrapper,
+  TasksPanel,
+  TaskWrapper,
+} from './workflowStyles.js';
 
 const Workflow = () => {
   const currentWorkflowSlug = useActiveWorkflowSlug();
@@ -25,14 +29,14 @@ const Workflow = () => {
   return (
     <div>
       <SelectWorkflow />
-      <div className="mercury__wrapper">
-        <aside className="mercury__tasks-panel">
+      <Wrapper>
+        <TasksPanel>
           {getTaskPanels()}
-        </aside>
-        <section className="mercury__task__wrapper">
+        </TasksPanel>
+        <TaskWrapper>
           <Task />
-        </section>
-      </div>
+        </TaskWrapper>
+      </Wrapper>
     </div>
   );
 };

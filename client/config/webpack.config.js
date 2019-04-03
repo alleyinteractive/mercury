@@ -45,15 +45,6 @@ module.exports = (env, argv) => {
                 },
               },
             },
-            {
-              loader: 'postcss-loader',
-              options: {
-                config: {
-                  path: path.join(__dirname, 'postcss.config.js'),
-                },
-              },
-            },
-            'sass-loader',
           ],
         },
       ],

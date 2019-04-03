@@ -17,7 +17,7 @@ namespace Mercury;
 /**
  * Current version of Mercury.
  */
-define( 'MERCURY_VERSION', '1.0.0' );
+define( 'MERCURY_VERSION', '1.0.1' );
 
 /**
  * Filesystem path to Mercury.
@@ -78,7 +78,7 @@ add_action(
 		} else {
 			wp_enqueue_script(
 				'mercury-workflow-js',
-				plugins_url( '/build/workflow.js', __FILE__ ),
+				plugins_url( '/build/js/workflow.js', __FILE__ ),
 				[ 'wp-api-fetch' ],
 				MERCURY_VERSION,
 				true

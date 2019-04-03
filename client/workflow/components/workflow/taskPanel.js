@@ -1,10 +1,7 @@
-/* eslint-disable */
-
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { setMeta } from '../../services/meta';
-import { setSelectedTaskSlug } from '../../services/tasks';
-import { useInProgressTaskSlug, useSelectedTaskSlug } from '../../hooks/tasks';
+import { setSelectedTaskSlug } from 'services/tasks';
+import { useInProgressTaskSlug, useSelectedTaskSlug } from 'hooks/tasks';
 import './taskPanel.css';
 
 const TaskPanel = (props) => {
@@ -26,7 +23,7 @@ const TaskPanel = (props) => {
       data-viewing={inProgressTaskSlug === slug}
       data-active={selectedTaskSlug === slug}
     >
-      <heading className="mercury__task-panel__header">
+      <header className="mercury__task-panel__header">
         <button
           className="mercury__task-panel__header__name"
           onClick={() => setSelectedTaskSlug(slug, 'task panel click')}
@@ -41,7 +38,7 @@ const TaskPanel = (props) => {
         >
           V
         </button>
-      </heading>
+      </header>
       {(isExpanded || selectedTaskSlug === slug) && (
         <div className="mercury__task-panel__expanded">
           <span>Assigned To: James Burke</span>

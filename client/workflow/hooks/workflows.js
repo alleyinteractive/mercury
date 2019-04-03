@@ -1,9 +1,6 @@
 /* global wp */
-/* eslint-disable */
-
-import PubSub from 'pubsub-js';
-import { useState, useEffect, useCallback } from 'react';
-import getWorkflows, { getActiveWorkflowSlug } from '../services/workflows';
+import { useState, useEffect } from 'react';
+import getWorkflows, { getActiveWorkflowSlug } from 'services/workflows';
 
 /**
  * Custom hook that manages a meta state.
@@ -14,9 +11,12 @@ import getWorkflows, { getActiveWorkflowSlug } from '../services/workflows';
  */
 export default function useWorkflows() {
   const [workflows, setWorkflows] = useState(getWorkflows());
-  wp.data.subscribe(() => {
-    setWorkflows(getWorkflows());
-  });
+
+  useEffect(() => (
+    wp.data.subscribe(() => {
+      setWorkflows(getWorkflows());
+    })
+  ));
   return workflows;
 }
 

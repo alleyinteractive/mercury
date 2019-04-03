@@ -1,4 +1,5 @@
 const path = require('path');
+const getConfigServices = require('./webpack');
 
 const exclude = [
   /node_modules/,
@@ -7,14 +8,14 @@ const exclude = [
 
 module.exports = (env, argv) => {
   const { mode } = argv;
+  const config = getConfigServices(mode, env);
 
   return {
-    devtool: 'development' === mode
-      ? 'cheap-module-eval-source-map'
-      : 'source-map',
+    devtool: config.getDevtool(),
     entry: {
-      'workflow': './client/workflow/index.js',
+      workflow: path.join(process.cwd(), './client/workflow/index.js'),
     },
+    plugins: config.getPlugins(),
     module: {
       rules: [
         {
@@ -23,10 +24,7 @@ module.exports = (env, argv) => {
           use: [
             {
               loader: 'babel-loader',
-              options: {
-                presets: ['@babel/react']
-              }
-            }
+            },
           ],
         },
         {
@@ -60,9 +58,7 @@ module.exports = (env, argv) => {
         },
       ],
     },
-    output: {
-      filename: '[name].js',
-      path: path.join(__dirname, 'build'),
-    },
+    output: config.getOutput(),
+    devServer: config.getDevServer(),
   };
 };

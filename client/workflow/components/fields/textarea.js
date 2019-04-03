@@ -1,11 +1,9 @@
-/* eslint-disable */
-
 import React from 'react';
-import { Field } from 'formik';
-import { setMeta } from '../../services/meta';
-import useMeta from '../../hooks/meta';
+import PropTypes from 'prop-types';
+import { setMeta } from 'services/meta';
+import useMeta from 'hooks/meta';
 
-const Textarea = (props) => {
+const TextArea = (props) => {
   const {
     slug,
   } = props;
@@ -13,15 +11,18 @@ const Textarea = (props) => {
   const value = useMeta(slug);
 
   return (
-     <textarea
+    <textarea
       className="mercury__field__textarea"
       id={slug}
       name={slug}
       onChange={(event) => setMeta(slug, event.target.value)}
-    >
-      {value}
-    </textarea>
+      defaultValue={value}
+    />
   );
 };
 
-export default Textarea;
+TextArea.propTypes = {
+  slug: PropTypes.string.isRequired,
+};
+
+export default TextArea;

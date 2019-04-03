@@ -1,14 +1,13 @@
-/* eslint-disable */
-
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Field } from 'formik';
-import { setMeta } from '../../services/meta';
-import useMeta from '../../hooks/meta';
+import { setMeta } from 'services/meta';
+import useMeta from 'hooks/meta';
 
-const Textfield = (props) => {
+const TextField = (props) => {
   const {
     slug,
-    readyOnly,
+    readOnly,
   } = props;
 
   const value = useMeta(slug);
@@ -21,9 +20,18 @@ const Textfield = (props) => {
       name={slug}
       onChange={(event) => setMeta(slug, event.target.value)}
       value={value}
-      readonly={readyOnly}
+      readOnly={readOnly}
     />
   );
 };
 
-export default Textfield;
+TextField.propTypes = {
+  slug: PropTypes.string.isRequired,
+  readOnly: PropTypes.bool,
+};
+
+TextField.defaultProps = {
+  readOnly: false,
+};
+
+export default TextField;

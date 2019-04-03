@@ -7,7 +7,7 @@ import useMeta from 'hooks/meta';
 const TextField = (props) => {
   const {
     slug,
-    readyOnly,
+    readOnly,
   } = props;
 
   const value = useMeta(slug);
@@ -20,14 +20,18 @@ const TextField = (props) => {
       name={slug}
       onChange={(event) => setMeta(slug, event.target.value)}
       value={value}
-      readOnly={readyOnly}
+      readOnly={readOnly}
     />
   );
 };
 
 TextField.propTypes = {
   slug: PropTypes.string.isRequired,
-  readyOnly: PropTypes.bool.isRequired,
+  readOnly: PropTypes.bool,
+};
+
+TextField.defaultProps = {
+  readOnly: false,
 };
 
 export default TextField;

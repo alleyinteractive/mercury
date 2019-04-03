@@ -12,12 +12,12 @@ module.exports = function getDevServer(mode, env) {
   switch (mode) {
     case 'development':
       return {
-        hot: true,
         quiet: false,
+        hot: true,
         noInfo: false,
         contentBase: '/build',
-        disableHostCheck: true,
         stats: { colors: true },
+        headers: { 'Access-Control-Allow-Origin': '*' },
         https: http ? false : {
           cert: fs.readFileSync(
             path.join(certPath, 'server.crt'),

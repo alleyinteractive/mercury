@@ -69,7 +69,7 @@ class Users {
 	}
 
 	/**
-	 * Get usergroups as an array formmated for a select field.
+	 * Get usergroups as an array formatted for a select field.
 	 *
 	 * @return array
 	 */

@@ -51,7 +51,7 @@ class Endpoints {
 			// Add meta fields that every task has.
 			$task_slug     = (string) get_post_meta( $task_id, 'slug', true );
 			$meta_fields[] = "mercury_{$task_slug}_status";
-			$meta_fields[] = "mercury_{$task_slug}_assignnee_id";
+			$meta_fields[] = "mercury_{$task_slug}_assignee_id";
 			$meta_fields[] = "mercury_{$task_slug}_due_date";
 
 			// Add each task slug so we can store it as meta.

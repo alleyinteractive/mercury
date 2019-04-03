@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-// import useMeta from 'hooks/meta';
 import Select from './select';
 import TextArea from './textarea';
 import TextField from './textfield';
@@ -12,8 +11,6 @@ const Field = (props) => {
     slug,
     type,
   } = props;
-
-  // const value = useMeta(slug);
 
   const getField = () => {
     switch (type) {

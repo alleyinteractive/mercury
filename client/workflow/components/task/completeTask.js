@@ -7,11 +7,16 @@ const CompleteTask = () => {
   // Watch for changes to the in progress and selected tasks.
   const inProgressTaskSlug = useInProgressTaskSlug();
   const selectedTaskSlug = useSelectedTaskSlug();
-  const [selectedTask, setSelectedTask] = useState(getTask(selectedTaskSlug));
+  const [
+    selectedTask,
+    setSelectedTask,
+  ] = useState(getTask(selectedTaskSlug));
   const { nextTasks } = selectedTask;
-  const nextTaskSlug = nextTasks[0].slug;
+  const [
+    nextTaskSlug,
+    setNextTaskSlug,
+  ] = useState(nextTasks[0].slug);
 
-  // Next task state.
   useEffect(() => {
     setSelectedTask(getTask(selectedTaskSlug));
   }, [selectedTaskSlug]);
@@ -32,7 +37,7 @@ const CompleteTask = () => {
           <select
             id="next-task"
             name="next-task"
-            onChange={(event) => setSelectedTask(event.target.value)}
+            onChange={(event) => setNextTaskSlug(event.target.value)}
             value={nextTaskSlug}
             disabled={inProgressTaskSlug !== selectedTaskSlug}
           >

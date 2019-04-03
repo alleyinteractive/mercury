@@ -204,7 +204,7 @@ class Task {
 							'limit'              => 0,
 							'minimum_count'      => 0,
 							'sortable'           => true,
-						],
+						]
 					),
 				],
 			]

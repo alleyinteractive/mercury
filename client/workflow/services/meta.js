@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 /**
  * Get a meta value from Gutenberg.
  */

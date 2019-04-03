@@ -1,9 +1,7 @@
-/* eslint-disable */
-
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const NextTaskAssignee = (props) => {
+const NextTask = (props) => {
   const {
     isActive,
     nextTaskSlug,

@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 // import useMeta from 'hooks/meta';
 import Select from './select';
-import Textarea from './textarea';
-import Textfield from './textfield';
+import TextArea from './textarea';
+import TextField from './textfield';
 import './field.css';
 
 const Field = (props) => {
@@ -20,10 +20,10 @@ const Field = (props) => {
       case 'select':
         return (<Select {...props} />);
       case 'textarea':
-        return (<Textarea {...props} />);
+        return (<TextArea {...props} />);
       case 'textfield':
       default:
-        return (<Textfield {...props} />);
+        return (<TextField {...props} />);
     }
   };
 

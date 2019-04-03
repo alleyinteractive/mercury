@@ -1,8 +1,5 @@
 /* global wp */
-/* eslint-disable */
-
-import PubSub from 'pubsub-js';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import getWorkflows, { getActiveWorkflowSlug } from 'services/workflows';
 
 /**

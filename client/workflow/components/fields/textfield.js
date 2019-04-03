@@ -1,11 +1,10 @@
-/* eslint-disable */
-
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Field } from 'formik';
 import { setMeta } from 'services/meta';
 import useMeta from 'hooks/meta';
 
-const Textfield = (props) => {
+const TextField = (props) => {
   const {
     slug,
     readyOnly,
@@ -26,4 +25,9 @@ const Textfield = (props) => {
   );
 };
 
-export default Textfield;
+TextField.propTypes = {
+  slug: PropTypes.string.isRequired,
+  readyOnly: PropTypes.bool.isRequired,
+};
+
+export default TextField;

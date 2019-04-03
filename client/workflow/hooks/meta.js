@@ -2,8 +2,8 @@
 
 import PubSub from 'pubsub-js';
 import { useState, useEffect } from 'react';
-import { getMeta, setMeta } from '../services/meta';
-import getWorkflows from '../services/workflows';
+import { getMeta, setMeta } from 'services/meta';
+import getWorkflows from 'services/workflows';
 
 /**
  * Custom hook that manages a meta state.

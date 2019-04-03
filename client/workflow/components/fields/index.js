@@ -1,10 +1,6 @@
-/* eslint-disable */
-
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Field as FormikField } from 'formik';
-import { setMeta } from '../../services/meta';
-import useMeta from '../../hooks/meta';
+// import useMeta from 'hooks/meta';
 import Select from './select';
 import Textarea from './textarea';
 import Textfield from './textfield';
@@ -17,7 +13,7 @@ const Field = (props) => {
     type,
   } = props;
 
-  const value = useMeta(slug);
+  // const value = useMeta(slug);
 
   const getField = () => {
     switch (type) {
@@ -29,7 +25,7 @@ const Field = (props) => {
       default:
         return (<Textfield {...props} />);
     }
-  }
+  };
 
   return (
     <div className="mercury__field">
@@ -42,6 +38,7 @@ const Field = (props) => {
 };
 
 Field.propTypes = {
+  type: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
   slug: PropTypes.string.isRequired,
 };

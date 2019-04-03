@@ -1,9 +1,8 @@
 .mercury__wrapper {
   display: flex;
-
-  * {
+  /* * {
     box-sizing: border-box;
-  }
+  } */
 }
 
 .mercury__tasks-panel {

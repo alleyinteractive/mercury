@@ -1,7 +1,5 @@
-/* eslint-disable */
-
 import { getMeta, setMeta } from './meta';
-import getWorkflows, { getActiveWorkflow, getActiveWorkflowSlug } from './workflows';
+import { getActiveWorkflow, getActiveWorkflowSlug } from './workflows';
 
 /**
  * Get a task by slug (for the current active workflow).
@@ -11,7 +9,9 @@ import getWorkflows, { getActiveWorkflow, getActiveWorkflowSlug } from './workfl
  */
 export function getTask(slug) {
   const workflow = getActiveWorkflow();
-  const task = workflow.tasks.find((task) => task.slug === slug);
+  const task = workflow.tasks.find(
+    (workflowTask) => workflowTask.slug === slug
+  );
   if (undefined === task) {
     return false;
   }
@@ -101,7 +101,7 @@ export function getSelectedTaskSlug() {
  * @param {string} slug Slug of the active workflow.
  * @return {string} slug Updated value.
  */
-export function setSelectedTaskSlug(slug, context = 'unknown') {
+export function setSelectedTaskSlug(slug) {
   if (getTask(slug)) {
     return setMeta('mercury_selected_task_slug', slug);
   }
@@ -116,7 +116,7 @@ export function setSelectedTaskSlug(slug, context = 'unknown') {
  */
 export function setTaskStatus(taskSlug, status) {
   const activeWorkflowSlug = getActiveWorkflowSlug();
-  setMeta(`mercury_${taskSlug}_status`, status);
+  setMeta(`mercury_${activeWorkflowSlug}_status`, status);
 }
 
 /**

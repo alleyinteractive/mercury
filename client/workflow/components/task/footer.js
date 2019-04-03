@@ -6,7 +6,7 @@ import './footer.css';
 
 const Footer = () => {
   return (
-    <footer class="mercury__task__footer">
+    <footer className="mercury__task__footer">
       <CompleteTask />
     </footer>
   );

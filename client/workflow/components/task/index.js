@@ -2,8 +2,6 @@
 
 import React from 'react';
 import { Formik } from 'formik';
-import { useSelectedTaskSlug } from '../../hooks/tasks';
-import { getSelectedTask } from '../../services/tasks';
 import Header from './header';
 import Fields from './fields';
 import Footer from './footer';

@@ -1,8 +1,12 @@
 const fs = require('fs');
 const path = require('path');
+const os = require('os');
 
 module.exports = function getDevServer(mode, env) {
-  const certPath = (env && env.certPath) ? env.certPath : false;
+  const certPath = (env && env.certPath) ? path.join(
+    os.homedir(),
+    env.certPath
+  ) : false;
   const http = (env && (env.http || ! env.certPath)) || false;
 
   switch (mode) {
@@ -11,8 +15,8 @@ module.exports = function getDevServer(mode, env) {
         hot: true,
         quiet: false,
         noInfo: false,
-        contentBase: '/client/build',
-        headers: { 'Access-Control-Allow-Origin': '*' },
+        contentBase: '/build',
+        disableHostCheck: true,
         stats: { colors: true },
         https: http ? false : {
           cert: fs.readFileSync(

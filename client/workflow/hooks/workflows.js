@@ -3,7 +3,7 @@
 
 import PubSub from 'pubsub-js';
 import { useState, useEffect, useCallback } from 'react';
-import getWorkflows, { getActiveWorkflowSlug } from '../services/workflows';
+import getWorkflows, { getActiveWorkflowSlug } from 'services/workflows';
 
 /**
  * Custom hook that manages a meta state.

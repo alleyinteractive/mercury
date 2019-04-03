@@ -1,34 +1,37 @@
-/* eslint-disable */
-
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Field } from 'formik';
-import { setMeta } from '../../services/meta';
-import useMeta from '../../hooks/meta';
+import { setMeta } from 'services/meta';
+import useMeta from 'hooks/meta';
 
 const Select = (props) => {
   const {
     slug,
-    readyOnly,
-    optionsSource,
+    readOnly,
     optionsSourceList,
     optionsFirstEmpty,
   } = props;
-
   const value = useMeta(slug);
 
   const getOptions = () => {
-    let options = optionsSourceList.map((option) =>
-      <option value={option.value}>{option.label}</option>
-    );
+    const options = optionsSourceList.map((option) => {
+      const { label, value: optionValue } = option;
+
+      return (
+        <option value={optionValue} key={optionValue}>
+          {label}
+        </option>
+      );
+    });
     if (optionsFirstEmpty) {
-      options.shift(<option disabled selected value></option>);
+      options.shift(<option disabled selected value />);
     }
     return options;
-  }
+  };
 
-  if (readyOnly) {
+  if (readOnly) {
     return (
-      <div class="mercury__field__readyonly">
+      <div className="mercury__field__readOnly">
         {value}
       </div>
     );
@@ -46,6 +49,22 @@ const Select = (props) => {
       {getOptions()}
     </Field>
   );
+};
+
+Select.propTypes = {
+  slug: PropTypes.string.isRequired,
+  readOnly: PropTypes.bool,
+  optionsSourceList: PropTypes.arrayOf(
+    PropTypes.shape({
+      value: PropTypes.string.isRequired,
+      name: PropTypes.string,
+    })
+  ).isRequired,
+  optionsFirstEmpty: PropTypes.bool.isRequired,
+};
+
+Select.defaultProps = {
+  readOnly: false,
 };
 
 export default Select;

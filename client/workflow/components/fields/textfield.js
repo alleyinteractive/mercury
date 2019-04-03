@@ -2,8 +2,8 @@
 
 import React from 'react';
 import { Field } from 'formik';
-import { setMeta } from '../../services/meta';
-import useMeta from '../../hooks/meta';
+import { setMeta } from 'services/meta';
+import useMeta from 'hooks/meta';
 
 const Textfield = (props) => {
   const {
@@ -21,7 +21,7 @@ const Textfield = (props) => {
       name={slug}
       onChange={(event) => setMeta(slug, event.target.value)}
       value={value}
-      readonly={readyOnly}
+      readOnly={readyOnly}
     />
   );
 };

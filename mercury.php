@@ -49,19 +49,41 @@ add_action(
 	}
 );
 
+/**
+ * Add custom query var for webpack hot-reloading.
+ *
+ * @param array $vars Array of current query vars.
+ * @return array $vars Array of query vars.
+ */
+function webpack_query_vars( $vars ) {
+	// Add a query var to enable hot reloading.
+	$vars[] = 'mercury-dev';
+
+	return $vars;
+}
+add_filter( 'query_vars', __NAMESPACE__ . '\webpack_query_vars' );
+
 // Admin enqueue scripts.
 add_action(
 	'admin_enqueue_scripts',
 	function() {
-
-		// Enqueue workflow metabox JS.
-		wp_enqueue_script(
-			'mercury-workflow-js',
-			plugins_url( '/build/workflow.js', __FILE__ ),
-			[ 'wp-api-fetch' ],
-			MERCURY_VERSION,
-			true
-		);
+		if ( ( ! empty( $_GET['mercury-dev'] ) && true == $_GET['mercury-dev'] ) ) {
+			wp_enqueue_script(
+				'mercury-workflow-js',
+				'//localhost:8080/build/js/workflow.js',
+				[ 'wp-api-fetch' ],
+				MERCURY_VERSION,
+				true
+			);
+		} else {
+			wp_enqueue_script(
+				'mercury-workflow-js',
+				plugins_url( '/build/workflow.js', __FILE__ ),
+				[ 'wp-api-fetch' ],
+				MERCURY_VERSION,
+				true
+			);
+		}
 	}
 );
 

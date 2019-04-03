@@ -1,8 +1,8 @@
 /* eslint-disable */
 
 import React from 'react';
-import { useSelectedTaskSlug } from '../../hooks/tasks';
-import { getTask } from '../../services/tasks';
+import { useSelectedTaskSlug } from 'hooks/tasks';
+import { getTask } from 'services/tasks';
 import './header.css';
 
 const Header = (props) => {

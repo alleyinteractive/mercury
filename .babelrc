@@ -1,0 +1,24 @@
+{
+  "plugins": [
+    "lodash",
+    "react-hot-loader/babel",
+    "@babel/plugin-proposal-object-rest-spread",
+    "@babel/plugin-proposal-class-properties",
+    [
+      "module-resolver",
+      {
+        "cwd": "packagejson",
+        "alias": {
+          "components": "./client/workflow/components",
+          "hooks": "./client/workflow/hooks",
+          "services": "./client/workflow/services",
+          "stores": "./client/workflow/stores",
+        },
+      },
+    ],
+  ],
+  "presets": [
+    "@babel/env",
+    "@babel/react",
+  ],
+}

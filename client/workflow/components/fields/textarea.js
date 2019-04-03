@@ -2,8 +2,8 @@
 
 import React from 'react';
 import { Field } from 'formik';
-import { setMeta } from '../../services/meta';
-import useMeta from '../../hooks/meta';
+import { setMeta } from 'services/meta';
+import useMeta from 'hooks/meta';
 
 const Textarea = (props) => {
   const {
@@ -18,9 +18,8 @@ const Textarea = (props) => {
       id={slug}
       name={slug}
       onChange={(event) => setMeta(slug, event.target.value)}
-    >
-      {value}
-    </textarea>
+      defaultValue={value}
+    />
   );
 };
 

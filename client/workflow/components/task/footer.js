@@ -1,11 +1,11 @@
 import React from 'react';
 import CompleteTask from './completeTask';
-import './footer.css';
+import Wrapper from './footerStyles.js';
 
 const Footer = () => (
-  <footer className="mercury__task__footer">
+  <Wrapper>
     <CompleteTask />
-  </footer>
+  </Wrapper>
 );
 
 export default Footer;

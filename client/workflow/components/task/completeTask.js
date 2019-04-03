@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useInProgressTaskSlug, useSelectedTaskSlug } from 'hooks/tasks';
 import { getTask, completeTask } from 'services/tasks';
-import './completeTask.css';
+import Wrapper from './completeTaskStyles.js';
 
 const CompleteTask = () => {
   // Watch for changes to the in progress and selected tasks.
@@ -29,7 +29,7 @@ const CompleteTask = () => {
   };
 
   return (
-    <div className="mercury__complete-task">
+    <Wrapper>
       {1 < nextTasks.length && (
         <label
           htmlFor="next-task"
@@ -55,7 +55,7 @@ const CompleteTask = () => {
       >
         {getButtonLabel()}
       </button>
-    </div>
+    </Wrapper>
   );
 };
 

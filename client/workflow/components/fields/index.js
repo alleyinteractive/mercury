@@ -3,7 +3,12 @@ import PropTypes from 'prop-types';
 import Select from './select';
 import TextArea from './textarea';
 import TextField from './textfield';
-import './field.css';
+import {
+  Wrapper,
+  Label,
+  LabelText,
+  Input,
+} from './fieldStyles.js';
 
 const Field = (props) => {
   const {
@@ -25,12 +30,12 @@ const Field = (props) => {
   };
 
   return (
-    <div className="mercury__field">
-      <label htmlFor={slug} className="mercury__field__label">
-        <span className="mercury__field_label_text">{label}</span>
-        {getField()}
-      </label>
-    </div>
+    <Wrapper>
+      <Label htmlFor={slug}>
+        <LabelText>{label}</LabelText>
+        <Input>{getField()}</Input>
+      </Label>
+    </Wrapper>
   );
 };
 

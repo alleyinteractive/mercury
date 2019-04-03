@@ -61,6 +61,7 @@
     "stylelint-custom-processor-loader": "^0.6.0",
     "stylelint-order": "^2.1.0",
     "stylelint-processor-styled-components": "^1.6.0",
+    "svg-react-loader": "^0.4.6",
     "webpack": "^4.10.2",
     "webpack-cli": "^3.1.2",
     "webpack-dev-server": "^3.1.4"

@@ -1,36 +1,37 @@
 import styled from 'styled-components';
+import colors from 'css/colors';
+import IconArrow from 'icons/arrow.svg';
 
 export const Wrapper = styled.div`
-  background: #CCC;
-
-  &:last-of-child {
-    margin: none;
-  }
-
-  &[data-active="true"] button {
-    background: #EEE;
-  }
-
-  &[data-viewing="true"] button {
-    background: #AAA;
-  }
+  display: flex;
+  flex-direction: column;
+  margin-bottom: ${(props) => (props.active ? 'auto' : '0')};
 `;
 
 export const Header = styled.header`
+  align-items: center;
+  background: ${(props) => (props.active ? colors.blue : colors.white)};
   display: flex;
   width: 100%;
 `;
 
-export const HeaderName = styled.button`
+export const HeaderName = styled.span`
   border: none;
   flex-grow: 1;
-  padding: 10px;
+  text-align: left;
 `;
 
 export const HeaderToggle = styled.button`
+  align-items: center;
   border: none;
+  display: flex;
+  justify-content: flex-start;
   padding: 10px;
-  width: 40px;
+  width: 100%;
+`;
+
+export const Arrow = styled(IconArrow)`
+  transform: rotate(${(props) => (props.active ? '90deg' : '0')});
 `;
 
 export const PanelExpaned = styled.div`

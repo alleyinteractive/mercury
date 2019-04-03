@@ -1,13 +1,17 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { setSelectedTaskSlug } from 'services/tasks';
-import { useInProgressTaskSlug, useSelectedTaskSlug } from 'hooks/tasks';
+import {
+//  useInProgressTaskSlug,
+  useSelectedTaskSlug,
+} from 'hooks/tasks';
 import {
   Wrapper,
   Header,
   HeaderName,
   HeaderToggle,
   PanelExpaned,
+  Arrow,
 } from './taskPanelStyles.js';
 
 const TaskPanel = (props) => {
@@ -17,32 +21,25 @@ const TaskPanel = (props) => {
   } = props;
 
   // Custom hooks.
-  const inProgressTaskSlug = useInProgressTaskSlug();
+  // const inProgressTaskSlug = useInProgressTaskSlug();
   const selectedTaskSlug = useSelectedTaskSlug();
-
-  // Task panel expanded.
-  const [isExpanded, setIsExpanded] = useState(false);
+  const active = selectedTaskSlug === slug;
 
   return (
-    <Wrapper
-      data-viewing={inProgressTaskSlug === slug}
-      data-active={selectedTaskSlug === slug}
-    >
-      <Header>
-        <HeaderName
-          onClick={() => setSelectedTaskSlug(slug, 'task panel click')}
-          type="button"
-        >
-          {name}
-        </HeaderName>
+    <Wrapper active={active}>
+      <Header active={active}>
         <HeaderToggle
-          onClick={() => setIsExpanded(! isExpanded)}
+          active={active}
+          onClick={() => {
+            setSelectedTaskSlug(slug, 'task panel click');
+          }}
           type="button"
         >
-          V
+          <HeaderName>{name}</HeaderName>
+          <Arrow active={active} />
         </HeaderToggle>
       </Header>
-      {(isExpanded || selectedTaskSlug === slug) && (
+      {active && (
         <PanelExpaned>
           <span>Assigned To: James Burke</span>
           <span>Due Date: June 3rd</span>

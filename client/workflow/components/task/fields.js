@@ -1,7 +1,8 @@
 import React from 'react';
+import Field from 'components/fields';
 import { useSelectedTaskSlug } from 'hooks/tasks';
 import { getTask } from 'services/tasks';
-import Field from 'components/fields';
+import { Wrapper, FieldWrapper } from './fieldsStyles';
 
 const Fields = () => {
   const selectedTaskSlug = useSelectedTaskSlug();
@@ -9,21 +10,25 @@ const Fields = () => {
 
   if (! fields || 0 === fields.length) {
     return (
-      <section className="mercury__task__fields">
+      <Wrapper>
         {/* eslint-disable-next-line max-len */}
         <p>No custom fields for this task. Proceed to the next task whenever ready.</p>
-      </section>
+      </Wrapper>
     );
   }
 
   return (
-    <section className="mercury__task__fields">
+    <Wrapper>
       {fields.map((field) => {
         const { slug } = field;
 
-        return <Field {...field} key={slug} />;
+        return (
+          <FieldWrapper>
+            <Field {...field} key={slug} />
+          </FieldWrapper>
+        );
       })}
-    </section>
+    </Wrapper>
   );
 };
 

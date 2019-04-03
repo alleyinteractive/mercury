@@ -4,10 +4,10 @@ import { Formik } from 'formik';
 import Header from './header';
 import Fields from './fields';
 import Footer from './footer';
-import './task.css';
+import { Wrapper, Form } from './taskStyles.js';
 
 const Task = () => (
-  <div className="mercury__task__settings">
+  <Wrapper>
     <Formik
       onSubmit={(values, actions) => {
         setTimeout(() => {
@@ -16,17 +16,14 @@ const Task = () => (
         }, 1000);
       }}
       render={(props) => (
-        <form
-          className="mercury__task__form"
-          onSubmit={props.handleSubmit}
-        >
+        <Form onSubmit={props.handleSubmit}>
           <Header />
           <Fields />
           <Footer />
-        </form>
+        </Form>
       )}
     />
-  </div>
+  </Wrapper>
 );
 
 Task.propTypes = {

@@ -28,6 +28,11 @@ module.exports = (env, argv) => {
           ],
         },
         {
+          test: /\.svg$/,
+          include: path.join(process.cwd(), 'client/icons'),
+          loader: 'svg-react-loader',
+        },
+        {
           enforce: 'pre',
           test: /\.js$/,
           exclude,

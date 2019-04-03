@@ -15,6 +15,7 @@
           "services": "./client/workflow/services",
           "stores": "./client/workflow/stores",
           "css": "./client/config/css",
+          "icons": "./client/icons",
         },
       },
     ],

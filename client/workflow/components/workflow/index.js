@@ -3,10 +3,8 @@ import { useActiveWorkflowSlug } from 'hooks/workflows';
 import { getWorkflow } from 'services/workflows';
 import Task from 'components/task';
 import SelectWorkflow from './selectWorkflow';
-import TaskPanel from './taskPanel';
 import {
   Wrapper,
-  TasksPanel,
   TaskWrapper,
 } from './workflowStyles.js';
 
@@ -18,11 +16,11 @@ const Workflow = () => {
    *
    * @return {array} TaskPanels.
    */
-  const getTaskPanels = () => (
+  const getTasks = () => (
     getWorkflow(currentWorkflowSlug).tasks.map((task) => {
       const { slug } = task;
 
-      return <TaskPanel {...task} key={slug} />;
+      return <Task {...task} key={slug} />;
     })
   );
 
@@ -30,11 +28,8 @@ const Workflow = () => {
     <div>
       <SelectWorkflow />
       <Wrapper>
-        <TasksPanel>
-          {getTaskPanels()}
-        </TasksPanel>
         <TaskWrapper>
-          <Task />
+          {getTasks()}
         </TaskWrapper>
       </Wrapper>
     </div>

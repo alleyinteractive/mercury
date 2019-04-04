@@ -1,16 +1,15 @@
 import styled from 'styled-components';
 import colors from 'css/colors';
-import IconArrow from 'icons/arrow.svg';
 
 export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  margin-bottom: ${(props) => (props.active ? 'auto' : '0')};
+  margin-bottom: ${(props) => (props.isActive ? 'auto' : '0')};
 `;
 
 export const Header = styled.header`
   align-items: center;
-  background: ${(props) => (props.active ? colors.blue : colors.white)};
+  background: ${(props) => (props.isActive ? colors.blue : colors.white)};
   display: flex;
   width: 100%;
 `;
@@ -28,10 +27,6 @@ export const HeaderToggle = styled.button`
   justify-content: flex-start;
   padding: 10px;
   width: 100%;
-`;
-
-export const Arrow = styled(IconArrow)`
-  transform: rotate(${(props) => (props.active ? '90deg' : '0')});
 `;
 
 export const PanelExpaned = styled.div`

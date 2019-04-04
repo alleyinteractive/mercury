@@ -3,6 +3,9 @@ import PropTypes from 'prop-types';
 import { Field } from 'formik';
 import { setMeta } from 'services/meta';
 import useMeta from 'hooks/meta';
+import {
+  SelectWrapper,
+} from './fieldStyles.js';
 
 const Select = (props) => {
   const {
@@ -38,16 +41,17 @@ const Select = (props) => {
   }
 
   return (
-    <Field
-      className="mercury__field__select"
-      component="select"
-      id={slug}
-      name={slug}
-      value={value}
-      onChange={(event) => setMeta(slug, event.target.value)}
-    >
-      {getOptions()}
-    </Field>
+    <SelectWrapper>
+      <Field
+        component="select"
+        id={slug}
+        name={slug}
+        value={value}
+        onChange={(event) => setMeta(slug, event.target.value)}
+      >
+        {getOptions()}
+      </Field>
+    </SelectWrapper>
   );
 };
 

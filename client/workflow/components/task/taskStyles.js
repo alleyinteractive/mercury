@@ -1,9 +1,9 @@
 import styled from 'styled-components';
 
 export const Wrapper = styled.div`
-  align-items: stretch;
   display: flex;
-  flex-grow: 1;
+  flex-direction: column;
+  width: 100%;
 `;
 
 export const Form = styled.form`

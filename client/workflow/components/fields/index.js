@@ -1,48 +1,43 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Select from './select';
-import TextArea from './textarea';
-import TextField from './textfield';
-import {
-  Wrapper,
-  Label,
-  LabelText,
-  Input,
-} from './fieldStyles.js';
+import Field from 'components/fields/field';
+import { Wrapper, FieldWrapper } from './fieldsStyles';
 
-const Field = (props) => {
-  const {
-    label,
-    slug,
-    type,
-  } = props;
+const Fields = (props) => {
+  const { fields, slug } = props;
+  console.log(slug);
 
-  const getField = () => {
-    switch (type) {
-      case 'select':
-        return (<Select {...props} />);
-      case 'textarea':
-        return (<TextArea {...props} />);
-      case 'textfield':
-      default:
-        return (<TextField {...props} />);
-    }
-  };
+  if (! fields || 0 === fields.length) {
+    return (
+      <Wrapper>
+        {/* eslint-disable-next-line max-len */}
+        <p>No custom fields for this task. Proceed to the next task whenever ready.</p>
+      </Wrapper>
+    );
+  }
 
   return (
     <Wrapper>
-      <Label htmlFor={slug}>
-        <LabelText>{label}</LabelText>
-        <Input>{getField()}</Input>
-      </Label>
+      {fields.map((field) => {
+        const { slug: fieldSlug } = field;
+
+        return (
+          <FieldWrapper key={fieldSlug}>
+            <Field {...field} />
+          </FieldWrapper>
+        );
+      })}
     </Wrapper>
   );
 };
 
-Field.propTypes = {
-  type: PropTypes.string.isRequired,
-  label: PropTypes.string.isRequired,
+Fields.propTypes = {
   slug: PropTypes.string.isRequired,
+  fields: PropTypes.arrayOf(
+    PropTypes.shape({
+      label: PropTypes.string,
+    })
+  ).isRequired,
 };
 
-export default Field;
+export default Fields;

@@ -1,10 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { setSelectedTaskSlug } from 'services/tasks';
-import {
-//  useInProgressTaskSlug,
-  useSelectedTaskSlug,
-} from 'hooks/tasks';
+import { useSelectedTaskSlug } from 'hooks/tasks';
+import IconArrow from 'icons/arrow.svg';
 import {
   Wrapper,
   Header,
@@ -21,22 +19,23 @@ const TaskPanel = (props) => {
   } = props;
 
   // Custom hooks.
-  // const inProgressTaskSlug = useInProgressTaskSlug();
   const selectedTaskSlug = useSelectedTaskSlug();
   const active = selectedTaskSlug === slug;
 
   return (
-    <Wrapper active={active}>
-      <Header active={active}>
+    <Wrapper isActive={active}>
+      <Header isActive={active}>
         <HeaderToggle
-          active={active}
+          isActive={active}
           onClick={() => {
             setSelectedTaskSlug(slug, 'task panel click');
           }}
           type="button"
         >
           <HeaderName>{name}</HeaderName>
-          <Arrow active={active} />
+          <Arrow isActive={active}>
+            <IconArrow />
+          </Arrow>
         </HeaderToggle>
       </Header>
       {active && (

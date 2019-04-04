@@ -1,7 +1,16 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
+
+const input = css`
+  border: 1px solid #CCCCCC;
+  width: 100%;
+  height: 42px;
+`;
+
+export const InputWrapper = styled.div`
+  width: calc(100% - 200px);
+`;
 
 export const Wrapper = styled.div`
-  background: #EEE;
   height: 100%;
   padding: 10px;
 `;
@@ -19,10 +28,27 @@ export const LabelText = styled.span`
   width: 200px;
 `;
 
-export const Input = styled.div`
-  width: calc(100% - 200px);
+export const TextFieldWrapper = styled.div`
 
-  > * {
-    width: 100%;
+  input {
+    ${input}
+    padding: 5px 10px;
+  }
+`;
+
+export const SelectWrapper = styled.div`
+
+  select {
+    ${input}
+    padding: 5px 10px;
+  }
+`;
+
+export const TextAreaWrapper = styled.div`
+
+  textarea {
+    ${input}
+    height: 120px;
+    padding: 5px 10px;
   }
 `;

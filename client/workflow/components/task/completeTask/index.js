@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useInProgressTaskSlug, useSelectedTaskSlug } from 'hooks/tasks';
 import { getTask, completeTask } from 'services/tasks';
-import Wrapper from './completeTaskStyles.js';
+import Wrapper from './completeTaskStyles';
 
 const CompleteTask = () => {
   // Watch for changes to the in progress and selected tasks.

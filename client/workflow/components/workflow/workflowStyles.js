@@ -11,17 +11,9 @@ export const Wrapper = styled.div`
   }
 `;
 
-export const TasksPanel = styled.aside`
+export const TaskWrapper = styled.section`
   background: ${colors.white};
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
-  width: 20%;
-`;
-
-export const TaskWrapper = styled.section`
-  align-items: stretch;
-  background: ${colors.white};
-  display: flex;
-  flex-grow: 1;
+  width: 100%;
 `;

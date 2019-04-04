@@ -30,6 +30,7 @@ class Post_Type {
 	public function __construct() {
 		$this->register_workflow_post_type();
 		$this->register_task_post_type();
+		$this->register_post_statuses();
 
 		// Register meta box for rendering the React component.
 		add_action( 'add_meta_boxes', [ $this, 'add_meta_boxes' ] );
@@ -78,6 +79,38 @@ class Post_Type {
 		];
 
 		register_post_type( self::WORKFLOW_TASK_POST_TYPE, $args );
+	}
+
+	/**
+	 * Register custom post statuses for all tasks.
+	 */
+	public function register_post_statuses() {
+
+		// Get all tasks.
+		$tasks_query = new \WP_Query(
+			[
+				'fields'         => 'ids',
+				'order'          => 'ASC',
+				'orderby'        => 'title',
+				'post_type'      => Post_Type::WORKFLOW_TASK_POST_TYPE,
+				'posts_per_page' => -1,
+			]
+		);
+
+		// Register a custom post status for each of them.
+		foreach ( ( $tasks_query->posts ?? [] ) as $task_id ) {
+			$task_post_status = (string) get_post_meta( $task_id, 'post_status', true );
+			$task_name        = (string) get_post_meta( $task_id, 'name', true );
+
+			$args = [
+				'label'                     => $task_name,
+				'label_count'               => _n_noop( "{$task_name} <span class=\"count\">(%s)</span>", "{$task_name} <span class=\"count\">(%s)</span>", 'mercury' ),
+				'public'                    => true,
+				'show_in_admin_status_list' => true,
+			];
+
+			register_post_status( $task_post_status, $args );
+		}	
 	}
 
 	/**

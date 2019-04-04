@@ -28,7 +28,7 @@ class Assignments_Table extends \WP_List_Table {
 		parent::__construct(
 			[
 				'ajax'     => false,
-				'plural'   => __( 'assignmnets', 'mercury' ),
+				'plural'   => __( 'assignments', 'mercury' ),
 				'singular' => __( 'assignment', 'mercury' ),
 			]
 		);

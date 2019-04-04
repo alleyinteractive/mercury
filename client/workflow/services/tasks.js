@@ -132,8 +132,20 @@ export function completeTask(currentTaskSlug, nextTaskSlug) {
   // Mark as complete in meta.
   setTaskStatus(currentTaskSlug, 'complete');
   setTaskStatus(nextTaskSlug, 'active');
+  setPostStatus(nextTaskSlug);
 
   // Set the InProgress and Selected tasks to the next task.
   setInProgressTaskSlug(nextTaskSlug);
   setSelectedTaskSlug(nextTaskSlug);
+}
+
+/**
+ * Set the post status appropriately, given a task.
+ *
+ * @param  {string} taskSlug Slug of the task.
+ */
+export function setPostStatus(taskSlug) {
+  wp.data.dispatch('core/editor').editPost({
+    status: getTask(taskSlug).postStatus,
+  });
 }

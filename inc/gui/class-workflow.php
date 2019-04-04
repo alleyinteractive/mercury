@@ -37,8 +37,8 @@ class Workflow {
 				'serialize_data' => false,
 				'add_to_prefix'  => false,
 				'children'       => [
-					'name'         => new \Fieldmanager_TextField( __( 'Name', 'mercury' ) ),
-					'slug'         => new \Fieldmanager_TextField( __( 'Slug', 'mercury' ) ),
+					'name' => new \Fieldmanager_TextField( __( 'Name', 'mercury' ) ),
+					'slug' => new \Fieldmanager_TextField( __( 'Slug', 'mercury' ) ),
 				],
 			]
 		);

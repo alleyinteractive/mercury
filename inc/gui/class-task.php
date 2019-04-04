@@ -40,8 +40,18 @@ class Task {
 				'serialize_data' => false,
 				'add_to_prefix'  => false,
 				'children'       => [
-					'name'         => new \Fieldmanager_TextField( __( 'Name', 'mercury' ) ),
-					'slug'         => new \Fieldmanager_TextField( __( 'Slug', 'mercury' ) ),
+					'name'        => new \Fieldmanager_TextField( __( 'Name', 'mercury' ) ),
+					'slug'        => new \Fieldmanager_TextField( __( 'Slug', 'mercury' ) ),
+					'post_status' => new \Fieldmanager_TextField(
+						[
+							'label'       => __( 'Post Status', 'mercury' ),
+							'description' => __( 'Limited to 20 characters', 'mercury' ),
+							'attributes'  => [
+								'maxlength' => '20',
+								'size'      => '50',
+							],
+						]
+					),
 				],
 			]
 		);
@@ -314,11 +324,12 @@ class Task {
 	 */
 	public static function get_task( int $task_id ) : array {
 		return [
-			'assignees' => self::get_assignee_settings( $task_id ),
-			'fields'    => self::get_fields( $task_id ),
-			'name'      => get_post_meta( $task_id, 'name', true ),
-			'nextTasks' => self::get_next_tasks( $task_id ),
-			'slug'      => get_post_meta( $task_id, 'slug', true ),
+			'assignees'  => self::get_assignee_settings( $task_id ),
+			'fields'     => self::get_fields( $task_id ),
+			'name'       => get_post_meta( $task_id, 'name', true ),
+			'nextTasks'  => self::get_next_tasks( $task_id ),
+			'slug'       => get_post_meta( $task_id, 'slug', true ),
+			'postStatus' => get_post_meta( $task_id, 'post_status', true ),
 		];
 	}
 

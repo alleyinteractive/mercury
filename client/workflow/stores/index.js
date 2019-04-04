@@ -1,15 +1,14 @@
-/* eslint-disable */
 const { data, apiFetch } = wp;
 const { registerStore } = data;
 
 const actions = {
-  setWorkflows( workflows ) {
+  setWorkflows(workflows) {
     return {
       type: 'SET_WORKFLOWS',
       workflows,
     };
   },
-  receiveWorkflows( path ) {
+  receiveWorkflows(path) {
     return {
       type: 'RECEIVE_WORKFLOWS',
       path,
@@ -17,39 +16,41 @@ const actions = {
   },
 };
 
-const store = registerStore( 'mercury/workflows', {
-  reducer( state = { workflows: [] }, action ) {
-
-    switch ( action.type ) {
+registerStore('mercury/workflows', {
+  reducer(state = { workflows: [] }, action) {
+    switch (action.type) {
       case 'SET_WORKFLOWS':
-      return {
-        ...state,
-        workflows: action.workflows,
-      };
-    }
+        return {
+          ...state,
+          workflows: action.workflows,
+        };
 
-    return state;
+      default:
+        return state;
+    }
   },
 
   actions,
 
   selectors: {
-    receiveWorkflows( state ) {
+    receiveWorkflows(state) {
       const { workflows } = state;
       return workflows;
     },
   },
 
   controls: {
-    RECEIVE_WORKFLOWS( action ) {
-      return apiFetch( { path: action.path } );
+    RECEIVE_WORKFLOWS(action) {
+      return apiFetch({ path: action.path });
     },
   },
 
   resolvers: {
-    * receiveWorkflows( state ) {
-      const workflows = yield actions.receiveWorkflows( '/mercury/v1/workflows/' );
-      return actions.setWorkflows( workflows );
+    * receiveWorkflows() {
+      const workflows = yield actions.receiveWorkflows(
+        '/mercury/v1/workflows/'
+      );
+      return actions.setWorkflows(workflows);
     },
   },
-} );
+});

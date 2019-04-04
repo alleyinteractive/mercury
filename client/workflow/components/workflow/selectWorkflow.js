@@ -1,14 +1,9 @@
-/* eslint-disable */
-
 import React from 'react';
-import PropTypes from 'prop-types';
-import useMeta from '../../hooks/meta';
 import { useActiveWorkflowSlug } from '../../hooks/workflows';
-import { getMeta, setMeta } from '../../services/meta';
 import getWorkflows, { setActiveWorkflowSlug } from '../../services/workflows';
 import './selectWorkflow.css';
 
-const SelectWorkflow = (props) => {
+const SelectWorkflow = () => {
   const workflowSlug = useActiveWorkflowSlug();
 
   return (
@@ -17,16 +12,18 @@ const SelectWorkflow = (props) => {
         value={workflowSlug}
         onChange={(event) => setActiveWorkflowSlug(event.target.value)}
       >
-        {getWorkflows().map((workflow) =>
-          <option value={workflow.slug}>{workflow.name}</option>
-        )}
+        {getWorkflows().map((workflow) => {
+          const { name, slug } = workflow;
+
+          return (
+            <option value={slug} key={slug}>
+              {name}
+            </option>
+          );
+        })}
       </select>
     </div>
   );
-};
-
-SelectWorkflow.propTypes = {
-  workflows: PropTypes.object.isRequired,
 };
 
 export default SelectWorkflow;

@@ -1,4 +1,3 @@
-/* stylelint-disable */
 import React from 'react';
 import ReactDOM from 'react-dom';
 import domReady from '@wordpress/dom-ready';
@@ -16,13 +15,13 @@ if (rootEl) {
       <App postId={postId} />,
       rootEl
     );
+
+    if (module.hot) {
+      module.hot.accept('./components/app', () => {
+        const NextApp = require('./components/app').default; // eslint-disable-line global-require
+
+        ReactDOM.render(<NextApp postId={postId} />, rootEl);
+      });
+    }
   });
-
-  if (module.hot) {
-    module.hot.accept('./components/app', () => {
-      const NextApp = require('./components/app').default; // eslint-disable-line global-require
-
-      ReactDOM.render(<NextApp postId={postId} />, rootEl);
-    });
-  }
 }

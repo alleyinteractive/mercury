@@ -1,8 +1,4 @@
-/* eslint-disable */
-
 import React, { useState } from 'react';
-// import PropTypes from 'prop-types';
-// import { getMeta } from '../../services/fieldHelpers';
 
 const Assignee = () => {
   const assignees = [

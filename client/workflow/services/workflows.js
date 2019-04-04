@@ -1,6 +1,4 @@
 /* global wp */
-/* eslint-disable */
-
 import { getMeta, setMeta } from './meta';
 import { setInProgressTaskSlug } from './tasks';
 
@@ -18,11 +16,13 @@ export default function getWorkflows() {
  * @return {object|bool} Workflow object or false.
  */
 export function getWorkflow(slug) {
-	const workflow = getWorkflows().find((workflow) => workflow.slug === slug);
-	if (undefined === workflow) {
-		return false;
-	}
-	return workflow;
+  const selectedWorklow = getWorkflows().find(
+    (workflow) => workflow.slug === slug
+  );
+  if (undefined === selectedWorklow) {
+    return false;
+  }
+  return selectedWorklow;
 }
 
 /**
@@ -30,8 +30,11 @@ export function getWorkflow(slug) {
  */
 export function setDefaultActiveWorkflowSlug() {
   const defaultWorkflow = getWorkflows()[0];
-  setInProgressTaskSlug(defaultWorkflow.tasks[0].slug);
-  return setActiveWorkflowSlug(defaultWorkflow.slug);
+  setMeta(
+    'mercury_in_progress_task_slug',
+    defaultWorkflow.tasks[0].slug
+  );
+  return setMeta('mercury_active_workflow_slug', defaultWorkflow.slug);
 }
 
 /**

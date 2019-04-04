@@ -1,8 +1,7 @@
-/* eslint-disable */
-
-import React, { useState, useEffect } from 'react';
-import Workflow from '../Workflow';
-import useWorkflows from '../../hooks/workflows';
+import React from 'react';
+import { hot } from 'react-hot-loader/root';
+import Workflow from 'components/workflow';
+import useWorkflows from 'hooks/workflows';
 
 const App = () => {
   const workflows = useWorkflows();
@@ -15,8 +14,8 @@ const App = () => {
   }
 
   return (
-    <Workflow/>
+    <Workflow />
   );
 };
 
-export default App;
+export default hot(App);

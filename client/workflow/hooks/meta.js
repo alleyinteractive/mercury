@@ -1,9 +1,5 @@
-/* eslint-disable */
-
-import PubSub from 'pubsub-js';
 import { useState, useEffect } from 'react';
-import { getMeta, setMeta } from '../services/meta';
-import getWorkflows from '../services/workflows';
+import { getMeta, setMeta } from 'services/meta';
 
 /**
  * Custom hook that manages a meta state.
@@ -24,10 +20,10 @@ export default function useMeta(metaKey, defaultValue) {
   const [value, setValue] = useState(metaValue);
 
   useEffect(() => wp.data.subscribe(() => {
-      const newMeta = getMeta(metaKey);
-      if (value !== newMeta) {
-        setValue(newMeta);
-      }
+    const newMeta = getMeta(metaKey);
+    if (value !== newMeta) {
+      setValue(newMeta);
+    }
   }));
 
   return value;

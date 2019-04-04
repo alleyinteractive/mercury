@@ -4,8 +4,7 @@ import Field from 'components/fields/field';
 import { Wrapper, FieldWrapper } from './fieldsStyles';
 
 const Fields = (props) => {
-  const { fields, slug } = props;
-  console.log(slug);
+  const { fields } = props;
 
   if (! fields || 0 === fields.length) {
     return (
@@ -19,10 +18,10 @@ const Fields = (props) => {
   return (
     <Wrapper>
       {fields.map((field) => {
-        const { slug: fieldSlug } = field;
+        const { slug } = field;
 
         return (
-          <FieldWrapper key={fieldSlug}>
+          <FieldWrapper key={slug}>
             <Field {...field} />
           </FieldWrapper>
         );
@@ -32,7 +31,6 @@ const Fields = (props) => {
 };
 
 Fields.propTypes = {
-  slug: PropTypes.string.isRequired,
   fields: PropTypes.arrayOf(
     PropTypes.shape({
       label: PropTypes.string,

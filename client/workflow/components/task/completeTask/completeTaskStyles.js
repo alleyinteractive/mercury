@@ -1,8 +1,18 @@
 import styled from 'styled-components';
+import { ButtonBase } from 'components/helpers/button';
 
-const Wrapper = styled.div`
+export const Wrapper = styled.div`
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
 `;
 
-export default Wrapper;
+export const Label = styled.label`
+  align-items: center;
+  display: flex;
+`;
+
+export const Submit = styled(ButtonBase)`
+  background-color: blue;
+  margin-left: auto;
+`;

@@ -1,10 +1,5 @@
 import styled from 'styled-components';
-
-export const ButtonBase = styled.button`
-  appearance: none;
-  background-color: transparent;
-  border: 0;
-`;
+import { ButtonBase } from 'components/helpers/button';
 
 export const Wrapper = styled.header`
   align-items: center;

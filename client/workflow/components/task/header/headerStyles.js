@@ -9,6 +9,7 @@ export const Wrapper = styled.header`
   justify-content: space-between;
   position: relative;
   top: 0;
+  z-index: 1;
 `;
 
 export const Button = styled(ButtonBase)`

@@ -1,7 +1,14 @@
 import React, { useState, useRef } from 'react';
-import getWorkflows, { setActiveWorkflowSlug } from 'services/workflows';
+import getWorkflows, {
+  setActiveWorkflowSlug,
+  getActiveWorkflowSlug,
+} from 'services/workflows';
 import { setSelectedTaskSlug } from 'services/tasks';
 import IconArrow from 'icons/arrow.svg';
+import {
+  ExpandDown,
+  ExpandHeight,
+} from 'components/helpers/animations';
 import {
   Wrapper,
   WorkflowList,
@@ -13,17 +20,14 @@ import {
   ExpandWorkflowMenuButton,
   ActivateWorkflowButton,
 } from './menuStyles';
-import {
-  ExpandDown,
-  ExpandHeight,
-} from './menuAnimations';
 
 const Menu = () => {
   const workflows = getWorkflows();
+  const selectedWorkflowSlug = getActiveWorkflowSlug();
   const [
     visibleWorkflow,
     setVisibleWorkflow,
-  ] = useState(workflows[0].slug);
+  ] = useState(selectedWorkflowSlug);
 
   return (
     <Wrapper>

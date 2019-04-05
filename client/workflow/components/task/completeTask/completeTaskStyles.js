@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { ButtonBase } from 'components/helpers/button';
+import colors from 'css/colors';
 
 export const Wrapper = styled.div`
   display: flex;
@@ -13,6 +14,15 @@ export const Label = styled.label`
 `;
 
 export const Submit = styled(ButtonBase)`
-  background-color: blue;
+  background-color: ${colors.primary};
+  font-size: 12px;
+  font-weight: 700;
   margin-left: auto;
+  padding: 10px 25px;
+  text-transform: uppercase;
+
+  &:hover,
+  &:focus {
+    background-color: ${colors.primaryDark}
+  }
 `;

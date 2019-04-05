@@ -91,7 +91,7 @@ export function getSelectedTaskSlug() {
   const taskSlug = getMeta('mercury_selected_task_slug');
 
   // Is `taskSlug` correspond to a valid task?
-  if (getTask(taskSlug)) {
+  if (getTask(taskSlug) || 'none' === taskSlug) {
     return taskSlug;
   }
 
@@ -105,7 +105,7 @@ export function getSelectedTaskSlug() {
  * @return {string} slug Updated value.
  */
 export function setSelectedTaskSlug(slug) {
-  if (getTask(slug)) {
+  if (getTask(slug) || 'none' === slug) {
     return setMeta('mercury_selected_task_slug', slug);
   }
   return setDefaultSelectedTaskSlug();

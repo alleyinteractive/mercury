@@ -1,27 +1,33 @@
 import styled from 'styled-components';
 import { ButtonBase } from 'components/helpers/button';
+import colors from 'css/colors';
 
 export const Wrapper = styled.header`
   align-items: center;
-  background: yellow;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  min-height: 50px;
-  padding: 10px;
   position: relative;
   top: 0;
 `;
 
 export const Button = styled(ButtonBase)`
   align-items: center;
+  background-color: ${colors.primary};
   display: flex;
   justify-content: space-between;
+  min-height: 50px;
+  padding: 10px;
   width: 100%;
+
+  &:hover,
+  &:focus {
+    background-color: ${colors.primaryDark};
+  }
 `;
 
 export const Name = styled.div`
-  font-size: 1.4rem;
+  font-size: 20px;
   font-weight: 700;
 `;
 

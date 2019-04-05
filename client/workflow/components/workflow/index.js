@@ -2,7 +2,7 @@ import React from 'react';
 import { useActiveWorkflowSlug } from 'hooks/workflows';
 import { getWorkflow } from 'services/workflows';
 import Task from 'components/task';
-import SelectWorkflow from './selectWorkflow';
+import Menu from 'components/menu';
 import {
   Wrapper,
   TaskWrapper,
@@ -25,14 +25,12 @@ const Workflow = () => {
   );
 
   return (
-    <div>
-      <SelectWorkflow />
-      <Wrapper>
-        <TaskWrapper>
-          {getTasks()}
-        </TaskWrapper>
-      </Wrapper>
-    </div>
+    <Wrapper>
+      <Menu />
+      <TaskWrapper>
+        {getTasks()}
+      </TaskWrapper>
+    </Wrapper>
   );
 };
 

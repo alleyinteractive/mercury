@@ -22,7 +22,11 @@ const Header = (props) => {
     <Wrapper>
       <Button
         onClick={() => {
-          setSelectedTaskSlug(slug, 'task panel click');
+          if (! active) {
+            setSelectedTaskSlug(slug, 'task panel click');
+          } else {
+            setSelectedTaskSlug('none');
+          }
         }}
         type="button"
       >

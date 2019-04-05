@@ -1,7 +1,8 @@
 import styled from 'styled-components';
+import colors from 'css/colors';
 
 const Wrapper = styled.footer`
-  background: yellow;
+  background: ${colors.grayLight};
   bottom: 0;
   display: flex;
   justify-content: space-between;

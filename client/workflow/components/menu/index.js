@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import getWorkflows, { setActiveWorkflowSlug } from 'services/workflows';
 import { setSelectedTaskSlug } from 'services/tasks';
 import IconArrow from 'icons/arrow.svg';
@@ -12,7 +12,11 @@ import {
   TaskItem,
   ExpandWorkflowMenuButton,
   ActivateWorkflowButton,
-} from './menuStyles.js';
+} from './menuStyles';
+import {
+  ExpandDown,
+  ExpandHeight,
+} from './menuAnimations';
 
 const Menu = () => {
   const workflows = getWorkflows();
@@ -31,6 +35,7 @@ const Menu = () => {
             tasks,
           } = workflow;
           const tasksVisible = visibleWorkflow === slug;
+          const taskListRef = useRef(null);
 
           return (
             <WorkflowMenuWrapper key={slug}>
@@ -47,27 +52,33 @@ const Menu = () => {
                   <IconArrow />
                 </ExpandWorkflowMenuButton>
               </WorkflowItem>
-              {tasksVisible && (
-                <TaskList>
-                  {tasks.map((task) => {
-                    const {
-                      name: taskName,
-                      slug: taskSlug,
-                    } = task;
+              <ExpandHeight
+                pose={tasksVisible ? 'expanded' : 'collapsed'}
+                maxHeight={taskListRef.current
+                  ? taskListRef.current.offsetHeight : 0}
+              >
+                <ExpandDown pose={tasksVisible ? 'expanded' : 'collapsed'}>
+                  <TaskList ref={taskListRef}>
+                    {tasks.map((task) => {
+                      const {
+                        name: taskName,
+                        slug: taskSlug,
+                      } = task;
 
-                    return (
-                      <TaskItem key={taskSlug}>
-                        <TaskButton
-                          type="button"
-                          onClick={() => setSelectedTaskSlug(taskSlug)}
-                        >
-                          {taskName}
-                        </TaskButton>
-                      </TaskItem>
-                    );
-                  })}
-                </TaskList>
-              )}
+                      return (
+                        <TaskItem key={taskSlug}>
+                          <TaskButton
+                            type="button"
+                            onClick={() => setSelectedTaskSlug(taskSlug)}
+                          >
+                            {taskName}
+                          </TaskButton>
+                        </TaskItem>
+                      );
+                    })}
+                  </TaskList>
+                </ExpandDown>
+              </ExpandHeight>
             </WorkflowMenuWrapper>
           );
         })}

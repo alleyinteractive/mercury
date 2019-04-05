@@ -26,6 +26,7 @@
     "react": "^16.6.0",
     "react-dom": "^16.6.0",
     "react-hot-loader": "^4.8.2",
+    "react-pose": "^4.0.8",
     "react-tabs": "^3.0.0",
     "styled-components": "^4.2.0"
   },

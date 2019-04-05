@@ -17,6 +17,8 @@ export const WorkflowItem = styled.div`
   align-items: center;
   display: flex;
   height: 40px;
+  position: relative;
+  z-index: 1;
 `;
 
 export const ExpandWorkflowMenuButton = styled(ButtonBase)`
@@ -36,6 +38,7 @@ export const ExpandWorkflowMenuButton = styled(ButtonBase)`
 
 export const ActivateWorkflowButton = styled(ButtonBase)`
   align-items: center;
+  background-color: ${colors.white};
   display: flex;
   font-size: 14px;
   font-weight: 700;
@@ -69,6 +72,7 @@ export const TaskList = styled(MenuList)`
 export const WorkflowMenuWrapper = styled.li`
   font-size: 1rem;
   margin-bottom: 1rem;
+  overflow: hidden;
   text-align: left;
   width: 100%;
 `;

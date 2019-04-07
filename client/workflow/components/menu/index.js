@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useCallback } from 'react';
 import getWorkflows, {
   setActiveWorkflowSlug,
   getActiveWorkflowSlug,
@@ -46,7 +46,12 @@ const Menu = () => {
           } = workflow;
           const inProgressTaskSlug = useInProgressTaskSlug();
           const tasksVisible = visibleWorkflow === slug;
-          const taskListRef = useRef(null);
+          const [height, setHeight] = useState(0);
+          const heightRef = useCallback((node) => {
+            if (null !== node) {
+              setHeight(node.getBoundingClientRect().height);
+            }
+          }, []);
 
           return (
             <WorkflowMenuWrapper key={slug}>
@@ -67,12 +72,11 @@ const Menu = () => {
                 </ExpandWorkflowMenuButton>
               </WorkflowItem>
               <ExpandHeight
-                pose={tasksVisible ? 'expanded' : 'collapsed'}
-                maxHeight={taskListRef.current
-                  ? taskListRef.current.offsetHeight : 0}
+                pose={(tasksVisible && height) ? 'expanded' : 'collapsed'}
+                maxHeight={height}
               >
                 <ExpandDown pose={tasksVisible ? 'expanded' : 'collapsed'}>
-                  <TaskList ref={taskListRef}>
+                  <TaskList ref={heightRef}>
                     {tasks.map((task) => {
                       const {
                         name: taskName,

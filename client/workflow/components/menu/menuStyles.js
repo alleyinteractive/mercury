@@ -25,6 +25,7 @@ export const ExpandWorkflowMenuButton = styled(ButtonBase)`
   height: 100%;
   padding: 0;
   transform: rotate(${(props) => (props.active ? '0' : '90deg')});
+  transition: transform 125ms ease;
   width: 40px;
 
   &:hover,
@@ -85,6 +86,9 @@ export const TaskItem = styled.li`
 `;
 
 export const MenuButton = styled(ButtonBase)`
+  background-color: ${(props) => (
+    props.active ? colors.primary : colors.white
+  )};
   min-height: 40px;
   padding: 10px 5px;
   text-align: left;
@@ -97,5 +101,19 @@ export const MenuButton = styled(ButtonBase)`
 `;
 
 export const TaskButton = styled(MenuButton)`
+  align-items: center;
+  display: flex;
   padding-left: 1rem;
+
+  span {
+    display: inline-block;
+    margin-right: 10px;
+  }
+`;
+
+export const InProgressIndicator = styled.span`
+  background-color: blue;
+  display: block;
+  height: 20px;
+  width: 20px;
 `;

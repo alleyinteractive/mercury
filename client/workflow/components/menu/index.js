@@ -4,6 +4,10 @@ import getWorkflows, {
   getActiveWorkflowSlug,
 } from 'services/workflows';
 import { setSelectedTaskSlug } from 'services/tasks';
+import {
+  useSelectedTaskSlug,
+  useInProgressTaskSlug,
+} from 'hooks/tasks';
 import IconArrow from 'icons/arrow.svg';
 import {
   ExpandDown,
@@ -19,11 +23,13 @@ import {
   TaskItem,
   ExpandWorkflowMenuButton,
   ActivateWorkflowButton,
+  InProgressIndicator,
 } from './menuStyles';
 
 const Menu = () => {
   const workflows = getWorkflows();
   const selectedWorkflowSlug = getActiveWorkflowSlug();
+  const selectedTaskSlug = useSelectedTaskSlug();
   const [
     visibleWorkflow,
     setVisibleWorkflow,
@@ -38,6 +44,7 @@ const Menu = () => {
             slug,
             tasks,
           } = workflow;
+          const inProgressTaskSlug = useInProgressTaskSlug();
           const tasksVisible = visibleWorkflow === slug;
           const taskListRef = useRef(null);
 
@@ -45,7 +52,10 @@ const Menu = () => {
             <WorkflowMenuWrapper key={slug}>
               <WorkflowItem>
                 <ActivateWorkflowButton
-                  onClick={() => setActiveWorkflowSlug(slug)}
+                  onClick={() => {
+                    setVisibleWorkflow(slug);
+                    setActiveWorkflowSlug(slug);
+                  }}
                 >
                   {name}
                 </ActivateWorkflowButton>
@@ -73,9 +83,13 @@ const Menu = () => {
                         <TaskItem key={taskSlug}>
                           <TaskButton
                             type="button"
+                            active={selectedTaskSlug === taskSlug}
                             onClick={() => setSelectedTaskSlug(taskSlug)}
                           >
-                            {taskName}
+                            <span>{taskName}</span>
+                            {(inProgressTaskSlug === taskSlug) && (
+                              <InProgressIndicator />
+                            )}
                           </TaskButton>
                         </TaskItem>
                       );

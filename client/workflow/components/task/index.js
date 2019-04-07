@@ -1,14 +1,10 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Formik } from 'formik';
-import { useSelectedTaskSlug } from 'hooks/tasks';
+import { useInProgressTaskSlug } from 'hooks/tasks';
 import Header from 'components/task/header';
 import Footer from 'components/task/footer';
 import Fields from 'components/fields';
-import {
-  ExpandDown,
-  ExpandHeight,
-} from 'components/helpers/animations';
 import { Wrapper, Form } from './taskStyles.js';
 
 const Task = (props) => {
@@ -17,47 +13,37 @@ const Task = (props) => {
     name,
     fields,
   } = props;
-  const selectedTaskSlug = useSelectedTaskSlug();
-  const active = selectedTaskSlug === slug;
-  const formRef = useRef(null);
+  const inProgressTaskSlug = useInProgressTaskSlug();
 
   return (
     <Wrapper>
       <Header
-        slug={slug}
         name={name}
+        inProgress={slug === inProgressTaskSlug}
       />
-      <ExpandHeight
-        pose={active ? 'expanded' : 'collapsed'}
-        maxHeight={formRef.current
-          ? formRef.current.offsetHeight : 0}
-      >
-        <ExpandDown pose={active ? 'expanded' : 'collapsed'}>
-          <Formik
-            onSubmit={(values, actions) => {
-              setTimeout(() => {
-                alert(JSON.stringify(values, null, 2));
-                actions.setSubmitting(false);
-              }, 1000);
-            }}
-            render={(formProps) => {
-              const { handleSubmit } = formProps;
+      <Formik
+        onSubmit={(values, actions) => {
+          setTimeout(() => {
+            alert(JSON.stringify(values, null, 2));
+            actions.setSubmitting(false);
+          }, 1000);
+        }}
+        render={(formProps) => {
+          const { handleSubmit } = formProps;
 
-              return (
-                <Form onSubmit={handleSubmit} ref={formRef}>
-                  <div>Due June 3rd</div>
-                  <div>
-                    Assigned to
-                    <button type="button">James Burke</button>
-                  </div>
-                  <Fields fields={fields} slug={slug} />
-                  <Footer />
-                </Form>
-              );
-            }}
-          />
-        </ExpandDown>
-      </ExpandHeight>
+          return (
+            <Form onSubmit={handleSubmit}>
+              <div>Due June 3rd</div>
+              <div>
+                Assigned to
+                <button type="button">James Burke</button>
+              </div>
+              <Fields fields={fields} slug={slug} />
+              <Footer />
+            </Form>
+          );
+        }}
+      />
     </Wrapper>
   );
 };

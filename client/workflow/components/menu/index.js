@@ -1,11 +1,9 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import getWorkflows, { setActiveWorkflowSlug } from 'services/workflows';
 import { setSelectedTaskSlug } from 'services/tasks';
 import { useActiveWorkflow } from 'hooks/workflows';
-import {
-  useSelectedTaskSlug,
-  useInProgressTaskSlug,
-} from 'hooks/tasks';
+import { useInProgressTaskSlug } from 'hooks/tasks';
 import ProgressIndicator from 'components/helpers/progressIndicator';
 import {
   Wrapper,
@@ -15,10 +13,10 @@ import {
   SelectLabel,
 } from './menuStyles';
 
-const Menu = () => {
+const Menu = (props) => {
+  const { selectedTaskSlug } = props;
   const workflows = getWorkflows();
   const activeWorkflow = useActiveWorkflow();
-  const selectedTaskSlug = useSelectedTaskSlug();
   const inProgressTaskSlug = useInProgressTaskSlug();
   const { slug, tasks } = activeWorkflow;
 
@@ -70,6 +68,10 @@ const Menu = () => {
       </TaskList>
     </Wrapper>
   );
+};
+
+Menu.propTypes = {
+  selectedTaskSlug: PropTypes.string.isRequired,
 };
 
 export default Menu;

@@ -1,19 +1,5 @@
-import styled, { css } from 'styled-components';
-import colors from 'css/colors';
-
-export const input = css`
-  border: 1px solid #CCCCCC;
-  height: 42px;
-  width: 100%;
-
-  &:hover,
-  &:focus {
-    border: 1px solid ${colors.primary};
-    box-shadow: none;
-    outline: 1px solid ${colors.primary};
-    outline-offset: 0;
-  }
-`;
+import styled from 'styled-components';
+import { input, label } from 'components/helpers/forms';
 
 export const InputWrapper = styled.div`
   width: 100%;
@@ -32,10 +18,7 @@ export const Label = styled.label`
 `;
 
 export const LabelText = styled.span`
-  font-size: 12px;
-  font-weight: 700;
-  margin-right: 10px;
-  text-transform: uppercase;
+  ${label}
   width: 200px;
 `;
 

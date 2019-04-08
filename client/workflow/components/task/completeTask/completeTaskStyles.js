@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { ButtonBase } from 'components/helpers/button';
 import colors from 'css/colors';
-import { input } from 'components/fields/fieldStyles';
+import { input, select, label } from 'components/helpers/forms';
 
 export const Wrapper = styled.div`
   display: flex;
@@ -10,20 +10,26 @@ export const Wrapper = styled.div`
 
   select {
     ${input}
+    ${select}
     padding: 5px 10px;
   }
 `;
 
 export const Label = styled.label`
-  align-items: center;
   display: flex;
+  flex-direction: column;
+
+  span {
+    ${label}
+  }
 `;
 
 export const Submit = styled(ButtonBase)`
   background-color: ${colors.primary};
   font-size: 12px;
   font-weight: 700;
-  margin-left: auto;
+  height: 42px;
+  margin: auto 0 0 auto;
   padding: 10px 25px;
   text-transform: uppercase;
 

@@ -5,7 +5,11 @@ import { useInProgressTaskSlug } from 'hooks/tasks';
 import Header from 'components/task/header';
 import Footer from 'components/task/footer';
 import Fields from 'components/fields';
-import { Wrapper, Form } from './taskStyles.js';
+import {
+  Wrapper,
+  Form,
+  FormHeader,
+} from './taskStyles.js';
 
 const Task = (props) => {
   const {
@@ -33,11 +37,13 @@ const Task = (props) => {
 
           return (
             <Form onSubmit={handleSubmit}>
-              <div>Due June 3rd</div>
-              <div>
-                Assigned to
-                <button type="button">James Burke</button>
-              </div>
+              <FormHeader>
+                <div>Due June 3rd</div>
+                <div>
+                  Assigned to
+                  <button type="button">James Burke</button>
+                </div>
+              </FormHeader>
               <Fields fields={fields} slug={slug} />
               <Footer />
             </Form>

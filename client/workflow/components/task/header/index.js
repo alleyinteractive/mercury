@@ -19,7 +19,11 @@ const Header = (props) => {
 
 Header.propTypes = {
   name: PropTypes.string.isRequired,
-  inProgress: PropTypes.bool.isRequired,
+  inProgress: PropTypes.bool,
+};
+
+Header.defaultProps = {
+  inProgress: false,
 };
 
 export default Header;

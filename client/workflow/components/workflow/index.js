@@ -20,11 +20,16 @@ const Workflow = () => {
    * @return {array} TaskPanels.
    */
   const getTask = () => {
-    const task = getWorkflow(currentWorkflowSlug).tasks
+    const workflow = getWorkflow(currentWorkflowSlug);
+    let task = workflow.tasks
       .find((currentTask) => (currentTask.slug === currentTaskSlug));
 
+    if (! task) {
+      [task] = workflow.tasks;
+    }
+
     if (task) {
-      return <Task {...task} key={task.slug} />;
+      return task;
     }
 
     return false;
@@ -33,23 +38,17 @@ const Workflow = () => {
 
   return (
     <Wrapper>
-      <Menu />
+      <Menu selectedTaskSlug={task ? task.slug : 'none'} />
       {task && (
         <TaskWrapper>
-          {task}
+          <Task {...task} key={task.slug} />
         </TaskWrapper>
       )}
       {('none' !== currentWorkflowSlug && ! task) && (
-        <TaskHeader
-          name="No Task Selected"
-          inProgress={false}
-        />
+        <TaskHeader name="No Task Selected" />
       )}
       {('none' === currentWorkflowSlug) && (
-        <TaskHeader
-          name="No Workflow Selected"
-          inProgress={false}
-        />
+        <TaskHeader name="No Workflow Selected" />
       )}
     </Wrapper>
   );

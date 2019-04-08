@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { ButtonBase } from 'components/helpers/button';
 import breakpoints from 'css/breakpoints';
 import colors from 'css/colors';
-import { input } from 'components/fields/fieldStyles';
+import { input, select, label } from 'components/helpers/forms';
 import screenreaderOnly from 'components/helpers/screenreaderOnly';
 
 export const Wrapper = styled.nav`
@@ -17,6 +17,7 @@ export const Wrapper = styled.nav`
 
   select {
     ${input}
+    ${select}
     display: block;
     font-size: 16px;
     font-weight: 700;
@@ -26,12 +27,9 @@ export const Wrapper = styled.nav`
 `;
 
 export const SelectLabel = styled.label`
+  ${label}
   display: flex;
   flex-direction: column;
-  font-size: 12px;
-  font-weight: 700;
-  margin-bottom: 5px;
-  text-transform: uppercase;
 
   > span {
     ${screenreaderOnly};

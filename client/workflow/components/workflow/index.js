@@ -3,6 +3,7 @@ import { useActiveWorkflowSlug } from 'hooks/workflows';
 import { useSelectedTaskSlug } from 'hooks/tasks';
 import { getWorkflow } from 'services/workflows';
 import Task from 'components/task';
+import TaskHeader from 'components/task/header';
 import Menu from 'components/menu';
 import {
   Wrapper,
@@ -28,13 +29,28 @@ const Workflow = () => {
 
     return false;
   };
+  const task = getTask();
 
   return (
     <Wrapper>
       <Menu />
-      <TaskWrapper>
-        {getTask()}
-      </TaskWrapper>
+      {task && (
+        <TaskWrapper>
+          {task}
+        </TaskWrapper>
+      )}
+      {('none' !== currentWorkflowSlug && ! task) && (
+        <TaskHeader
+          name="No Task Selected"
+          inProgress={false}
+        />
+      )}
+      {('none' === currentWorkflowSlug) && (
+        <TaskHeader
+          name="No Workflow Selected"
+          inProgress={false}
+        />
+      )}
     </Wrapper>
   );
 };

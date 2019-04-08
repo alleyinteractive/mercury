@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import ProgressIndicator from 'components/helpers/progressIndicator';
 import {
   Wrapper,
   Name,
-  InProgressIndicator,
 } from './headerStyles';
 
 const Header = (props) => {
@@ -12,7 +12,7 @@ const Header = (props) => {
   return (
     <Wrapper>
       <Name>{name}</Name>
-      {inProgress && <InProgressIndicator />}
+      {inProgress && <ProgressIndicator />}
     </Wrapper>
   );
 };

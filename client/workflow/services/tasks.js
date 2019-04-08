@@ -1,3 +1,4 @@
+import { task as defaultTaskState } from 'config/defaultState';
 import { getMeta, setMeta } from './meta';
 import { getActiveWorkflow, getActiveWorkflowSlug } from './workflows';
 
@@ -13,7 +14,7 @@ export function getTask(slug) {
     (workflowTask) => workflowTask.slug === slug
   );
   if (undefined === task) {
-    return false;
+    return defaultTaskState;
   }
   return task;
 }

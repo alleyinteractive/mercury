@@ -1,11 +1,17 @@
 import styled from 'styled-components';
 import { ButtonBase } from 'components/helpers/button';
 import colors from 'css/colors';
+import { input } from 'components/fields/fieldStyles';
 
 export const Wrapper = styled.div`
   display: flex;
   justify-content: space-between;
   width: 100%;
+
+  select {
+    ${input}
+    padding: 5px 10px;
+  }
 `;
 
 export const Label = styled.label`

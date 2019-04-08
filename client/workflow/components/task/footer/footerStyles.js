@@ -7,7 +7,7 @@ const Wrapper = styled.footer`
   display: flex;
   justify-content: space-between;
   min-height: 50px;
-  padding: 10px;
+  padding: 10px 20px;
   position: relative;
 `;
 

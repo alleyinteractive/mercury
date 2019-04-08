@@ -1,110 +1,73 @@
-import React, { useState, useCallback } from 'react';
-import getWorkflows, {
-  setActiveWorkflowSlug,
-  getActiveWorkflowSlug,
-} from 'services/workflows';
+import React from 'react';
+import getWorkflows, { setActiveWorkflowSlug } from 'services/workflows';
 import { setSelectedTaskSlug } from 'services/tasks';
+import { useActiveWorkflow } from 'hooks/workflows';
 import {
   useSelectedTaskSlug,
   useInProgressTaskSlug,
 } from 'hooks/tasks';
-import IconArrow from 'icons/arrow.svg';
-import {
-  ExpandDown,
-  ExpandHeight,
-} from 'components/helpers/animations';
+import ProgressIndicator from 'components/helpers/progressIndicator';
 import {
   Wrapper,
-  WorkflowList,
   TaskList,
   TaskButton,
-  WorkflowMenuWrapper,
-  WorkflowItem,
   TaskItem,
-  ExpandWorkflowMenuButton,
-  ActivateWorkflowButton,
-  InProgressIndicator,
+  SelectLabel,
 } from './menuStyles';
 
 const Menu = () => {
   const workflows = getWorkflows();
-  const selectedWorkflowSlug = getActiveWorkflowSlug();
+  const activeWorkflow = useActiveWorkflow();
   const selectedTaskSlug = useSelectedTaskSlug();
-  const [
-    visibleWorkflow,
-    setVisibleWorkflow,
-  ] = useState(selectedWorkflowSlug);
+  const inProgressTaskSlug = useInProgressTaskSlug();
+  const { slug, tasks } = activeWorkflow;
 
   return (
     <Wrapper>
-      <WorkflowList>
-        {workflows.map((workflow) => {
+      <SelectLabel>
+        <span>Workflow</span>
+        <select
+          onChange={(e) => setActiveWorkflowSlug(e.target.value)}
+          defaultValue={slug || 'none'}
+        >
+          <option value="none">Select a Workflow</option>
+          {workflows.map((workflow) => {
+            const { slug: workflowSlug, name } = workflow;
+
+            return (
+              <option
+                key={workflowSlug}
+                value={workflowSlug}
+              >
+                {name}
+              </option>
+            );
+          })}
+        </select>
+      </SelectLabel>
+      <TaskList>
+        {tasks.map((task) => {
           const {
-            name,
-            slug,
-            tasks,
-          } = workflow;
-          const inProgressTaskSlug = useInProgressTaskSlug();
-          const tasksVisible = visibleWorkflow === slug;
-          const [height, setHeight] = useState(0);
-          const heightRef = useCallback((node) => {
-            if (null !== node) {
-              setHeight(node.getBoundingClientRect().height);
-            }
-          }, []);
+            name: taskName,
+            slug: taskSlug,
+          } = task;
 
           return (
-            <WorkflowMenuWrapper key={slug}>
-              <WorkflowItem>
-                <ActivateWorkflowButton
-                  onClick={() => {
-                    setVisibleWorkflow(slug);
-                    setActiveWorkflowSlug(slug);
-                  }}
-                >
-                  {name}
-                </ActivateWorkflowButton>
-                <ExpandWorkflowMenuButton
-                  onClick={() => setVisibleWorkflow(slug)}
-                  active={tasksVisible}
-                >
-                  <IconArrow />
-                </ExpandWorkflowMenuButton>
-              </WorkflowItem>
-              <ExpandHeight
-                pose={(tasksVisible && height) ? 'expanded' : 'collapsed'}
-                maxHeight={height}
+            <TaskItem key={taskSlug}>
+              <TaskButton
+                type="button"
+                active={selectedTaskSlug === taskSlug}
+                onClick={() => setSelectedTaskSlug(taskSlug)}
               >
-                <ExpandDown pose={tasksVisible ? 'expanded' : 'collapsed'}>
-                  <TaskList ref={heightRef}>
-                    {tasks.map((task) => {
-                      const {
-                        name: taskName,
-                        slug: taskSlug,
-                      } = task;
-
-                      return (
-                        <TaskItem key={taskSlug}>
-                          <TaskButton
-                            type="button"
-                            active={selectedTaskSlug === taskSlug}
-                            onClick={() => setSelectedTaskSlug(taskSlug)}
-                          >
-                            <span>{taskName}</span>
-                            {(inProgressTaskSlug === taskSlug) && (
-                              <InProgressIndicator />
-                            )}
-                          </TaskButton>
-                        </TaskItem>
-                      );
-                    })}
-                  </TaskList>
-                </ExpandDown>
-              </ExpandHeight>
-            </WorkflowMenuWrapper>
+                <span>{taskName}</span>
+                {(inProgressTaskSlug === taskSlug) && (
+                  <ProgressIndicator />
+                )}
+              </TaskButton>
+            </TaskItem>
           );
         })}
-      </WorkflowList>
+      </TaskList>
     </Wrapper>
   );
 };

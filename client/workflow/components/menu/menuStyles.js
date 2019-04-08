@@ -2,80 +2,48 @@ import styled from 'styled-components';
 import { ButtonBase } from 'components/helpers/button';
 import breakpoints from 'css/breakpoints';
 import colors from 'css/colors';
+import { input } from 'components/fields/fieldStyles';
+import screenreaderOnly from 'components/helpers/screenreaderOnly';
 
 export const Wrapper = styled.nav`
   display: flex;
   flex-direction: column;
+  padding-right: 10px;
   width: 35%;
 
   @media (min-width: ${breakpoints.xl}) {
     width: 25%;
   }
-`;
 
-export const WorkflowItem = styled.div`
-  align-items: center;
-  display: flex;
-  height: 40px;
-  position: relative;
-  z-index: 1;
-`;
-
-export const ExpandWorkflowMenuButton = styled(ButtonBase)`
-  height: 100%;
-  padding: 0;
-  transform: rotate(${(props) => (props.active ? '0' : '90deg')});
-  transition: transform 125ms ease;
-  width: 40px;
-
-  &:hover,
-  &:focus {
-
-    svg {
-      fill: ${colors.primary};
-    }
+  select {
+    ${input}
+    display: block;
+    font-size: 16px;
+    font-weight: 700;
+    height: 50px;
+    padding: 10px;
   }
 `;
 
-export const ActivateWorkflowButton = styled(ButtonBase)`
-  align-items: center;
-  background-color: ${colors.white};
+export const SelectLabel = styled.label`
   display: flex;
-  font-size: 14px;
+  flex-direction: column;
+  font-size: 12px;
   font-weight: 700;
-  flex-grow: 1;
-  height: 100%;
-  justify-content: flex-start;
-  padding: 10px;
-  text-align: left;
+  margin-bottom: 5px;
+  text-transform: uppercase;
 
-  &:hover,
-  &:focus {
-    background-color: ${colors.primary};
+  > span {
+    ${screenreaderOnly};
   }
 `;
 
-export const MenuList = styled.ul`
+export const TaskList = styled.ul`
   align-items: flex-start;
+  border-left: 3px solid ${colors.primary};
   display: flex;
   flex-direction: column;
   margin-top: 0;
-`;
-
-export const WorkflowList = styled(MenuList)`
-  padding: 0;
-`;
-
-export const TaskList = styled(MenuList)`
-  border-left: 3px solid ${colors.primary};
-`;
-
-export const WorkflowMenuWrapper = styled.li`
-  font-size: 1rem;
-  margin-bottom: 1rem;
-  overflow: hidden;
-  text-align: left;
-  width: 100%;
 `;
 
 export const TaskItem = styled.li`
@@ -109,11 +77,4 @@ export const TaskButton = styled(MenuButton)`
     display: inline-block;
     margin-right: 10px;
   }
-`;
-
-export const InProgressIndicator = styled.span`
-  background-color: blue;
-  display: block;
-  height: 20px;
-  width: 20px;
 `;

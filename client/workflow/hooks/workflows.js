@@ -1,6 +1,12 @@
 /* global wp */
-import { useState, useEffect } from 'react';
-import getWorkflows, { getActiveWorkflowSlug } from 'services/workflows';
+import {
+  useState,
+  useEffect,
+} from 'react';
+import getWorkflows, {
+  getWorkflow,
+  getActiveWorkflowSlug,
+} from 'services/workflows';
 
 /**
  * Custom hook that manages a meta state.
@@ -42,4 +48,25 @@ export function useActiveWorkflowSlug() {
   }));
 
   return activeWorkflowSlug;
+}
+
+/**
+ * Custom hook that retrieves a workflow when the active workflow slug changes.
+ *
+ * @return {object} Data object for active workflow.
+ */
+export function useActiveWorkflow() {
+  // Initialize a new state for the current workflow object.
+  const activeWorkflowSlug = useActiveWorkflowSlug();
+  const [
+    activeWorkflow,
+    setActiveWorkflow,
+  ] = useState(getWorkflow(activeWorkflowSlug));
+
+  // Retrieve workflow data when slug changes.
+  useEffect(() => {
+    setActiveWorkflow(getWorkflow(activeWorkflowSlug));
+  }, [activeWorkflowSlug]);
+
+  return activeWorkflow;
 }

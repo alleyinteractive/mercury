@@ -194,8 +194,9 @@ class Task {
 										'description' => __( 'Use this to describe what this transition will do. Ex. "Proceed to Final Edit", or "Return to editor"', 'mercury' ),
 									]
 								),
-								'task_id' => new \Fieldmanager_Select(
+								'task_id' => new \Fieldmanager_Autocomplete(
 									[
+										'label' => __( 'Task', 'mercury' ),
 										'datasource' => new \Fieldmanager_Datasource_Post(
 											[
 												'query_args' => [
@@ -324,9 +325,9 @@ class Task {
 	 */
 	public static function get_task( int $task_id ) : array {
 		return [
+			'name'       => get_post_meta( $task_id, 'name', true ),
 			'assignees'  => self::get_assignee_settings( $task_id ),
 			'fields'     => self::get_fields( $task_id ),
-			'name'       => get_post_meta( $task_id, 'name', true ),
 			'nextTasks'  => self::get_next_tasks( $task_id ),
 			'slug'       => get_post_meta( $task_id, 'slug', true ),
 			'postStatus' => get_post_meta( $task_id, 'post_status', true ),
@@ -386,6 +387,7 @@ class Task {
 
 	/**
 	 * Get the next step options for a given task.
+	 *
 	 * @param int $task_id Task post ID.
 	 * @return array
 	 */

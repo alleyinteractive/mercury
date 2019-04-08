@@ -54,7 +54,7 @@ class Endpoints {
 			$meta_fields[] = "mercury_{$task_slug}_assignee_id";
 			$meta_fields[] = "mercury_{$task_slug}_due_date";
 
-			// Add each task slug so we can store it as meta.
+			// Add each field's slug so we can store it as meta.
 			$fields = \Mercury\GUI\Task::get_fields( $task_id );
 			$slugs = wp_list_pluck( $fields, 'slug' );
 			if ( ! empty( $slugs ) ) {
@@ -82,7 +82,7 @@ class Endpoints {
 	}
 
 	/**
-	 * Register custom api routes.
+	 * Register custom API routes.
 	 */
 	public function register_routes() {
 

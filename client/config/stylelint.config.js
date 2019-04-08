@@ -2,6 +2,12 @@ module.exports = {
   plugins: [
     'stylelint-order',
   ],
+  processors: [
+    'stylelint-processor-styled-components',
+  ],
+  extends: [
+    'stylelint-config-styled-components',
+  ],
   rules: {
     'at-rule-empty-line-before': ['always', {
       except: [

@@ -1,4 +1,5 @@
 /* global wp */
+import { workflow as defaultWorkflowState } from 'config/defaultState';
 import { getMeta, setMeta } from './meta';
 import { setInProgressTaskSlug } from './tasks';
 
@@ -20,7 +21,7 @@ export function getWorkflow(slug) {
     (workflow) => workflow.slug === slug
   );
   if (undefined === selectedWorklow) {
-    return false;
+    return defaultWorkflowState;
   }
   return selectedWorklow;
 }
@@ -55,7 +56,7 @@ export function getActiveWorkflowSlug() {
   const workflowSlug = getMeta('mercury_active_workflow_slug');
 
   // Is `workflowSlug` correspond to a valid workflow?
-  if (getWorkflow(workflowSlug)) {
+  if ('none' === workflowSlug || getWorkflow(workflowSlug)) {
     return workflowSlug;
   }
 
@@ -71,8 +72,10 @@ export function getActiveWorkflowSlug() {
 export function setActiveWorkflowSlug(slug) {
   const soonToBeActiveWorkflow = getWorkflow(slug);
   // Ensure the slug is a real workflow.
-  if (soonToBeActiveWorkflow) {
-    setInProgressTaskSlug(soonToBeActiveWorkflow.tasks[0].slug);
+  if ('none' === slug || soonToBeActiveWorkflow) {
+    if ('none' !== slug) {
+      setInProgressTaskSlug(soonToBeActiveWorkflow.tasks[0].slug);
+    }
     return setMeta('mercury_active_workflow_slug', slug);
   }
   return setDefaultActiveWorkflowSlug();

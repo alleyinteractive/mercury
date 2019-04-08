@@ -1,39 +1,56 @@
 import React from 'react';
 import { useActiveWorkflowSlug } from 'hooks/workflows';
+import { useSelectedTaskSlug } from 'hooks/tasks';
 import { getWorkflow } from 'services/workflows';
 import Task from 'components/task';
-import SelectWorkflow from './selectWorkflow';
-import TaskPanel from './taskPanel';
-import './workflow.css';
+import TaskHeader from 'components/task/header';
+import Menu from 'components/menu';
+import {
+  Wrapper,
+  TaskWrapper,
+} from './workflowStyles.js';
 
 const Workflow = () => {
   const currentWorkflowSlug = useActiveWorkflowSlug();
+  const currentTaskSlug = useSelectedTaskSlug();
 
   /**
    * Get the TaskPanel components for the current workflow.
    *
    * @return {array} TaskPanels.
    */
-  const getTaskPanels = () => (
-    getWorkflow(currentWorkflowSlug).tasks.map((task) => {
-      const { slug } = task;
+  const getTask = () => {
+    const workflow = getWorkflow(currentWorkflowSlug);
+    let task = workflow.tasks
+      .find((currentTask) => (currentTask.slug === currentTaskSlug));
 
-      return <TaskPanel {...task} key={slug} />;
-    })
-  );
+    if (! task) {
+      [task] = workflow.tasks;
+    }
+
+    if (task) {
+      return task;
+    }
+
+    return false;
+  };
+  const task = getTask();
 
   return (
-    <div>
-      <SelectWorkflow />
-      <div className="mercury__wrapper">
-        <aside className="mercury__tasks-panel">
-          {getTaskPanels()}
-        </aside>
-        <section className="mercury__task__wrapper">
-          <Task />
-        </section>
-      </div>
-    </div>
+    <Wrapper>
+      <Menu selectedTaskSlug={task ? task.slug : 'none'} />
+      {task && (
+        <TaskWrapper>
+          <Task {...task} key={task.slug} />
+        </TaskWrapper>
+      )}
+      {('none' !== currentWorkflowSlug && ! task) && (
+        <TaskHeader name="No Task Selected" />
+      )}
+      {('none' === currentWorkflowSlug) && (
+        <TaskHeader name="No Workflow Selected" />
+      )}
+    </Wrapper>
   );
 };
 

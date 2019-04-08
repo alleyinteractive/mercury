@@ -1,9 +1,0 @@
-.mercury__task__footer {
-	background: yellow;
-	bottom: 0;
-	display: flex;
-	justify-content: space-between;
-	min-height: 50px;
-	padding: 10px;
-	position: relative;
-}

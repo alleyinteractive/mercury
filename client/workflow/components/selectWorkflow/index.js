@@ -1,13 +1,13 @@
 import React from 'react';
 import { useActiveWorkflowSlug } from '../../hooks/workflows';
 import getWorkflows, { setActiveWorkflowSlug } from '../../services/workflows';
-import './selectWorkflow.css';
+import Wrapper from './selectWorkflowStyles.js';
 
 const SelectWorkflow = () => {
   const workflowSlug = useActiveWorkflowSlug();
 
   return (
-    <div className="mercury__select__workflow">
+    <Wrapper>
       <select
         value={workflowSlug}
         onChange={(event) => setActiveWorkflowSlug(event.target.value)}
@@ -22,7 +22,7 @@ const SelectWorkflow = () => {
           );
         })}
       </select>
-    </div>
+    </Wrapper>
   );
 };
 

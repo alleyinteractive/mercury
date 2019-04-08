@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useInProgressTaskSlug, useSelectedTaskSlug } from 'hooks/tasks';
 import { getTask, completeTask } from 'services/tasks';
-import './completeTask.css';
+import {
+  Wrapper,
+  Submit,
+  Label,
+} from './completeTaskStyles';
 
 const CompleteTask = () => {
   // Watch for changes to the in progress and selected tasks.
@@ -25,15 +29,16 @@ const CompleteTask = () => {
     if (1 === nextTasks.length) {
       return nextTasks[0].label;
     }
-    return 'Complete Task';
+    return 'Submit';
   };
 
   return (
-    <div className="mercury__complete-task">
+    <Wrapper>
       {1 < nextTasks.length && (
-        <label
+        <Label
           htmlFor="next-task"
         >
+          <span>Actions: </span>
           <select
             id="next-task"
             name="next-task"
@@ -46,16 +51,16 @@ const CompleteTask = () => {
               return <option value={slug} key={slug}>{label}</option>;
             })}
           </select>
-        </label>
+        </Label>
       )}
-      <button
+      <Submit
         type="button"
         onClick={() => completeTask(selectedTask, nextTaskSlug)}
         disabled={inProgressTaskSlug !== selectedTaskSlug}
       >
         {getButtonLabel()}
-      </button>
-    </div>
+      </Submit>
+    </Wrapper>
   );
 };
 

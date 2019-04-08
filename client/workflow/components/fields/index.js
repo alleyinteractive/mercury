@@ -1,43 +1,41 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Select from './select';
-import TextArea from './textarea';
-import TextField from './textfield';
-import './field.css';
+import Field from 'components/fields/field';
+import { Wrapper, FieldWrapper } from './fieldsStyles';
 
-const Field = (props) => {
-  const {
-    label,
-    slug,
-    type,
-  } = props;
+const Fields = (props) => {
+  const { fields } = props;
 
-  const getField = () => {
-    switch (type) {
-      case 'select':
-        return (<Select {...props} />);
-      case 'textarea':
-        return (<TextArea {...props} />);
-      case 'textfield':
-      default:
-        return (<TextField {...props} />);
-    }
-  };
+  if (! fields || 0 === fields.length) {
+    return (
+      <Wrapper>
+        {/* eslint-disable-next-line max-len */}
+        <p>No custom fields for this task. Proceed to the next task whenever ready.</p>
+      </Wrapper>
+    );
+  }
 
   return (
-    <div className="mercury__field">
-      <label htmlFor={slug} className="mercury__field__label">
-        <span className="mercury__field_label_text">{label}</span>
-        {getField()}
-      </label>
-    </div>
+    <Wrapper>
+      {fields.map((field) => {
+        const { slug } = field;
+
+        return (
+          <FieldWrapper key={slug}>
+            <Field {...field} />
+          </FieldWrapper>
+        );
+      })}
+    </Wrapper>
   );
 };
 
-Field.propTypes = {
-  type: PropTypes.string.isRequired,
-  label: PropTypes.string.isRequired,
-  slug: PropTypes.string.isRequired,
+Fields.propTypes = {
+  fields: PropTypes.arrayOf(
+    PropTypes.shape({
+      label: PropTypes.string,
+    })
+  ).isRequired,
 };
 
-export default Field;
+export default Fields;

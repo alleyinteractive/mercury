@@ -1,3 +1,4 @@
+import { task as defaultTaskState } from 'config/defaultState';
 import { getMeta, setMeta } from './meta';
 import { getActiveWorkflow, getActiveWorkflowSlug } from './workflows';
 
@@ -13,7 +14,7 @@ export function getTask(slug) {
     (workflowTask) => workflowTask.slug === slug
   );
   if (undefined === task) {
-    return false;
+    return defaultTaskState;
   }
   return task;
 }
@@ -91,7 +92,7 @@ export function getSelectedTaskSlug() {
   const taskSlug = getMeta('mercury_selected_task_slug');
 
   // Is `taskSlug` correspond to a valid task?
-  if (getTask(taskSlug)) {
+  if (getTask(taskSlug) || 'none' === taskSlug) {
     return taskSlug;
   }
 
@@ -105,7 +106,7 @@ export function getSelectedTaskSlug() {
  * @return {string} slug Updated value.
  */
 export function setSelectedTaskSlug(slug) {
-  if (getTask(slug)) {
+  if (getTask(slug) || 'none' === slug) {
     return setMeta('mercury_selected_task_slug', slug);
   }
   return setDefaultSelectedTaskSlug();

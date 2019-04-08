@@ -1,7 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { setMeta } from 'services/meta';
+import { Field } from 'formik';
 import useMeta from 'hooks/meta';
+import {
+  TextAreaWrapper,
+} from './fieldStyles.js';
 
 const TextArea = (props) => {
   const {
@@ -11,13 +15,15 @@ const TextArea = (props) => {
   const value = useMeta(slug);
 
   return (
-    <textarea
-      className="mercury__field__textarea"
-      id={slug}
-      name={slug}
-      onChange={(event) => setMeta(slug, event.target.value)}
-      defaultValue={value}
-    />
+    <TextAreaWrapper>
+      <Field
+        component="textarea"
+        id={slug}
+        name={slug}
+        onChange={(event) => setMeta(slug, event.target.value)}
+        defaultValue={value}
+      />
+    </TextAreaWrapper>
   );
 };
 

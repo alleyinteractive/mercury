@@ -14,7 +14,7 @@ import {
   InputWrapper,
 } from './fieldStyles.js';
 
-const Field = (props) => {
+const FormField = (props) => {
   const {
     label,
     slug,
@@ -29,7 +29,7 @@ const Field = (props) => {
     radios: RadioGroup,
     textfield: TextField,
   };
-  const FormField = fieldMap[type] ? fieldMap[type] : TextField;
+  const FieldComponent = fieldMap[type] ? fieldMap[type] : TextField;
 
   return (
     <Wrapper>
@@ -44,7 +44,7 @@ const Field = (props) => {
           ? <ReadOnly slug={slug} />
           : (
             <InputWrapper>
-              <FormField {...props} />
+              <FieldComponent {...props} />
             </InputWrapper>
           )
         }
@@ -53,7 +53,7 @@ const Field = (props) => {
   );
 };
 
-Field.propTypes = {
+FormField.propTypes = {
   handleChange: PropTypes.func.isRequired,
   type: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
@@ -66,8 +66,8 @@ Field.propTypes = {
   ]).isRequired,
 };
 
-Field.defaultProps = {
+FormField.defaultProps = {
   readOnly: false,
 };
 
-export default Field;
+export default FormField;

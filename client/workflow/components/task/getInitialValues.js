@@ -2,7 +2,7 @@ import { getMeta } from 'services/meta';
 
 export default function getInitialValues(fields, nextTasks) {
   const nextTaskSlug = nextTasks.length ? nextTasks[0].slug : '';
-  const formikFieldState = fields.reduce((acc, currentField) => {
+  const defaultFormikState = fields.reduce((acc, currentField) => {
     const {
       slug: fieldSlug,
       type,
@@ -17,6 +17,6 @@ export default function getInitialValues(fields, nextTasks) {
 
   return {
     'next-task-slug': nextTaskSlug,
-    ...formikFieldState,
+    ...defaultFormikState,
   };
 }

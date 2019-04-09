@@ -1,15 +1,23 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import Field from 'components/fields/field';
+import { setMeta } from 'services/meta';
+import FormField from 'components/fields/field';
+import { connect } from 'formik';
 import { Wrapper, FieldWrapper } from './fieldsStyles';
 
 const Fields = (props) => {
   const {
     fields,
+    formik: { values: formikState },
     handleChange,
     setFieldValue,
     values,
   } = props;
+
+  // Save fields to gutenberg meta on change.
+  useEffect(() => {
+    setMeta(formikState);
+  }, [formikState]);
 
   if (! fields || 0 === fields.length) {
     return (
@@ -27,7 +35,7 @@ const Fields = (props) => {
 
         return (
           <FieldWrapper key={slug}>
-            <Field
+            <FormField
               {...field}
               value={values[slug]}
               setFieldValue={setFieldValue}
@@ -46,10 +54,13 @@ Fields.propTypes = {
       label: PropTypes.string,
     })
   ).isRequired,
+  formik: PropTypes.shape({
+    values: PropTypes.object.isRequired,
+  }).isRequired,
   handleChange: PropTypes.func.isRequired,
   setFieldValue: PropTypes.func.isRequired,
   // eslint-disable-next-line react/forbid-prop-types
   values: PropTypes.object.isRequired,
 };
 
-export default Fields;
+export default connect(Fields);

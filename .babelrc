@@ -17,6 +17,7 @@
           "config": "./client/config",
           "css": "./client/config/css",
           "icons": "./client/icons",
+          "utils": "./client/workflow/utils",
         },
       },
     ],

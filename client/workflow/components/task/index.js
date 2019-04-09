@@ -36,9 +36,7 @@ const Task = (props) => {
       />
       <Formik
         onSubmit={(values, actions) => {
-          Object.keys(values).forEach((valueKey) => {
-            setMeta(valueKey, values[valueKey]);
-          });
+          setMeta(values);
           completeTask(selectedTaskSlug, values['next-task-slug']);
           actions.setSubmitting(false);
         }}

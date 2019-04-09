@@ -1,9 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Field } from 'formik';
-import {
-  SelectWrapper,
-} from './fieldStyles.js';
 
 const Select = (props) => {
   const {
@@ -11,34 +8,26 @@ const Select = (props) => {
     optionsSourceList,
     optionsFirstEmpty,
   } = props;
-  const getOptions = () => {
-    const options = optionsSourceList.map((option) => {
-      const { label, value: optionValue } = option;
-
-      return (
-        <option value={optionValue} key={optionValue}>
-          {label}
-        </option>
-      );
-    });
-
-    if (optionsFirstEmpty) {
-      options.shift(<option disabled selected value />);
-    }
-
-    return options;
-  };
 
   return (
-    <SelectWrapper>
-      <Field
-        component="select"
-        id={slug}
-        name={slug}
-      >
-        {getOptions()}
-      </Field>
-    </SelectWrapper>
+    <Field
+      component="select"
+      id={slug}
+      name={slug}
+    >
+      {optionsFirstEmpty && (
+        <option disabled value />
+      )}
+      {optionsSourceList.map((option) => {
+        const { label, value: optionValue } = option;
+
+        return (
+          <option value={optionValue} key={optionValue}>
+            {label}
+          </option>
+        );
+      })}
+    </Field>
   );
 };
 

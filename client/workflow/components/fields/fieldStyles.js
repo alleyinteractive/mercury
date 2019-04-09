@@ -4,6 +4,22 @@ import colors from 'css/colors';
 
 export const InputWrapper = styled.div`
   width: 100%;
+
+  [type="text"] {
+    ${input}
+    padding: 5px 10px;
+  }
+
+  select {
+    ${input}
+    padding: 5px 10px;
+  }
+
+  textarea {
+    ${input}
+    height: 120px;
+    padding: 5px 10px;
+  }
 `;
 
 export const Wrapper = styled.div`
@@ -66,31 +82,6 @@ export const ReadOnlyText = styled.div`
 
   strong {
     font-weight: 700;
-  }
-`;
-
-export const TextFieldWrapper = styled.div`
-
-  input {
-    ${input}
-    padding: 5px 10px;
-  }
-`;
-
-export const SelectWrapper = styled.div`
-
-  select {
-    ${input}
-    padding: 5px 10px;
-  }
-`;
-
-export const TextAreaWrapper = styled.div`
-
-  textarea {
-    ${input}
-    height: 120px;
-    padding: 5px 10px;
   }
 `;
 

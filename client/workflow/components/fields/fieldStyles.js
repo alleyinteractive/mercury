@@ -18,10 +18,16 @@ export const Label = styled.label`
 `;
 
 export const InlineLabel = styled.label`
-  align-items: center;
+  align-items: flex-start;
   display: flex;
   justify-content: flex-start;
+  line-height: 16px;
   margin-bottom: 10px;
+
+  input {
+    line-height: 16px;
+    margin: 0 5px 0 0;
+  }
 `;
 
 export const LabelText = styled.span`

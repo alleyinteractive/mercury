@@ -4,10 +4,22 @@ export const workflow = {
   tasks: [],
 };
 
+export const assignees = {
+  defaultAssignee: 'none',
+  defaultUser: null,
+  enableAssigneeSelection: false,
+  assigneeOptions: [],
+  assigneeSelectionPermissions: {},
+  assigneeSelection: {},
+  enableAskReject: false,
+  askReject: {},
+};
+
 export const task = {
-  assignees: {},
+  assignees,
   fields: [],
   name: '',
   nextTasks: [],
   slug: '',
+  postStatus: '',
 };

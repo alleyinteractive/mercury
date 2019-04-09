@@ -17,8 +17,21 @@ export const Label = styled.label`
   justify-content: flex-start;
 `;
 
+export const InlineLabel = styled.label`
+  align-items: center;
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 10px;
+`;
+
 export const LabelText = styled.span`
   ${label}
+  width: 200px;
+`;
+
+export const OptionText = styled.span`
+  font-size: 12px;
+  font-weight: 400;
   width: 200px;
 `;
 
@@ -45,4 +58,10 @@ export const TextAreaWrapper = styled.div`
     height: 120px;
     padding: 5px 10px;
   }
+`;
+
+export const GroupWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-top: 10px;
 `;

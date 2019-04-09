@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Select from './select';
 import TextArea from './textarea';
 import TextField from './textfield';
+import CheckboxGroup from './checkboxGroup';
 import {
   Wrapper,
   Label,
@@ -21,8 +22,13 @@ const Field = (props) => {
     switch (type) {
       case 'select':
         return (<Select {...props} />);
+
       case 'textarea':
         return (<TextArea {...props} />);
+
+      case 'checkboxes':
+        return (<CheckboxGroup {...props} />);
+
       case 'textfield':
       default:
         return (<TextField {...props} />);

@@ -8,10 +8,7 @@ import {
 } from './fieldStyles.js';
 
 const TextField = (props) => {
-  const {
-    slug,
-    readOnly,
-  } = props;
+  const { slug } = props;
 
   const value = useMeta(slug);
 
@@ -23,7 +20,6 @@ const TextField = (props) => {
         name={slug}
         onChange={(event) => setMeta(slug, event.target.value)}
         value={value}
-        readOnly={readOnly}
       />
     </TextFieldWrapper>
   );
@@ -31,11 +27,6 @@ const TextField = (props) => {
 
 TextField.propTypes = {
   slug: PropTypes.string.isRequired,
-  readOnly: PropTypes.bool,
-};
-
-TextField.defaultProps = {
-  readOnly: false,
 };
 
 export default TextField;

@@ -10,7 +10,6 @@ import {
 const Select = (props) => {
   const {
     slug,
-    readOnly,
     optionsSourceList,
     optionsFirstEmpty,
   } = props;
@@ -32,14 +31,6 @@ const Select = (props) => {
     return options;
   };
 
-  if (readOnly) {
-    return (
-      <div className="mercury__field__readOnly">
-        {value}
-      </div>
-    );
-  }
-
   return (
     <SelectWrapper>
       <Field
@@ -57,7 +48,6 @@ const Select = (props) => {
 
 Select.propTypes = {
   slug: PropTypes.string.isRequired,
-  readOnly: PropTypes.bool,
   optionsSourceList: PropTypes.arrayOf(
     PropTypes.shape({
       value: PropTypes.string.isRequired,
@@ -65,10 +55,6 @@ Select.propTypes = {
     })
   ).isRequired,
   optionsFirstEmpty: PropTypes.bool.isRequired,
-};
-
-Select.defaultProps = {
-  readOnly: false,
 };
 
 export default Select;

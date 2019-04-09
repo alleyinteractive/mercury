@@ -13,7 +13,6 @@ const RadioGroup = (props) => {
   const {
     slug,
     optionsSourceList,
-    readOnly,
   } = props;
   const value = useMeta(slug);
 
@@ -35,7 +34,6 @@ const RadioGroup = (props) => {
               checked={value === optionValue}
               onChange={(event) => setMeta(slug, event.target.value)}
               value={optionValue}
-              readOnly={readOnly}
             />
             <OptionText>{label}</OptionText>
           </InlineLabel>
@@ -53,11 +51,6 @@ RadioGroup.propTypes = {
     })
   ).isRequired,
   slug: PropTypes.string.isRequired,
-  readOnly: PropTypes.bool,
-};
-
-RadioGroup.defaultProps = {
-  readOnly: false,
 };
 
 export default RadioGroup;

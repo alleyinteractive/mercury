@@ -13,7 +13,6 @@ const CheckboxGroup = (props) => {
   const {
     slug,
     optionsSourceList,
-    readOnly,
   } = props;
   let value = useMeta(slug);
 
@@ -66,7 +65,6 @@ const CheckboxGroup = (props) => {
                 );
               }}
               value={optionValue}
-              readOnly={readOnly}
             />
             <OptionText>{label}</OptionText>
           </InlineLabel>
@@ -84,11 +82,6 @@ CheckboxGroup.propTypes = {
     })
   ).isRequired,
   slug: PropTypes.string.isRequired,
-  readOnly: PropTypes.bool,
-};
-
-CheckboxGroup.defaultProps = {
-  readOnly: false,
 };
 
 export default CheckboxGroup;

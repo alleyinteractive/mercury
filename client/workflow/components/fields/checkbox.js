@@ -12,7 +12,6 @@ const Checkbox = (props) => {
   const {
     label,
     slug,
-    readOnly,
   } = props;
   const value = useMeta(slug);
 
@@ -28,7 +27,6 @@ const Checkbox = (props) => {
           setMeta(slug, newValue);
         }}
         value={slug}
-        readOnly={readOnly}
       />
       <OptionText>{label}</OptionText>
     </InlineLabel>
@@ -38,11 +36,6 @@ const Checkbox = (props) => {
 Checkbox.propTypes = {
   label: PropTypes.string.isRequired,
   slug: PropTypes.string.isRequired,
-  readOnly: PropTypes.bool,
-};
-
-Checkbox.defaultProps = {
-  readOnly: false,
 };
 
 export default Checkbox;

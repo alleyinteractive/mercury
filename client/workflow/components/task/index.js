@@ -44,7 +44,10 @@ const Task = (props) => {
                   <button type="button">James Burke</button>
                 </div>
               </FormHeader>
-              <Fields fields={fields} slug={slug} />
+              <Fields
+                fields={fields}
+                slug={slug}
+              />
               <Footer />
             </Form>
           );

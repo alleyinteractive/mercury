@@ -1,8 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Field } from 'formik';
-import { setMeta } from 'services/meta';
-import useMeta from 'hooks/meta';
 import {
   GroupWrapper,
   InlineLabel,
@@ -11,10 +9,10 @@ import {
 
 const RadioGroup = (props) => {
   const {
-    slug,
     optionsSourceList,
+    setFieldValue,
+    slug,
   } = props;
-  const value = useMeta(slug);
 
   if (! optionsSourceList || ! optionsSourceList.length) {
     return null;
@@ -28,12 +26,23 @@ const RadioGroup = (props) => {
         return (
           <InlineLabel key={optionValue}>
             <Field
-              type="radio"
-              id={optionValue}
               name={slug}
-              checked={value === optionValue}
-              onChange={(event) => setMeta(slug, event.target.value)}
-              value={optionValue}
+              component={(fieldProps) => {
+                const {
+                  field: fieldHelpers,
+                } = fieldProps;
+
+                return (
+                  <input
+                    {...fieldHelpers}
+                    type="radio"
+                    id={optionValue}
+                    checked={fieldHelpers.value === optionValue}
+                    value={optionValue}
+                    onChange={() => setFieldValue(slug, optionValue)}
+                  />
+                );
+              }}
             />
             <OptionText>{label}</OptionText>
           </InlineLabel>
@@ -50,6 +59,7 @@ RadioGroup.propTypes = {
       value: PropTypes.string.isRequired,
     })
   ).isRequired,
+  setFieldValue: PropTypes.func.isRequired,
   slug: PropTypes.string.isRequired,
 };
 

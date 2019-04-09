@@ -21,29 +21,15 @@ const Field = (props) => {
     type,
     readOnly,
   } = props;
-
-  const getField = () => {
-    switch (type) {
-      case 'select':
-        return (<Select {...props} />);
-
-      case 'textarea':
-        return (<TextArea {...props} />);
-
-      case 'checkbox':
-        return (<Checkbox {...props} />);
-
-      case 'checkboxes':
-        return (<CheckboxGroup {...props} />);
-
-      case 'radios':
-        return (<RadioGroup {...props} />);
-
-      case 'textfield':
-      default:
-        return (<TextField {...props} />);
-    }
+  const fieldMap = {
+    select: Select,
+    textarea: TextArea,
+    checkbox: Checkbox,
+    checkboxes: CheckboxGroup,
+    radios: RadioGroup,
+    textfield: TextField,
   };
+  const FormField = fieldMap[type] ? fieldMap[type] : TextField;
 
   return (
     <Wrapper>
@@ -56,7 +42,11 @@ const Field = (props) => {
         )}
         {readOnly
           ? <ReadOnly slug={slug} />
-          : <InputWrapper>{getField()}</InputWrapper>
+          : (
+            <InputWrapper>
+              <FormField {...props} />
+            </InputWrapper>
+          )
         }
       </Label>
     </Wrapper>
@@ -64,10 +54,16 @@ const Field = (props) => {
 };
 
 Field.propTypes = {
+  handleChange: PropTypes.func.isRequired,
   type: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
   readOnly: PropTypes.bool,
   slug: PropTypes.string.isRequired,
+  value: PropTypes.oneOfType([
+    PropTypes.bool,
+    PropTypes.array,
+    PropTypes.string,
+  ]).isRequired,
 };
 
 Field.defaultProps = {

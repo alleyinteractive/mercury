@@ -1,8 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Field } from 'formik';
-import { setMeta } from 'services/meta';
-import useMeta from 'hooks/meta';
 import {
   SelectWrapper,
 } from './fieldStyles.js';
@@ -13,8 +11,6 @@ const Select = (props) => {
     optionsSourceList,
     optionsFirstEmpty,
   } = props;
-  const value = useMeta(slug);
-
   const getOptions = () => {
     const options = optionsSourceList.map((option) => {
       const { label, value: optionValue } = option;
@@ -25,9 +21,11 @@ const Select = (props) => {
         </option>
       );
     });
+
     if (optionsFirstEmpty) {
       options.shift(<option disabled selected value />);
     }
+
     return options;
   };
 
@@ -37,8 +35,6 @@ const Select = (props) => {
         component="select"
         id={slug}
         name={slug}
-        value={value}
-        onChange={(event) => setMeta(slug, event.target.value)}
       >
         {getOptions()}
       </Field>

@@ -1,8 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Field } from 'formik';
-import { setMeta } from 'services/meta';
-import useMeta from 'hooks/meta';
 import {
   InlineLabel,
   OptionText,
@@ -13,7 +11,6 @@ const Checkbox = (props) => {
     label,
     slug,
   } = props;
-  const value = useMeta(slug);
 
   return (
     <InlineLabel>
@@ -21,12 +18,6 @@ const Checkbox = (props) => {
         type="checkbox"
         id={slug}
         name={slug}
-        checked={value === slug}
-        onChange={(event) => {
-          const newValue = ! event.target.checked ? '' : event.target.value;
-          setMeta(slug, newValue);
-        }}
-        value={slug}
       />
       <OptionText>{label}</OptionText>
     </InlineLabel>

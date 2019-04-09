@@ -1,8 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Field } from 'formik';
-import { setMeta } from 'services/meta';
-import useMeta from 'hooks/meta';
+import { Field, FieldArray } from 'formik';
 import {
   GroupWrapper,
   InlineLabel,
@@ -13,64 +11,52 @@ const CheckboxGroup = (props) => {
   const {
     slug,
     optionsSourceList,
+    value,
   } = props;
-  let value = useMeta(slug);
-
-  /**
-   * Add or remove a value to the array of checked values.
-   *
-   * @param {string} optionValue Value to add to meta array
-   */
-  const addOrRemoveOptionValue = (optionValue) => {
-    let newValue = value;
-
-    if (value.includes(optionValue)) {
-      newValue = value.filter(
-        (valueItem) => valueItem !== optionValue
-      );
-    } else {
-      newValue.push(optionValue);
-    }
-
-    return newValue;
-  };
-
-  // Try to parse meta value into json.
-  try {
-    value = JSON.parse(value);
-  } catch {
-    value = value ? [value] : [];
-  }
 
   if (! optionsSourceList || ! optionsSourceList.length) {
     return null;
   }
 
   return (
-    <GroupWrapper>
-      {optionsSourceList.map((field) => {
-        const { label, value: optionValue } = field;
+    <FieldArray
+      name={slug}
+      render={(arrayHelpers) => (
+        <GroupWrapper>
+          {optionsSourceList.map((field) => {
+            const { label, value: optionValue } = field;
 
-        return (
-          <InlineLabel key={optionValue}>
-            <Field
-              type="checkbox"
-              id={optionValue}
-              name={slug}
-              checked={value.includes(optionValue)}
-              onChange={() => {
-                setMeta(
-                  slug,
-                  JSON.stringify(addOrRemoveOptionValue(optionValue))
-                );
-              }}
-              value={optionValue}
-            />
-            <OptionText>{label}</OptionText>
-          </InlineLabel>
-        );
-      })}
-    </GroupWrapper>
+            return (
+              <InlineLabel key={optionValue}>
+                <Field
+                  name={slug}
+                  component={(fieldProps) => {
+                    const { field: fieldHelpers } = fieldProps;
+
+                    return (
+                      <input
+                        {...fieldHelpers}
+                        type="checkbox"
+                        id={optionValue}
+                        checked={value.includes(optionValue)}
+                        onChange={(e) => {
+                          if (e.target.checked) {
+                            arrayHelpers.push(optionValue);
+                          } else {
+                            arrayHelpers.remove(value.indexOf(optionValue));
+                          }
+                        }}
+                      />
+                    );
+                  }}
+                />
+                <OptionText>{label}</OptionText>
+              </InlineLabel>
+            );
+          })}
+        </GroupWrapper>
+      )}
+    />
   );
 };
 
@@ -82,6 +68,7 @@ CheckboxGroup.propTypes = {
     })
   ).isRequired,
   slug: PropTypes.string.isRequired,
+  value: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
 export default CheckboxGroup;

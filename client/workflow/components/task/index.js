@@ -1,10 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Formik } from 'formik';
-import { useInProgressTaskSlug } from 'hooks/tasks';
+import {
+  useInProgressTaskSlug,
+  useSelectedTaskSlug,
+} from 'hooks/tasks';
+import { completeTask, getTask } from 'services/tasks';
+import { setMeta } from 'services/meta';
 import Header from 'components/task/header';
 import Footer from 'components/task/footer';
 import Fields from 'components/fields';
+import getInitialValues from './getInitialValues';
 import {
   Wrapper,
   Form,
@@ -18,6 +24,9 @@ const Task = (props) => {
     fields,
   } = props;
   const inProgressTaskSlug = useInProgressTaskSlug();
+  const selectedTaskSlug = useSelectedTaskSlug();
+  const selectedTask = getTask(selectedTaskSlug);
+  const { nextTasks } = selectedTask;
 
   return (
     <Wrapper>
@@ -27,13 +36,15 @@ const Task = (props) => {
       />
       <Formik
         onSubmit={(values, actions) => {
-          setTimeout(() => {
-            alert(JSON.stringify(values, null, 2));
-            actions.setSubmitting(false);
-          }, 1000);
+          Object.keys(values).forEach((valueKey) => {
+            setMeta(valueKey, values[valueKey]);
+          });
+          completeTask(selectedTaskSlug, values['next-task-slug']);
+          actions.setSubmitting(false);
         }}
+        initialValues={getInitialValues(fields, nextTasks)}
         render={(formProps) => {
-          const { handleSubmit } = formProps;
+          const { handleSubmit, values } = formProps;
 
           return (
             <Form onSubmit={handleSubmit}>
@@ -47,8 +58,14 @@ const Task = (props) => {
               <Fields
                 fields={fields}
                 slug={slug}
+                {...formProps}
               />
-              <Footer />
+              <Footer
+                inProgressTaskSlug={inProgressTaskSlug}
+                selectedTaskSlug={selectedTaskSlug}
+                nextTaskSlug={values['next-task-slug']}
+                nextTasks={nextTasks}
+              />
             </Form>
           );
         }}

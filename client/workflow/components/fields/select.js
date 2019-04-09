@@ -27,7 +27,7 @@ const Select = (props) => {
       );
     });
     if (optionsFirstEmpty) {
-      options.shift(<option disabled selected value />);
+      options.unshift(<option value />);
     }
     return options;
   };

@@ -60,7 +60,10 @@ Select.propTypes = {
   readOnly: PropTypes.bool,
   optionsSourceList: PropTypes.arrayOf(
     PropTypes.shape({
-      value: PropTypes.string.isRequired,
+      value: PropTypes.oneOfType([
+        PropTypes.number,
+        PropTypes.string,
+      ]).isRequired,
       name: PropTypes.string,
     })
   ).isRequired,

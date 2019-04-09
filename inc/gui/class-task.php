@@ -250,8 +250,6 @@ class Task {
 				'collapsed'      => true,
 				'sortable'       => true,
 				'children'       => [
-					'label' => new \Fieldmanager_Textfield( __( 'Label', 'mercury' ) ),
-					'slug'  => new \Fieldmanager_Textfield( __( 'Slug', 'mercury' ) ),
 					'type'  => new \Fieldmanager_Select(
 						[
 							'label'         => __( 'Type', 'mercury' ),
@@ -264,6 +262,16 @@ class Task {
 								'textarea'   => __( 'Textarea', 'mercury' ),
 								'textfield'  => __( 'Textfield', 'mercury' ),
 								'assignee'   => __( 'Assignee', 'mercury' ),
+							],
+						]
+					),
+					'label' => new \Fieldmanager_Textfield( __( 'Label', 'mercury' ) ),
+					'slug'  => new \Fieldmanager_Textfield(
+						[
+							'label' => __( 'Slug', 'mercury' ),
+							'display_if' => [
+								'src'   => 'type',
+								'value' => 'checkbox,checkboxes,date,select,textarea,textfield'
 							],
 						]
 					),
@@ -309,6 +317,24 @@ class Task {
 								'src'   => 'options_source',
 								'value' => 'list'
 							],
+						]
+					),
+					'assignee_task_id' => new \Fieldmanager_Autocomplete(
+						[
+							'label' => __( 'Task', 'mercury' ),
+							'description' => __( 'Select the task for which this assignee field applies.', 'mercury' ),
+							'display_if' => [
+								'src'   => 'type',
+								'value' => 'assignee'
+							],
+							'datasource' => new \Fieldmanager_Datasource_Post(
+								[
+									'query_args' => [
+										'post_status' => 'any',
+										'post_type'   => Post_Type::WORKFLOW_TASK_POST_TYPE,
+									],
+								]
+							),
 						]
 					),
 				],
@@ -429,8 +455,9 @@ class Task {
 		// Validate required fields.
 		if (
 			empty( $field['label'] )
-			|| empty( $field['slug'] )
 			|| empty( $field['type'] )
+			|| ( 'assignee' !== $field['type'] && empty( $field['slug'] ) )
+			|| ( 'assignee' === $field['type'] && empty( $field['assignee_task_id'] ) )
 		) {
 			return;
 		}
@@ -439,6 +466,8 @@ class Task {
 		$field = wp_parse_args(
 			$field,
 			[
+				'assignee_task_id'    => 0,
+				'assignee_task_slug'  => '',
 				'label'               => '',
 				'options_first_empty' => false,
 				'options_source'      => '',
@@ -454,6 +483,13 @@ class Task {
 		$field['options_first_empty'] = filter_var( $field['options_first_empty'], FILTER_VALIDATE_BOOLEAN );
 		$field['read_only']           = filter_var( $field['read_only'], FILTER_VALIDATE_BOOLEAN );
 		$field['required']            = filter_var( $field['required'], FILTER_VALIDATE_BOOLEAN );
+
+		// Handle assignee field.
+		if ( 'assignee' === $field['type'] ) {
+			$task_slug     = (string) get_post_meta( $field['assignee_task_id'], 'slug', true );
+			$field['slug'] = "mercury_{$task_slug}_assignee_id";
+			$field['assignee_task_slug'] = $task_slug;
+		}
 
 		return $field;
 	}

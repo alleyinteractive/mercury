@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Assignee from './assignee';
 import Select from './select';
 import TextArea from './textarea';
 import TextField from './textfield';
@@ -19,6 +20,8 @@ const Field = (props) => {
 
   const getField = () => {
     switch (type) {
+      case 'assignee':
+        return (<Assignee {...props} />);
       case 'select':
         return (<Select {...props} />);
       case 'textarea':

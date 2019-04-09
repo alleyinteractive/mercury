@@ -58,12 +58,20 @@ class Users {
 		foreach ( $user_ids as $user_id ) {
 			$userdata = get_userdata( $user_id );
 			if ( $userdata instanceof \WP_User ) {
-				$users[ absint( $user_id ) ] = $userdata->data->display_name ?? '';
+				$users[] = [
+					'label' => $userdata->data->display_name ?? '',
+					'value' => absint( $user_id ) 
+				];
 			}
 		}
 
-		// Sort by name.
-		asort( $users, SORT_STRING | SORT_FLAG_CASE | SORT_NATURAL );
+		// Sort alphabetically by name (label).
+		usort(
+			$users,
+			function ( $a, $b ) {
+				return $a['label'] > $b['label'];
+			}
+		);
 
 		return $users;
 	}

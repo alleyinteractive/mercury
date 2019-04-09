@@ -66,6 +66,7 @@ export function useActiveWorkflow() {
   // Retrieve workflow data when slug changes.
   useEffect(() => {
     setActiveWorkflow(getWorkflow(activeWorkflowSlug));
+    return () => {};
   }, [activeWorkflowSlug]);
 
   return activeWorkflow;

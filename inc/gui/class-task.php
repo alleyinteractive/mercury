@@ -432,7 +432,7 @@ class Task {
 		$settings['ask_reject']['enable_groups'] = filter_var( $settings['ask_reject']['enable_groups'], FILTER_VALIDATE_BOOLEAN );
 		$settings['ask_reject']['enable_roles']  = filter_var( $settings['ask_reject']['enable_roles'], FILTER_VALIDATE_BOOLEAN );
 
-		$settings['assignee_options'] = \Mercury\Users::create_user_list_from_assignee_data( $settings['assignee_selection'] );
+		$settings['assignee_options'] = \Mercury\Users::create_user_list_from_assignee_data( $settings );
 
 		return $settings;
 	}

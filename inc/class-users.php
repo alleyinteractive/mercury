@@ -22,14 +22,26 @@ class Users {
 
 		$user_ids = [];
 
+		// Add default user if defined.
+		switch ( $data['default_assignee'] ?? '' ) {
+			case 'creator':
+				$user_ids[] = get_current_user_id();
+				break;
+			case 'user':
+				$user_ids[] = $data['default_user'] ?? 0;
+				break;
+			default:
+				break;
+		}
+
 		// Add users.
-		if ( $data['enable_users'] ) {
-			$user_ids = array_merge( $user_ids, array_filter( $data['filter_users'] ) );
+		if ( $data['assignee_selection']['enable_users'] ) {
+			$user_ids = array_merge( $user_ids, array_filter( $data['assignee_selection']['filter_users'] ) );
 		}
 
 		// Add groups.
-		if ( $data['enable_groups'] ) {
-			foreach ( ( $data['filter_groups'] ?? [] ) as $group_id ) {
+		if ( $data['assignee_selection']['enable_groups'] ) {
+			foreach ( ( $data['assignee_selection']['filter_groups'] ?? [] ) as $group_id ) {
 				$ef_user_groups = new \EF_User_Groups();
 				$usergroup      = $ef_user_groups->get_usergroup_by( 'id', $group_id );
 				if ( $usergroup instanceof \WP_Term ) {
@@ -39,13 +51,13 @@ class Users {
 		}
 
 		// Add roles.
-		if ( $data['enable_roles'] ) {
+		if ( $data['assignee_selection']['enable_roles'] ) {
 			$user_ids = array_merge(
 				$user_ids,
 				get_users(
 					[
 						'fields'   => 'ids',
-						'role__in' => array_values( $data['filter_roles'] ),
+						'role__in' => array_values( $data['assignee_selection']['filter_roles'] ),
 					]
 				)
 			);

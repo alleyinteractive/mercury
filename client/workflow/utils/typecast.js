@@ -3,6 +3,7 @@
 /**
  * Attempt to convert a value into a regular javascript type.
  *
+ * @todo investigate removing this and doing it in PHP instead. Perhaps register fields in gutenberg differently.
  * @param {mixed} val Value to convert.
  */
 export default function typecast(val) {

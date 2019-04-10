@@ -395,10 +395,10 @@ class Task {
 		$settings = wp_parse_args( $assignments, $settings_template );
 
 		// Assignees.
-		$settings['enable_assignee_selection'] = filter_var( $settings['enable_assignee_selection'], FILTER_VALIDATE_BOOLEAN );
-		$settings['assignee_selection']['enable_users']  = filter_var($settings['assignee_selection']['enable_users'], FILTER_VALIDATE_BOOLEAN );
-		$settings['assignee_selection']['enable_groups'] = filter_var($settings['assignee_selection']['enable_groups'], FILTER_VALIDATE_BOOLEAN );
-		$settings['assignee_selection']['enable_roles']  = filter_var($settings['assignee_selection']['enable_roles'], FILTER_VALIDATE_BOOLEAN );
+		$settings['enable_assignee_selection']           = filter_var( $settings['enable_assignee_selection'], FILTER_VALIDATE_BOOLEAN );
+		$settings['assignee_selection']['enable_users']  = filter_var( $settings['assignee_selection']['enable_users'], FILTER_VALIDATE_BOOLEAN );
+		$settings['assignee_selection']['enable_groups'] = filter_var( $settings['assignee_selection']['enable_groups'], FILTER_VALIDATE_BOOLEAN );
+		$settings['assignee_selection']['enable_roles']  = filter_var( $settings['assignee_selection']['enable_roles'], FILTER_VALIDATE_BOOLEAN );
 
 		// Ask/Reject.
 		$settings['enable_ask_reject']           = filter_var( $settings['enable_ask_reject'], FILTER_VALIDATE_BOOLEAN );
@@ -459,7 +459,7 @@ class Task {
 			|| ( 'assignee' !== $field['type'] && empty( $field['slug'] ) )
 			|| ( 'assignee' === $field['type'] && empty( $field['assignee_task_id'] ) )
 		) {
-			return;
+			return [];
 		}
 
 		// Clean shape of each field.

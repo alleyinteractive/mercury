@@ -72,7 +72,7 @@ const FormField = (props) => {
         }
         {error && (
           <ErrorText>
-            {error.replace ? error.replace(slug, 'This') : error}
+            {error}
           </ErrorText>
         )}
       </Label>

@@ -122,7 +122,7 @@ class Post_Type {
 			__( 'Mercury', 'mercury' ),
 			function() {
 				printf(
-					'<div id="mercury-workflow-ui" data-post-id="%1$s">asdf</div>',
+					'<div id="mercury-workflow-ui"></div>',
 					get_the_ID()
 				);
 			},

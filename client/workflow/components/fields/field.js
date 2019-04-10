@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
+// import { connect } from 'formik';
+import { setMeta } from 'services/meta';
 import Select from './select';
 import TextArea from './textarea';
 import TextField from './textfield';
@@ -26,6 +28,7 @@ const FormField = (props) => {
     readOnly,
     required,
     error,
+    value,
   } = props;
   const fieldMap = {
     select: Select,
@@ -36,6 +39,12 @@ const FormField = (props) => {
     textfield: TextField,
   };
   const FieldComponent = fieldMap[type] ? fieldMap[type] : TextField;
+
+  // Set value in Gutenberg meta whenever it changes.
+  useEffect(() => {
+    setMeta(slug, value);
+    return () => {};
+  }, [value]);
 
   return (
     <Wrapper>
@@ -77,6 +86,9 @@ FormField.propTypes = {
     PropTypes.array,
     PropTypes.string,
   ]).isRequired,
+  // formik: PropTypes.shape({
+  //   values: PropTypes.object.isRequired,
+  // }).isRequired,
   handleChange: PropTypes.func.isRequired,
   type: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,

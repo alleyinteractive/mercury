@@ -1,5 +1,6 @@
 import {
   stringifyValues,
+  stringifyValue,
   parseValue,
 } from 'utils/jsonHelpers';
 
@@ -19,28 +20,37 @@ export function getMeta(field) {
 }
 
 /**
- * Save a meta value from Gutenberg.
+ * Save an object of meta values from Gutenberg.
+ *
+ * @param {object} meta Object containing multiple meta values to set.
  */
-export function setMeta(field, value = false) {
-  if (! value && 'object' === typeof field) {
-    // Update meta object wholesale.
-    const newMeta = field;
-    const oldMeta = wp.data.select('core/editor')
-      .getEditedPostAttribute('meta');
+export function setMetaGroup(meta) {
+  // Update meta object wholesale.
+  const newMeta = meta;
+  const oldMeta = wp.data.select('core/editor')
+    .getEditedPostAttribute('meta');
 
-    if (! isEqual(oldMeta, newMeta)) {
-      wp.data.dispatch('core/editor')
-        .editPost({ meta: stringifyValues(newMeta) });
-    }
-  } else {
-    // Update a single value in the meta object.
+  if (! isEqual(oldMeta, newMeta)) {
+    wp.data.dispatch('core/editor')
+      .editPost({ meta: stringifyValues(newMeta) });
+  }
+
+  return meta;
+}
+
+/**
+ * Save a meta value from Gutenberg.
+ *
+ * @param {string} field Meta field for which to set a new value.
+ * @param {string} value New value for meta field.
+ */
+export function setMeta(field, value) {
+  if (value !== getMeta(field)) {
     const newMeta = {
-      [field]: value,
+      [field]: stringifyValue(value),
     };
 
-    if (value !== getMeta(field)) {
-      wp.data.dispatch('core/editor').editPost({ meta: newMeta });
-    }
+    wp.data.dispatch('core/editor').editPost({ meta: newMeta });
   }
 
   return value;

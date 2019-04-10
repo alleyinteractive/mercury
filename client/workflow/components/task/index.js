@@ -6,7 +6,7 @@ import {
   useSelectedTaskSlug,
 } from 'hooks/tasks';
 import { completeTask, getTask } from 'services/tasks';
-import { setMeta } from 'services/meta';
+import { setMetaGroup } from 'services/meta';
 import getInitialValues from 'utils/getInitialTaskValues';
 import getValidationSchema from 'utils/getValidationSchema';
 import Header from 'components/task/header';
@@ -37,7 +37,7 @@ const Task = (props) => {
       />
       <Formik
         onSubmit={(values, actions) => {
-          setMeta(values);
+          setMetaGroup(values);
           completeTask(selectedTaskSlug, values['next-task-slug']);
           actions.setSubmitting(false);
         }}

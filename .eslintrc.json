@@ -17,7 +17,8 @@
     "node": true
   },
   "globals": {
-    "wp": true
+    "wp": true,
+    "lodash": true
   },
   // Do NOT change these rules
   "rules": {

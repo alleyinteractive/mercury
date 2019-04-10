@@ -22,6 +22,13 @@ export const select = css`
 export const label = css`
   font-size: 12px;
   font-weight: 700;
-  margin-right: 10px;
+  margin-right: 5px;
+  text-transform: uppercase;
+`;
+
+export const secondaryLabel = css`
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 400;
   text-transform: uppercase;
 `;

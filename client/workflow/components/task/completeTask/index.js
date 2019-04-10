@@ -1,29 +1,21 @@
-import React, { useState, useEffect } from 'react';
-import { useInProgressTaskSlug, useSelectedTaskSlug } from 'hooks/tasks';
-import { getTask, completeTask } from 'services/tasks';
+import React from 'react';
+import PropTypes from 'prop-types';
+import { Field } from 'formik';
+import Select from 'components/fields/select';
 import {
   Wrapper,
   Submit,
   Label,
 } from './completeTaskStyles';
 
-const CompleteTask = () => {
-  // Watch for changes to the in progress and selected tasks.
-  const inProgressTaskSlug = useInProgressTaskSlug();
-  const selectedTaskSlug = useSelectedTaskSlug();
-  const [
-    selectedTask,
-    setSelectedTask,
-  ] = useState(getTask(selectedTaskSlug));
-  const { nextTasks } = selectedTask;
-  const [
+const CompleteTask = (props) => {
+  const {
+    errors,
+    inProgressTaskSlug,
+    selectedTaskSlug,
     nextTaskSlug,
-    setNextTaskSlug,
-  ] = useState(nextTasks.length ? nextTasks[0].slug : '');
-
-  useEffect(() => {
-    setSelectedTask(getTask(selectedTaskSlug));
-  }, [selectedTaskSlug]);
+    nextTasks,
+  } = props;
 
   const getButtonLabel = () => {
     if (1 === nextTasks.length) {
@@ -34,34 +26,46 @@ const CompleteTask = () => {
 
   return (
     <Wrapper>
-      {1 < nextTasks.length && (
-        <Label
-          htmlFor="next-task"
-        >
+      {1 < nextTasks.length ? (
+        <Label htmlFor="next-task-slug">
           <span>Actions: </span>
-          <select
-            id="next-task"
-            name="next-task"
-            onChange={(event) => setNextTaskSlug(event.target.value)}
+          <Select
+            slug="next-task-slug"
+            optionsSourceList={nextTasks.map((task) => ({
+              label: task.label,
+              value: task.slug,
+            }))}
             value={nextTaskSlug}
             disabled={inProgressTaskSlug !== selectedTaskSlug}
-          >
-            {nextTasks.map((task) => {
-              const { slug, label } = task;
-              return <option value={slug} key={slug}>{label}</option>;
-            })}
-          </select>
+          />
         </Label>
+      ) : (
+        <Field
+          type="hidden"
+          name="next-task"
+        />
       )}
       <Submit
-        type="button"
-        onClick={() => completeTask(selectedTask, nextTaskSlug)}
-        disabled={inProgressTaskSlug !== selectedTaskSlug}
+        type="submit"
+        disabled={
+          (inProgressTaskSlug !== selectedTaskSlug)
+          || !! Object.keys(errors).length
+        }
       >
         {getButtonLabel()}
       </Submit>
     </Wrapper>
   );
+};
+
+CompleteTask.propTypes = {
+  // eslint-disable-next-line react/forbid-prop-types
+  errors: PropTypes.object.isRequired,
+  inProgressTaskSlug: PropTypes.string.isRequired,
+  selectedTaskSlug: PropTypes.string.isRequired,
+  nextTaskSlug: PropTypes.string.isRequired,
+  // eslint-disable-next-line react/forbid-prop-types
+  nextTasks: PropTypes.array.isRequired,
 };
 
 export default CompleteTask;

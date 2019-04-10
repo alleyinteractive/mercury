@@ -91,6 +91,28 @@ class Task {
 							'description' => __( 'This will allow the assignee to be set from a filtered list of users. Use this when your default selection may need to change. By default this will include all users. Use the filter options to filter that list.', 'mercury' ),
 						]
 					),
+					'assignee_selection_permissions' => new \Fieldmanager_Group(
+						[
+							'label'       => __( 'Assignee Selection Permissions', 'mercury' ),
+							'collapsible' => true,
+							'display_if'  => [
+								'src'   => 'enable_assignee_selection',
+								'value' => true,
+							],
+							'children'    => [
+								'enabled_roles' => new \Fieldmanager_Select(
+									[
+										'limit'              => 0,
+										'extra_elements'     => 0,
+										'one_label_per_item' => false,
+										'label'              => __( 'By default only administrators can assign users to tasks. Grant this permission to additional roles for this task:', 'mercury' ),
+										'add_more_label'     => __( 'Add Role', 'healthline' ),
+										'options'            => \Mercury\Users::get_role_options(),
+									]
+								),
+							],
+						]
+					),
 					'assignee_selection' => new \Fieldmanager_Group(
 						[
 							'label'       => __( 'Assignee Selection Options', 'mercury' ),
@@ -351,23 +373,27 @@ class Task {
 	 */
 	public static function get_task( int $task_id ) : array {
 		return [
-			'name'       => get_post_meta( $task_id, 'name', true ),
-			'assignees'  => self::get_assignee_settings( $task_id ),
-			'fields'     => self::get_fields( $task_id ),
-			'nextTasks'  => self::get_next_tasks( $task_id ),
-			'slug'       => get_post_meta( $task_id, 'slug', true ),
-			'postStatus' => get_post_meta( $task_id, 'post_status', true ),
+			'name'          => get_post_meta( $task_id, 'name', true ),
+			'assignees'     => self::get_assignee_settings( $task_id ),
+			'assigneeField' => self::get_assignee_field( $task_id ),
+			'fields'        => self::get_fields( $task_id ),
+			'nextTasks'     => self::get_next_tasks( $task_id ),
+			'slug'          => get_post_meta( $task_id, 'slug', true ),
+			'postStatus'    => get_post_meta( $task_id, 'post_status', true ),
 		];
 	}
 
 	public static function get_assignee_settings( $task_id ) {
 
 		$settings_template = [
-			'default_assignee'          => 'none',
-			'default_user'              => 0,
-			'enable_assignee_selection' => false,
-			'assignee_options'          => [],
-			'assignee_selection'        => [
+			'default_assignee'               => 'none',
+			'default_user'                   => 0,
+			'enable_assignee_selection'      => false,
+			'assignee_options'               => [],
+			'assignee_selection_permissions' => [
+				'enabled_roles'  => [],
+			],
+			'assignee_selection'             => [
 				'enable_users'  => false,
 				'filter_users'  => [],
 				'enable_groups' => false,
@@ -375,8 +401,8 @@ class Task {
 				'enable_roles'  => false,
 				'filter_roles'  => [],
 			],
-			'enable_ask_reject'         => false,
-			'ask_reject'                => [
+			'enable_ask_reject'              => false,
+			'ask_reject'                     => [
 				'enable_users'  => false,
 				'filter_users'  => [],
 				'enable_groups' => false,
@@ -489,6 +515,39 @@ class Task {
 			$task_slug     = (string) get_post_meta( $field['assignee_task_id'], 'slug', true );
 			$field['slug'] = "mercury_{$task_slug}_assignee_id";
 			$field['assignee_task_slug'] = $task_slug;
+		}
+
+		return $field;
+	}
+
+	/**
+	 * Get the assignee field for a given task.
+	 *
+	 * @param int $task_id Task post ID.
+	 * @return array
+	 */
+	public static function get_assignee_field( $task_id ) {
+		$task_slug = (string) get_post_meta( $task_id, 'slug', true );
+
+		$field = [
+			'assignee_task_id'   => $task_id,
+			'assignee_task_slug' => $task_slug,
+			'label'              => __( 'Assigned to', 'mercury' ),
+			'read_only'          => true,
+			'slug'               => "mercury_{$task_slug}_assignee_id",
+			'type'               => 'assignee',
+		];
+
+		$assignments   = (array) get_post_meta( $task_id, 'assignments', true );
+		$enabled_roles = array_merge( $assignments['assignee_selection_permissions']['enabled_roles'] ?? [], [ 'administrator' ] );
+		$current_user  = wp_get_current_user();
+
+		// Enable editing of the field if the current user has a sufficient role.
+		foreach ( $enabled_roles as $role ) {
+			if ( in_array( $role, $current_user->roles ?? [], true ) ) {
+				$field['read_only'] = false;
+				break;
+			}
 		}
 
 		return $field;

@@ -5,6 +5,7 @@ import { useInProgressTaskSlug } from 'hooks/tasks';
 import Header from 'components/task/header';
 import Footer from 'components/task/footer';
 import Fields from 'components/fields';
+import Field from 'components/fields/field';
 import {
   Wrapper,
   Form,
@@ -16,6 +17,7 @@ const Task = (props) => {
     slug,
     name,
     fields,
+    assigneeField,
   } = props;
   const inProgressTaskSlug = useInProgressTaskSlug();
 
@@ -39,10 +41,7 @@ const Task = (props) => {
             <Form onSubmit={handleSubmit}>
               <FormHeader>
                 <div>Due June 3rd</div>
-                <div>
-                  Assigned to
-                  <button type="button">James Burke</button>
-                </div>
+                <Field {...assigneeField} />
               </FormHeader>
               <Fields fields={fields} slug={slug} />
               <Footer />
@@ -62,6 +61,13 @@ Task.propTypes = {
       label: PropTypes.string,
     })
   ).isRequired,
+  assigneeField: PropTypes.shape({
+    assigneeTaskSlug: PropTypes.string,
+    label: PropTypes.string,
+    readOnly: PropTypes.bool,
+    slug: PropTypes.string,
+    type: PropTypes.string.isRequired,
+  }).isRequired,
 };
 
 export default Task;

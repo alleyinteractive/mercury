@@ -35,10 +35,11 @@ const Select = (props) => {
   if (readOnly) {
     const selectedOption = optionsSourceList
       .find((option) => (option.value === parseInt(value, 10)));
+    const { label } = selectedOption || {};
 
     return (
       <div className="mercury__field__readOnly">
-        {selectedOption.label}
+        {label || ''}
       </div>
     );
   }

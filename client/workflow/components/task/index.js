@@ -7,10 +7,11 @@ import {
 } from 'hooks/tasks';
 import { completeTask, getTask } from 'services/tasks';
 import { setMeta } from 'services/meta';
+import getInitialValues from 'utils/getInitialTaskValues';
+import getValidationSchema from 'utils/getValidationSchema';
 import Header from 'components/task/header';
 import Footer from 'components/task/footer';
 import Fields from 'components/fields';
-import getInitialValues from './getInitialValues';
 import {
   Wrapper,
   Form,
@@ -41,8 +42,9 @@ const Task = (props) => {
           actions.setSubmitting(false);
         }}
         initialValues={getInitialValues(fields, nextTasks)}
+        validationSchema={getValidationSchema(fields)}
         render={(formProps) => {
-          const { handleSubmit, values } = formProps;
+          const { handleSubmit, values, errors } = formProps;
 
           return (
             <Form onSubmit={handleSubmit}>
@@ -54,11 +56,13 @@ const Task = (props) => {
                 </div>
               </FormHeader>
               <Fields
+                errors={errors}
                 fields={fields}
                 slug={slug}
                 {...formProps}
               />
               <Footer
+                errors={errors}
                 inProgressTaskSlug={inProgressTaskSlug}
                 selectedTaskSlug={selectedTaskSlug}
                 nextTaskSlug={values['next-task-slug']}

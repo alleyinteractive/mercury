@@ -10,6 +10,7 @@ import {
 
 const CompleteTask = (props) => {
   const {
+    errors,
     inProgressTaskSlug,
     selectedTaskSlug,
     nextTaskSlug,
@@ -46,7 +47,10 @@ const CompleteTask = (props) => {
       )}
       <Submit
         type="submit"
-        disabled={inProgressTaskSlug !== selectedTaskSlug}
+        disabled={
+          (inProgressTaskSlug !== selectedTaskSlug)
+          || !! Object.keys(errors).length
+        }
       >
         {getButtonLabel()}
       </Submit>
@@ -55,6 +59,8 @@ const CompleteTask = (props) => {
 };
 
 CompleteTask.propTypes = {
+  // eslint-disable-next-line react/forbid-prop-types
+  errors: PropTypes.object.isRequired,
   inProgressTaskSlug: PropTypes.string.isRequired,
   selectedTaskSlug: PropTypes.string.isRequired,
   nextTaskSlug: PropTypes.string.isRequired,

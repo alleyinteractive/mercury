@@ -9,9 +9,13 @@ import RadioGroup from './radioGroup';
 import ReadOnly from './readOnly';
 import {
   Wrapper,
+  LabelWrapper,
   Label,
   LabelText,
   InputWrapper,
+  ReadOnlyLabel,
+  RequiredLabel,
+  ErrorText,
 } from './fieldStyles.js';
 
 const FormField = (props) => {
@@ -20,6 +24,8 @@ const FormField = (props) => {
     slug,
     type,
     readOnly,
+    required,
+    error,
   } = props;
   const fieldMap = {
     select: Select,
@@ -33,13 +39,20 @@ const FormField = (props) => {
 
   return (
     <Wrapper>
-      <Label htmlFor={slug}>
-        {('checkbox' !== type || ('checkbox' === type && readOnly)) && (
-          <LabelText>
-            {label}
-            {readOnly && <span>(Read only)</span>}
-          </LabelText>
-        )}
+      <Label
+        htmlFor={slug}
+        required={required}
+        error={error}
+      >
+        <LabelWrapper>
+          {'checkbox' !== type && (
+            <LabelText>{label}</LabelText>
+          )}
+          {readOnly && (
+            <ReadOnlyLabel>(Read only)</ReadOnlyLabel>
+          )}
+          {required && <RequiredLabel>required</RequiredLabel>}
+        </LabelWrapper>
         {readOnly
           ? <ReadOnly slug={slug} />
           : (
@@ -48,16 +61,27 @@ const FormField = (props) => {
             </InputWrapper>
           )
         }
+        {error && (
+          <ErrorText>
+            {error.replace ? error.replace(slug, 'This') : error}
+          </ErrorText>
+        )}
       </Label>
     </Wrapper>
   );
 };
 
 FormField.propTypes = {
+  error: PropTypes.oneOfType([
+    PropTypes.bool,
+    PropTypes.array,
+    PropTypes.string,
+  ]).isRequired,
   handleChange: PropTypes.func.isRequired,
   type: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
   readOnly: PropTypes.bool,
+  required: PropTypes.bool.isRequired,
   slug: PropTypes.string.isRequired,
   value: PropTypes.oneOfType([
     PropTypes.bool,

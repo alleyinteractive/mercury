@@ -12,11 +12,13 @@ const Fields = (props) => {
     handleChange,
     setFieldValue,
     values,
+    errors,
   } = props;
 
   // Save fields to gutenberg meta on change.
   useEffect(() => {
     setMeta(formikState);
+    return () => {};
   }, [formikState]);
 
   if (! fields || 0 === fields.length) {
@@ -37,6 +39,7 @@ const Fields = (props) => {
           <FieldWrapper key={slug}>
             <FormField
               {...field}
+              error={errors[slug] || ''}
               value={values[slug]}
               setFieldValue={setFieldValue}
               handleChange={handleChange}
@@ -49,6 +52,8 @@ const Fields = (props) => {
 };
 
 Fields.propTypes = {
+  // eslint-disable-next-line react/forbid-prop-types
+  errors: PropTypes.object.isRequired,
   fields: PropTypes.arrayOf(
     PropTypes.shape({
       label: PropTypes.string,

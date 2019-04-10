@@ -14,6 +14,7 @@ export function getMeta(field) {
   if (! currentMeta[field]) {
     return '';
   }
+
   return parseValue(currentMeta[field]);
 }
 

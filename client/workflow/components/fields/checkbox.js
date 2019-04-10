@@ -10,6 +10,7 @@ const Checkbox = (props) => {
   const {
     label,
     slug,
+    value,
   } = props;
 
   return (
@@ -18,6 +19,7 @@ const Checkbox = (props) => {
         type="checkbox"
         id={slug}
         name={slug}
+        checked={value}
       />
       <OptionText>{label}</OptionText>
     </InlineLabel>
@@ -27,6 +29,7 @@ const Checkbox = (props) => {
 Checkbox.propTypes = {
   label: PropTypes.string.isRequired,
   slug: PropTypes.string.isRequired,
+  value: PropTypes.bool.isRequired,
 };
 
 export default Checkbox;

@@ -434,6 +434,11 @@ class Task {
 
 		$settings['assignee_options'] = \Mercury\Users::create_user_list_from_assignee_data( $settings );
 
+		// Set the default user to the current user if that option has been selected.
+		if ( 'creator' === $settings['default_assignee'] ) {
+			$settings['default_user'] = get_current_user_id();
+		}
+
 		return $settings;
 	}
 

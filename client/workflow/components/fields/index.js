@@ -1,10 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Field from 'components/fields/field';
+import FormField from 'components/fields/field';
 import { Wrapper, FieldWrapper } from './fieldsStyles';
 
 const Fields = (props) => {
-  const { fields } = props;
+  const {
+    fields,
+    handleChange,
+    setFieldValue,
+    values,
+    errors,
+  } = props;
 
   if (! fields || 0 === fields.length) {
     return (
@@ -22,7 +28,13 @@ const Fields = (props) => {
 
         return (
           <FieldWrapper key={slug}>
-            <Field {...field} />
+            <FormField
+              {...field}
+              error={errors[slug] || ''}
+              value={values[slug]}
+              setFieldValue={setFieldValue}
+              handleChange={handleChange}
+            />
           </FieldWrapper>
         );
       })}
@@ -31,11 +43,17 @@ const Fields = (props) => {
 };
 
 Fields.propTypes = {
+  // eslint-disable-next-line react/forbid-prop-types
+  errors: PropTypes.object.isRequired,
   fields: PropTypes.arrayOf(
     PropTypes.shape({
       label: PropTypes.string,
     })
   ).isRequired,
+  handleChange: PropTypes.func.isRequired,
+  setFieldValue: PropTypes.func.isRequired,
+  // eslint-disable-next-line react/forbid-prop-types
+  values: PropTypes.object.isRequired,
 };
 
 export default Fields;

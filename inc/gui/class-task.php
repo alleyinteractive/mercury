@@ -277,8 +277,9 @@ class Task {
 							'label'         => __( 'Type', 'mercury' ),
 							'default_value' => 'textfield',
 							'options'       => [
-								'checkbox'   => __( 'Checkbox', 'mercury' ),
+								'radios'     => __( 'Radios', 'mercury' ),
 								'checkboxes' => __( 'Checkboxes', 'mercury' ),
+								'checkbox'   => __( 'Checkbox', 'mercury' ),
 								'date'       => __( 'Date', 'mercury' ),
 								'select'     => __( 'Dropdown', 'mercury' ),
 								'textarea'   => __( 'Textarea', 'mercury' ),
@@ -308,7 +309,7 @@ class Task {
 							],
 							'display_if' => [
 								'src'   => 'type',
-								'value' => 'select,checkboxes'
+								'value' => 'select,checkboxes,radios'
 							],
 						]
 					),

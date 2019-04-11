@@ -71,7 +71,7 @@ class Task {
 							'options'    => [
 								'none'    => __( 'None', 'mercury' ),
 								'self'    => __( 'Self', 'mercury' ),
-								'creator' => __( 'Post creator', 'mercury' ),
+								'author'  => __( 'Post author', 'mercury' ),
 								'user'    => __( 'Specific User', 'mercury' ),
 							],
 						]
@@ -100,7 +100,7 @@ class Task {
 								'value' => true,
 							],
 							'children'    => [
-								'enabled_roles' => new \Fieldmanager_Select(
+								'roles' => new \Fieldmanager_Select(
 									[
 										'limit'              => 0,
 										'extra_elements'     => 0,
@@ -376,7 +376,6 @@ class Task {
 		return [
 			'name'          => get_post_meta( $task_id, 'name', true ),
 			'assignees'     => self::get_assignee_settings( $task_id ),
-			'assigneeField' => self::get_assignee_field( $task_id ),
 			'fields'        => self::get_fields( $task_id ),
 			'nextTasks'     => self::get_next_tasks( $task_id ),
 			'slug'          => get_post_meta( $task_id, 'slug', true ),
@@ -392,7 +391,7 @@ class Task {
 			'enable_assignee_selection'      => false,
 			'assignee_options'               => [],
 			'assignee_selection_permissions' => [
-				'enabled_roles'  => [],
+				'roles' => [],
 			],
 			'assignee_selection'             => [
 				'enable_users'  => false,
@@ -433,13 +432,10 @@ class Task {
 		$settings['ask_reject']['enable_groups'] = filter_var( $settings['ask_reject']['enable_groups'], FILTER_VALIDATE_BOOLEAN );
 		$settings['ask_reject']['enable_roles']  = filter_var( $settings['ask_reject']['enable_roles'], FILTER_VALIDATE_BOOLEAN );
 
-		$settings['assignee_options'] = \Mercury\Users::create_user_list_from_assignee_data( $settings );
+		$settings['assignee_options'] = \Mercury\Users::create_user_list_from_assignee_data( $settings['assignee_selection'] );
 
-		// Set the default user to the current user if that option has been selected.
-		if ( 'creator' === $settings['default_assignee'] ) {
-			$settings['default_user'] = get_current_user_id();
-		}
-
+		$settings['assignee_selection_permissions']['roles'] = array_merge( $settings['assignee_selection_permissions']['roles'] ?? [], [ 'administrator' ] );
+		
 		return $settings;
 	}
 
@@ -521,39 +517,6 @@ class Task {
 			$task_slug     = (string) get_post_meta( $field['assignee_task_id'], 'slug', true );
 			$field['slug'] = "mercury_{$task_slug}_assignee_id";
 			$field['assignee_task_slug'] = $task_slug;
-		}
-
-		return $field;
-	}
-
-	/**
-	 * Get the assignee field for a given task.
-	 *
-	 * @param int $task_id Task post ID.
-	 * @return array
-	 */
-	public static function get_assignee_field( $task_id ) {
-		$task_slug = (string) get_post_meta( $task_id, 'slug', true );
-
-		$field = [
-			'assignee_task_id'   => $task_id,
-			'assignee_task_slug' => $task_slug,
-			'label'              => __( 'Assigned to', 'mercury' ),
-			'read_only'          => true,
-			'slug'               => "mercury_{$task_slug}_assignee_id",
-			'type'               => 'assignee',
-		];
-
-		$assignments   = (array) get_post_meta( $task_id, 'assignments', true );
-		$enabled_roles = array_merge( $assignments['assignee_selection_permissions']['enabled_roles'] ?? [], [ 'administrator' ] );
-		$current_user  = wp_get_current_user();
-
-		// Enable editing of the field if the current user has a sufficient role.
-		foreach ( $enabled_roles as $role ) {
-			if ( in_array( $role, $current_user->roles ?? [], true ) ) {
-				$field['read_only'] = false;
-				break;
-			}
 		}
 
 		return $field;

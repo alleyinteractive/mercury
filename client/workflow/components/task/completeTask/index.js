@@ -31,6 +31,7 @@ const CompleteTask = (props) => {
           <span>Actions: </span>
           <Select
             slug="next-task-slug"
+            optionsFirstEmpty={false}
             optionsSourceList={nextTasks.map((task) => ({
               label: task.label,
               value: task.slug,

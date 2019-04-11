@@ -87,7 +87,7 @@ class Task {
 					),
 					'enable_assignee_selection' => new \Fieldmanager_Checkbox(
 						[
-							'label' => __( 'Enable Assignee Selection', 'mercury' ),
+							'label'       => __( 'Enable Assignee Selection', 'mercury' ),
 							'description' => __( 'This will allow the assignee to be set from a filtered list of users. Use this when your default selection may need to change. By default this will include all users. Use the filter options to filter that list.', 'mercury' ),
 						]
 					),

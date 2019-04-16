@@ -1,5 +1,5 @@
 /* global wp */
-import { getMeta, setMeta } from 'services/meta';
+import { getMeta } from 'services/meta';
 import { getTask } from 'services/tasks';
 
 /**
@@ -16,12 +16,7 @@ export default function getUser() {
  */
 export function getAssignee(taskSlug) {
   const currentAssignee = getMeta(`mercury_${taskSlug}_assignee_id`);
-
-  if (currentAssignee) {
-    return currentAssignee;
-  }
-
-  return setDefaultAssignee(taskSlug);
+  return currentAssignee || getDefaultAssigneeId(taskSlug);
 }
 
 /**
@@ -29,7 +24,7 @@ export function getAssignee(taskSlug) {
  *
  * @param {string} taskSlug Task slug.
  */
-export function setDefaultAssignee(taskSlug) {
+export function getDefaultAssigneeId(taskSlug) {
   const task = getTask(taskSlug);
 
   // Determine the default assignee.
@@ -47,13 +42,8 @@ export function setDefaultAssignee(taskSlug) {
       break;
     case 'none':
     default:
-      defaultUserId = null;
+      defaultUserId = '';
   }
 
-  // Set the default assignee.
-  if (defaultUserId) {
-    return setMeta(`mercury_${taskSlug}_assignee_id`, defaultUserId);
-  }
-
-  return null;
+  return defaultUserId;
 }

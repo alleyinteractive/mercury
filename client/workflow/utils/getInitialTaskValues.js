@@ -1,4 +1,5 @@
 import { getMeta } from 'services/meta';
+import { getAssignee } from 'services/users';
 
 export default function getInitialValues(task) {
   const {
@@ -22,7 +23,7 @@ export default function getInitialValues(task) {
 
   return {
     'next-task-slug': nextTaskSlug,
-    [`mercury_${slug}_assignee_id`]: 0,
+    [`mercury_${slug}_assignee_id`]: getAssignee(slug),
     ...defaultFormikState,
   };
 }

@@ -106,6 +106,7 @@ FormField.propTypes = {
     PropTypes.bool,
     PropTypes.array,
     PropTypes.string,
+    PropTypes.number,
   ]).isRequired,
 };
 

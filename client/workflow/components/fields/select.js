@@ -7,6 +7,7 @@ const Select = (props) => {
     slug,
     optionsSourceList,
     optionsFirstEmpty,
+    readOnly,
   } = props;
 
   return (
@@ -14,6 +15,7 @@ const Select = (props) => {
       component="select"
       id={slug}
       name={slug}
+      disabled={readOnly}
     >
       {optionsFirstEmpty && (
         <option value />
@@ -43,6 +45,7 @@ Select.propTypes = {
     })
   ).isRequired,
   optionsFirstEmpty: PropTypes.bool.isRequired,
+  readOnly: PropTypes.bool.isRequired,
 };
 
 export default Select;

@@ -90,22 +90,6 @@ export const OptionText = styled.span`
   font-weight: 400;
 `;
 
-export const ReadOnlyText = styled.div`
-  background-color: ${colors.grayLight};
-  font-size: 12px;
-  font-weight: 400;
-  width: 100%;
-
-  strong {
-    font-weight: 700;
-  }
-`;
-
-export const ReadOnlyLabel = styled.span`
-  ${secondaryLabel}
-  color: ${colors.gray};
-`;
-
 export const RequiredLabel = styled.span`
   ${secondaryLabel}
   color: ${colors.secondary};

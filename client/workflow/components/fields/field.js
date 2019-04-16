@@ -9,14 +9,12 @@ import TextField from './textfield';
 import Checkbox from './checkbox';
 import CheckboxGroup from './checkboxGroup';
 import RadioGroup from './radioGroup';
-import ReadOnly from './readOnly';
 import {
   Wrapper,
   LabelWrapper,
   Label,
   LabelText,
   InputWrapper,
-  ReadOnlyLabel,
   RequiredLabel,
   ErrorText,
 } from './fieldStyles.js';
@@ -26,7 +24,6 @@ const FormField = (props) => {
     label,
     slug,
     type,
-    readOnly,
     required,
     error,
     theme,
@@ -61,24 +58,21 @@ const FormField = (props) => {
             {'checkbox' !== type && (
               <LabelText>{label}</LabelText>
             )}
-            {readOnly && (
-              <ReadOnlyLabel>(Read only)</ReadOnlyLabel>
-            )}
             {required && <RequiredLabel>required</RequiredLabel>}
           </LabelWrapper>
-          {readOnly
-            ? <ReadOnly slug={slug} />
-            : (
-              <InputWrapper>
-                <FieldComponent {...props} />
-              </InputWrapper>
-            )
-          }
-          {error && (
-            <ErrorText>
-              {error}
-            </ErrorText>
-          )}
+          <InputWrapper>
+            <FieldComponent {...props} />
+          </InputWrapper>
+          {error && <ErrorText>{error}</ErrorText>}
+          {/* {readOnly ? (
+            <Fragment>
+              <LabelWrapper>
+                <LabelText>{label}</LabelText>
+                <ReadOnlyLabel>(Read only)</ReadOnlyLabel>
+              </LabelWrapper>
+              <ReadOnly slug={slug} />
+            </Fragment>
+          )} */}
         </Label>
       </Wrapper>
     </ThemeProvider>

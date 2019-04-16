@@ -12,6 +12,7 @@ const CheckboxGroup = (props) => {
     slug,
     optionsSourceList,
     value,
+    readOnly,
   } = props;
 
   if (! optionsSourceList || ! optionsSourceList.length) {
@@ -36,6 +37,7 @@ const CheckboxGroup = (props) => {
                     return (
                       <input
                         {...fieldHelpers}
+                        disabled={readOnly}
                         type="checkbox"
                         id={optionValue}
                         checked={value.includes(optionValue)}
@@ -69,6 +71,7 @@ CheckboxGroup.propTypes = {
   ).isRequired,
   slug: PropTypes.string.isRequired,
   value: PropTypes.arrayOf(PropTypes.string).isRequired,
+  readOnly: PropTypes.bool.isRequired,
 };
 
 export default CheckboxGroup;

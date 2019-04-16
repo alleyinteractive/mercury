@@ -12,6 +12,7 @@ const RadioGroup = (props) => {
     optionsSourceList,
     setFieldValue,
     slug,
+    readOnly,
   } = props;
 
   if (! optionsSourceList || ! optionsSourceList.length) {
@@ -35,6 +36,7 @@ const RadioGroup = (props) => {
                 return (
                   <input
                     {...fieldHelpers}
+                    disabled={readOnly}
                     type="radio"
                     id={optionValue}
                     checked={fieldHelpers.value === optionValue}
@@ -61,6 +63,7 @@ RadioGroup.propTypes = {
   ).isRequired,
   setFieldValue: PropTypes.func.isRequired,
   slug: PropTypes.string.isRequired,
+  readOnly: PropTypes.bool.isRequired,
 };
 
 export default RadioGroup;

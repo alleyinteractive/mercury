@@ -1,6 +1,11 @@
 import { getMeta } from 'services/meta';
 
-export default function getInitialValues(fields, nextTasks) {
+export default function getInitialValues(task) {
+  const {
+    nextTasks,
+    fields,
+    slug,
+  } = task;
   const nextTaskSlug = nextTasks.length ? nextTasks[0].slug : '';
   const defaultFormikState = fields.reduce((acc, currentField) => {
     const {
@@ -17,6 +22,7 @@ export default function getInitialValues(fields, nextTasks) {
 
   return {
     'next-task-slug': nextTaskSlug,
+    [`mercury_${slug}_assignee_id`]: 0,
     ...defaultFormikState,
   };
 }

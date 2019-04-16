@@ -9,7 +9,9 @@ export const assignees = {
   defaultUser: null,
   enableAssigneeSelection: false,
   assigneeOptions: [],
-  assigneeSelectionPermissions: {},
+  assigneeSelectionPermissions: {
+    roles: [],
+  },
   assigneeSelection: {},
   enableAskReject: false,
   askReject: {},

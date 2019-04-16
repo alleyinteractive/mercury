@@ -1,9 +1,21 @@
-import styled from 'styled-components';
+import { css } from 'styled-components';
 
-const Heading = styled.span`
+export const label = css`
+  align-items: center;
+  display: flex;
+  flex-direction: row;
   font-weight: 700;
   padding-right: 5px;
   text-transform: uppercase;
 `;
 
-export default Heading;
+export const labelWrapper = css`
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  margin-right: 5px;
+`;
+
+export const inputWrapper = css`
+  max-width: 400px;
+`;

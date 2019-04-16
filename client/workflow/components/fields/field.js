@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
-// import { connect } from 'formik';
 import { setMeta } from 'services/meta';
+import { ThemeProvider } from 'styled-components';
 import Select from './select';
 import Assignee from './assignee';
 import TextArea from './textarea';
@@ -29,9 +29,9 @@ const FormField = (props) => {
     readOnly,
     required,
     error,
+    theme,
     value,
   } = props;
-
   const fieldMap = {
     assignee: Assignee,
     select: Select,
@@ -50,36 +50,38 @@ const FormField = (props) => {
   }, [value]);
 
   return (
-    <Wrapper>
-      <Label
-        htmlFor={slug}
-        required={required}
-        error={error}
-      >
-        <LabelWrapper>
-          {'checkbox' !== type && (
-            <LabelText>{label}</LabelText>
+    <ThemeProvider theme={theme}>
+      <Wrapper>
+        <Label
+          htmlFor={slug}
+          required={required}
+          error={error}
+        >
+          <LabelWrapper>
+            {'checkbox' !== type && (
+              <LabelText>{label}</LabelText>
+            )}
+            {readOnly && (
+              <ReadOnlyLabel>(Read only)</ReadOnlyLabel>
+            )}
+            {required && <RequiredLabel>required</RequiredLabel>}
+          </LabelWrapper>
+          {readOnly
+            ? <ReadOnly slug={slug} />
+            : (
+              <InputWrapper>
+                <FieldComponent {...props} />
+              </InputWrapper>
+            )
+          }
+          {error && (
+            <ErrorText>
+              {error}
+            </ErrorText>
           )}
-          {readOnly && (
-            <ReadOnlyLabel>(Read only)</ReadOnlyLabel>
-          )}
-          {required && <RequiredLabel>required</RequiredLabel>}
-        </LabelWrapper>
-        {readOnly
-          ? <ReadOnly slug={slug} />
-          : (
-            <InputWrapper>
-              <FieldComponent {...props} />
-            </InputWrapper>
-          )
-        }
-        {error && (
-          <ErrorText>
-            {error}
-          </ErrorText>
-        )}
-      </Label>
-    </Wrapper>
+        </Label>
+      </Wrapper>
+    </ThemeProvider>
   );
 };
 
@@ -89,14 +91,16 @@ FormField.propTypes = {
     PropTypes.array,
     PropTypes.string,
   ]).isRequired,
-  // formik: PropTypes.shape({
-  //   values: PropTypes.object.isRequired,
-  // }).isRequired,
   handleChange: PropTypes.func.isRequired,
   type: PropTypes.string.isRequired,
-  label: PropTypes.string.isRequired,
+  label: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.element,
+  ]).isRequired,
+  // eslint-disable-next-line react/forbid-prop-types
+  theme: PropTypes.object,
   readOnly: PropTypes.bool,
-  required: PropTypes.bool.isRequired,
+  required: PropTypes.bool,
   slug: PropTypes.string.isRequired,
   value: PropTypes.oneOfType([
     PropTypes.bool,
@@ -106,7 +110,9 @@ FormField.propTypes = {
 };
 
 FormField.defaultProps = {
+  theme: {},
   readOnly: false,
+  required: false,
 };
 
 export default FormField;

@@ -5,7 +5,8 @@ import * as Yup from 'yup';
  *
  * @param {object} fields - Fields from mercury API that require validation
  */
-export default function getValidationSchema(fields) {
+export default function getValidationSchema(task) {
+  const { fields, slug: taskSlug } = task;
   const schemaShape = fields.reduce((acc, field) => {
     const {
       slug,
@@ -48,5 +49,9 @@ export default function getValidationSchema(fields) {
     };
   }, {});
 
-  return Yup.object().shape(schemaShape);
+  return Yup.object().shape({
+    [`mercury_${taskSlug}_assignee_id`]: Yup.number(),
+    'next-task-slug': Yup.string(),
+    ...schemaShape,
+  });
 }

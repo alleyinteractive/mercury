@@ -8,6 +8,11 @@ import typecast from './typecast';
 export const stringifyValue = (val) => {
   let newVal;
 
+  // don't stringify if it's already a string
+  if ('string' === typeof val) {
+    return val;
+  }
+
   try {
     newVal = JSON.stringify(val);
   } catch {

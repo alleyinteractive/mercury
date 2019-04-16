@@ -1,40 +1,51 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { getTask } from 'services/tasks';
 import { getAssignee } from 'services/users';
-import Select from 'components/fields/select';
+import FormField from 'components/fields/field';
 import useUser from 'hooks/users';
-import Heading from './assigneeStyles.js';
+import * as fieldTheme from './assigneeStyles.js';
 
 const Assignee = (props) => {
   const {
+    assignees: {
+      assigneeOptions,
+      assigneeSelectionPermissions,
+    },
     taskSlug,
+    formProps: {
+      handleChange,
+      values,
+      errors,
+    },
   } = props;
-  const task = getTask(taskSlug);
+  const fieldSlug = `mercury_${taskSlug}_assignee_id`;
   const currentAssignee = getAssignee(taskSlug);
-  const {
-    roles,
-  } = useUser();
+  const { roles } = useUser();
 
   // Get the assignee's name for display.
-  const assignee = task.assignees.assigneeOptions
-    .find((option) => (option.value === parseInt(currentAssignee, 10)));
+  const assignee = assigneeOptions.find(
+    (option) => (option.value === parseInt(currentAssignee, 10))
+  );
   const { label: assigneeName } = assignee || {};
 
   // Determine if user has permission to see the select field.
   const editAssignee = roles.some(
-    (role) => task.assignees.assigneeSelectionPermissions.roles
-      .includes(role)
+    (role) => assigneeSelectionPermissions.roles.includes(role)
   );
 
   return (
     <div>
-      <Heading>Assignee:</Heading>
       {editAssignee ? (
-        <Select
-          slug={`mercury_${taskSlug}_assignee_id`}
+        <FormField
           optionsFirstEmpty
-          optionsSourceList={task.assignees.assigneeOptions}
+          error={errors[fieldSlug] || ''}
+          value={values[fieldSlug]}
+          handleChange={handleChange}
+          slug={fieldSlug}
+          label="Assignee:"
+          theme={fieldTheme}
+          type="select"
+          optionsSourceList={assigneeOptions}
         />
       ) : (
         <span>{assigneeName || 'no one'}</span>
@@ -44,7 +55,23 @@ const Assignee = (props) => {
 };
 
 Assignee.propTypes = {
+  assignees: PropTypes.shape({
+    assigneeOptions: PropTypes.arrayOf(
+      PropTypes.shape({
+        label: PropTypes.string,
+        value: PropTypes.number,
+      })
+    ).isRequired,
+    assigneeSelectionPermissions: PropTypes.shape({
+      roles: PropTypes.array.isRequired,
+    }).isRequired,
+  }).isRequired,
   taskSlug: PropTypes.string.isRequired,
+  formProps: PropTypes.shape({
+    errors: PropTypes.object.isRequired,
+    handleChange: PropTypes.func.isRequired,
+    values: PropTypes.object.isRequired,
+  }).isRequired,
 };
 
 export default Assignee;

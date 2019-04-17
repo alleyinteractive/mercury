@@ -28,6 +28,9 @@ class Endpoints {
 		$this->register_meta_for_workflows();
 	}
 
+	/**
+	 * Register meta.
+	 */
 	public function register_meta_for_workflows() {
 
 		$meta_fields = [
@@ -147,7 +150,7 @@ class Endpoints {
 	/**
 	 * Camel case a string.
 	 *
-	 * @param strinng $string Text to convert.
+	 * @param string $string Text to convert.
 	 * @return string
 	 */
 	public static function camel_case_string( string $string ) : string {

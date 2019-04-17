@@ -30,6 +30,9 @@ class Workflow {
 		add_action( 'fm_post_' . Post_Type::WORKFLOW_POST_TYPE, [ $this, 'tasks_meta_box' ] );
 	}
 
+	/**
+	 * Add settings meta box.
+	 */
 	public function settings_meta_box() {
 		$fm = new \Fieldmanager_Group(
 			[
@@ -45,6 +48,9 @@ class Workflow {
 		$fm->add_meta_box( __( 'Settings', 'mercury' ), [ Post_Type::WORKFLOW_POST_TYPE ], 'normal', 'high' );
 	}
 
+	/**
+	 * Add tasks meta box.
+	 */
 	public function tasks_meta_box() {
 		$fm = new \Fieldmanager_Group(
 			[

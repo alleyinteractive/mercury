@@ -60,7 +60,7 @@ class Users {
 			if ( $userdata instanceof \WP_User ) {
 				$users[] = [
 					'label' => $userdata->data->display_name ?? '',
-					'value' => absint( $user_id ) 
+					'value' => absint( $user_id ),
 				];
 			}
 		}

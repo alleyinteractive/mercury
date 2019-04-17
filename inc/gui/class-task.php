@@ -29,10 +29,13 @@ class Task {
 		add_action( 'fm_post_' . Post_Type::WORKFLOW_TASK_POST_TYPE, [ $this, 'settings_meta_box' ] );
 		add_action( 'fm_post_' . Post_Type::WORKFLOW_TASK_POST_TYPE, [ $this, 'assignments_meta_box' ] );
 		add_action( 'fm_post_' . Post_Type::WORKFLOW_TASK_POST_TYPE, [ $this, 'next_tasks_meta_box' ] );
-		// add_action( 'fm_post_' . Post_Type::WORKFLOW_TASK_POST_TYPE, [ $this, 'due_dates_meta_box' ] );
+		// add_action( 'fm_post_' . Post_Type::WORKFLOW_TASK_POST_TYPE, [ $this, 'due_dates_meta_box' ] );.
 		add_action( 'fm_post_' . Post_Type::WORKFLOW_TASK_POST_TYPE, [ $this, 'fields_meta_box' ] );
 	}
 
+	/**
+	 * Add settings meta box.
+	 */
 	public function settings_meta_box() {
 		$fm = new \Fieldmanager_Group(
 			[
@@ -58,6 +61,9 @@ class Task {
 		$fm->add_meta_box( __( 'Settings', 'mercury' ), [ Post_Type::WORKFLOW_TASK_POST_TYPE ], 'normal', 'high' );
 	}
 
+	/**
+	 * Add assignments meta box.
+	 */
 	public function assignments_meta_box() {
 
 		$fm = new \Fieldmanager_Group(
@@ -106,7 +112,7 @@ class Task {
 										'extra_elements'     => 0,
 										'one_label_per_item' => false,
 										'label'              => __( 'By default only administrators can assign users to tasks. Grant this permission to additional roles for this task:', 'mercury' ),
-										'add_more_label'     => __( 'Add Role', 'healthline' ),
+										'add_more_label'     => __( 'Add Role', 'mercury' ),
 										'options'            => \Mercury\Users::get_role_options(),
 									]
 								),
@@ -146,6 +152,9 @@ class Task {
 		$fm->add_meta_box( __( 'Assignments', 'mercury' ), [ Post_Type::WORKFLOW_TASK_POST_TYPE ], 'normal', 'high' );
 	}
 
+	/**
+	 * Get assignee filters.
+	 */
 	public function get_assignee_filters() {
 		return [
 			'enable_users' => new \Fieldmanager_Checkbox(
@@ -156,7 +165,7 @@ class Task {
 			'filter_users' => new \Fieldmanager_Autocomplete(
 				[
 					'limit'          => 0,
-					'add_more_label' => __( 'Add User', 'healthline' ),
+					'add_more_label' => __( 'Add User', 'mercury' ),
 					'display_if'     => [
 						'src'   => 'enable_users',
 						'value' => true,
@@ -172,7 +181,7 @@ class Task {
 			'filter_groups' => new \Fieldmanager_Select(
 				[
 					'limit'          => 0,
-					'add_more_label' => __( 'Add Group', 'healthline' ),
+					'add_more_label' => __( 'Add Group', 'mercury' ),
 					'display_if'     => [
 						'src'   => 'enable_groups',
 						'value' => true,
@@ -188,7 +197,7 @@ class Task {
 			'filter_roles' => new \Fieldmanager_Select(
 				[
 					'limit'          => 0,
-					'add_more_label' => __( 'Add Role', 'healthline' ),
+					'add_more_label' => __( 'Add Role', 'mercury' ),
 					'display_if'     => [
 						'src'   => 'enable_roles',
 						'value' => true,
@@ -199,6 +208,9 @@ class Task {
 		];
 	}
 
+	/**
+	 * Add transitions meta box.
+	 */
 	public function next_tasks_meta_box() {
 		$fm = new \Fieldmanager_Group(
 			[
@@ -208,7 +220,7 @@ class Task {
 				'children'       => [
 					'transitions' => new \Fieldmanager_Group(
 						[
-							'add_more_label'     => __( 'Add Transition', 'healthline' ),
+							'add_more_label'     => __( 'Add Transition', 'mercury' ),
 							'children'           => [
 								'label'   => new \Fieldmanager_Textfield(
 									[
@@ -232,7 +244,7 @@ class Task {
 							],
 							'collapsed'          => true,
 							'extra_elements'     => 0,
-							'label'              => __( 'Task Transitions', 'healthline' ),
+							'label'              => __( 'Task Transitions', 'mercury' ),
 							'label_macro'        => [ '%s', 'label' ],
 							'limit'              => 0,
 							'minimum_count'      => 0,
@@ -245,6 +257,9 @@ class Task {
 		$fm->add_meta_box( __( 'Transitions', 'mercury' ), [ Post_Type::WORKFLOW_TASK_POST_TYPE ], 'normal', 'high' );
 	}
 
+	/**
+	 * Add due dates meta box.
+	 */
 	public function due_dates_meta_box() {
 		$fm = new \Fieldmanager_Group(
 			[
@@ -259,6 +274,9 @@ class Task {
 		$fm->add_meta_box( __( 'Due Dates', 'mercury' ), [ Post_Type::WORKFLOW_TASK_POST_TYPE ], 'normal', 'high' );
 	}
 
+	/**
+	 * Add fields meta box.
+	 */
 	public function fields_meta_box() {
 		$fm = new \Fieldmanager_Group(
 			[
@@ -294,7 +312,7 @@ class Task {
 							'label' => __( 'Slug', 'mercury' ),
 							'display_if' => [
 								'src'   => 'type',
-								'value' => 'checkbox,checkboxes,date,select,textarea,textfield'
+								'value' => 'checkbox,checkboxes,date,select,textarea,textfield',
 							],
 						]
 					),
@@ -309,7 +327,7 @@ class Task {
 							],
 							'display_if' => [
 								'src'   => 'type',
-								'value' => 'select,checkboxes,radios'
+								'value' => 'select,checkboxes,radios',
 							],
 						]
 					),
@@ -318,7 +336,7 @@ class Task {
 							'label'          => __( 'First Empty?', 'mercury' ),
 							'display_if' => [
 								'src'   => 'options_source',
-								'value' => 'list'
+								'value' => 'list',
 							],
 						]
 					),
@@ -338,7 +356,7 @@ class Task {
 							],
 							'display_if' => [
 								'src'   => 'options_source',
-								'value' => 'list'
+								'value' => 'list',
 							],
 						]
 					),
@@ -348,7 +366,7 @@ class Task {
 							'description' => __( 'Select the task for which this assignee field applies.', 'mercury' ),
 							'display_if' => [
 								'src'   => 'type',
-								'value' => 'assignee'
+								'value' => 'assignee',
 							],
 							'datasource' => new \Fieldmanager_Datasource_Post(
 								[
@@ -383,6 +401,12 @@ class Task {
 		];
 	}
 
+	/**
+	 * Helper function to get the assignee settings.
+	 *
+	 * @param int $task_id Task ID.
+	 * @return array
+	 */
 	public static function get_assignee_settings( $task_id ) {
 
 		$settings_template = [
@@ -435,7 +459,7 @@ class Task {
 		$settings['assignee_options'] = \Mercury\Users::create_user_list_from_assignee_data( $settings['assignee_selection'] );
 
 		$settings['assignee_selection_permissions']['roles'] = array_merge( $settings['assignee_selection_permissions']['roles'] ?? [], [ 'administrator' ] );
-		
+
 		return $settings;
 	}
 

@@ -34,6 +34,9 @@ class Assignments_Table extends \WP_List_Table {
 		);
 	}
 
+	/**
+	 * Prepare items for the table.
+	 */
 	public function prepare_items() {
 
 		// Set column headers.

@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const Wrapper = styled.div`
+export const Wrapper = styled.fieldset`
   display: flex;
   flex: 1 0 auto;
   flex-direction: column;

@@ -8,6 +8,8 @@ import colors from 'css/colors';
 
 export const InputWrapper = styled.div`
   width: 100%;
+  /* Label wrapper overrides */
+  ${(props) => props.theme.inputWrapper}
 
   [type="text"] {
     ${input}
@@ -42,6 +44,9 @@ export const GroupWrapper = styled.div`
 export const LabelWrapper = styled.div`
   display: block;
   line-height: 16px;
+
+  /* Label wrapper overrides */
+  ${(props) => props.theme.labelWrapper}
 `;
 
 export const Label = styled.label`
@@ -54,6 +59,9 @@ export const Label = styled.label`
   justify-content: flex-start;
   padding: 5px;
   width: 100%;
+
+  /* Label overrides */
+  ${(props) => props.theme.label}
 `;
 
 export const InlineLabel = styled.label`
@@ -80,22 +88,6 @@ export const LabelText = styled.span`
 export const OptionText = styled.span`
   font-size: 12px;
   font-weight: 400;
-`;
-
-export const ReadOnlyText = styled.div`
-  background-color: ${colors.grayLight};
-  font-size: 12px;
-  font-weight: 400;
-  width: 100%;
-
-  strong {
-    font-weight: 700;
-  }
-`;
-
-export const ReadOnlyLabel = styled.span`
-  ${secondaryLabel}
-  color: ${colors.gray};
 `;
 
 export const RequiredLabel = styled.span`

@@ -1,17 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Formik } from 'formik';
-import {
-  useInProgressTaskSlug,
-  useSelectedTaskSlug,
-} from 'hooks/tasks';
-import { completeTask, getTask } from 'services/tasks';
+import { useInProgressTaskSlug } from 'hooks/tasks';
+import { completeTask } from 'services/tasks';
 import { setMetaGroup } from 'services/meta';
 import getInitialValues from 'utils/getInitialTaskValues';
 import getValidationSchema from 'utils/getValidationSchema';
 import Header from 'components/task/header';
 import Footer from 'components/task/footer';
 import Fields from 'components/fields';
+import Assignee from './assignee';
 import {
   Wrapper,
   Form,
@@ -23,11 +21,10 @@ const Task = (props) => {
     slug,
     name,
     fields,
+    assignees,
+    nextTasks,
   } = props;
   const inProgressTaskSlug = useInProgressTaskSlug();
-  const selectedTaskSlug = useSelectedTaskSlug();
-  const selectedTask = getTask(selectedTaskSlug);
-  const { nextTasks } = selectedTask;
 
   return (
     <Wrapper>
@@ -38,11 +35,11 @@ const Task = (props) => {
       <Formik
         onSubmit={(values, actions) => {
           setMetaGroup(values);
-          completeTask(selectedTaskSlug, values['next-task-slug']);
+          completeTask(slug, values['next-task-slug']);
           actions.setSubmitting(false);
         }}
-        initialValues={getInitialValues(fields, nextTasks)}
-        validationSchema={getValidationSchema(fields)}
+        initialValues={getInitialValues(props)}
+        validationSchema={getValidationSchema(props)}
         render={(formProps) => {
           const { handleSubmit, values, errors } = formProps;
 
@@ -50,10 +47,11 @@ const Task = (props) => {
             <Form onSubmit={handleSubmit}>
               <FormHeader>
                 <div>Due June 3rd</div>
-                <div>
-                  Assigned to
-                  <button type="button">James Burke</button>
-                </div>
+                <Assignee
+                  assignees={assignees}
+                  taskSlug={slug}
+                  formProps={formProps}
+                />
               </FormHeader>
               <Fields
                 errors={errors}
@@ -64,7 +62,7 @@ const Task = (props) => {
               <Footer
                 errors={errors}
                 inProgressTaskSlug={inProgressTaskSlug}
-                selectedTaskSlug={selectedTaskSlug}
+                selectedTaskSlug={slug}
                 nextTaskSlug={values['next-task-slug']}
                 nextTasks={nextTasks}
               />
@@ -77,8 +75,16 @@ const Task = (props) => {
 };
 
 Task.propTypes = {
+  // eslint-disable-next-line react/forbid-prop-types
+  assignees: PropTypes.object.isRequired,
   slug: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
+  nextTasks: PropTypes.arrayOf(
+    PropTypes.shape({
+      label: PropTypes.string,
+      value: PropTypes.number,
+    })
+  ).isRequired,
   fields: PropTypes.arrayOf(
     PropTypes.shape({
       label: PropTypes.string,

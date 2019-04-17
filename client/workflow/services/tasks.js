@@ -46,7 +46,7 @@ export function getInProgressTask() {
 export function getInProgressTaskSlug() {
   const taskSlug = getMeta('mercury_in_progress_task_slug');
 
-  // Is `taskSlug` correspond to a valid task?
+  // Does `taskSlug` correspond to a valid task?
   if (getTask(taskSlug)) {
     return taskSlug;
   }
@@ -91,8 +91,8 @@ export function getSelectedTask() {
 export function getSelectedTaskSlug() {
   const taskSlug = getMeta('mercury_selected_task_slug');
 
-  // Is `taskSlug` correspond to a valid task?
-  if (getTask(taskSlug) || 'none' === taskSlug) {
+  // Does `taskSlug` correspond to a valid task?
+  if (getTask(taskSlug).slug || 'none' === taskSlug) {
     return taskSlug;
   }
 

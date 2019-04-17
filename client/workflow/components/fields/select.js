@@ -7,6 +7,7 @@ const Select = (props) => {
     slug,
     optionsSourceList,
     optionsFirstEmpty,
+    readOnly,
   } = props;
 
   return (
@@ -14,9 +15,10 @@ const Select = (props) => {
       component="select"
       id={slug}
       name={slug}
+      disabled={readOnly}
     >
       {optionsFirstEmpty && (
-        <option disabled value />
+        <option value />
       )}
       {optionsSourceList.map((option) => {
         const { label, value: optionValue } = option;
@@ -35,11 +37,15 @@ Select.propTypes = {
   slug: PropTypes.string.isRequired,
   optionsSourceList: PropTypes.arrayOf(
     PropTypes.shape({
-      value: PropTypes.string.isRequired,
+      value: PropTypes.oneOfType([
+        PropTypes.number,
+        PropTypes.string,
+      ]).isRequired,
       name: PropTypes.string,
     })
   ).isRequired,
   optionsFirstEmpty: PropTypes.bool.isRequired,
+  readOnly: PropTypes.bool.isRequired,
 };
 
 export default Select;

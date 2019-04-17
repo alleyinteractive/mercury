@@ -7,12 +7,10 @@ import './stores';
 const rootEl = document.getElementById('mercury-workflow-ui');
 
 if (rootEl) {
-  const { postId } = rootEl.dataset;
-
   // Do something after DOM loads.
   domReady(() => {
     ReactDOM.render(
-      <App postId={postId} />,
+      <App />,
       rootEl
     );
 
@@ -20,7 +18,7 @@ if (rootEl) {
       module.hot.accept('./components/app', () => {
         const NextApp = require('./components/app').default; // eslint-disable-line global-require
 
-        ReactDOM.render(<NextApp postId={postId} />, rootEl);
+        ReactDOM.render(<NextApp />, rootEl);
       });
     }
   });

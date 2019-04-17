@@ -44,17 +44,17 @@ class Post_Type {
 	 */
 	protected function register_workflow_post_type() {
 		$args = [
-				'capability_type'    => 'post',
-				'description'        => __( 'Workflow Management.', 'mercury' ),
-				'has_archive'        => false,
-				'label'              => __( 'Workflows', 'mercury' ),
-				'menu_icon'          => 'dashicons-yes',
-				'public'             => false,
-				'show_in_rest'       => true,
-				'publicly_queryable' => true,
-				'show_in_menu'       => true,
-				'show_ui'            => true,
-				'supports'           => [ 'title' ],
+			'capability_type'    => 'post',
+			'description'        => __( 'Workflow Management.', 'mercury' ),
+			'has_archive'        => false,
+			'label'              => __( 'Workflows', 'mercury' ),
+			'menu_icon'          => 'dashicons-yes',
+			'public'             => false,
+			'show_in_rest'       => true,
+			'publicly_queryable' => true,
+			'show_in_menu'       => true,
+			'show_ui'            => true,
+			'supports'           => [ 'title' ],
 		];
 
 		register_post_type( self::WORKFLOW_POST_TYPE, $args );
@@ -66,16 +66,16 @@ class Post_Type {
 	 */
 	protected function register_task_post_type() {
 		$args = [
-				'capability_type'    => 'post',
-				'has_archive'        => false,
-				'label'              => __( 'Tasks', 'mercury' ),
-				'menu_icon'          => 'dashicons-yes',
-				'public'             => false,
-				'show_in_rest'       => true,
-				'publicly_queryable' => true,
-				'show_in_menu'       => 'edit.php?post_type=mercury-workflow',
-				'show_ui'            => true,
-				'supports'           => [ 'title' ],
+			'capability_type'    => 'post',
+			'has_archive'        => false,
+			'label'              => __( 'Tasks', 'mercury' ),
+			'menu_icon'          => 'dashicons-yes',
+			'public'             => false,
+			'show_in_rest'       => true,
+			'publicly_queryable' => true,
+			'show_in_menu'       => 'edit.php?post_type=mercury-workflow',
+			'show_ui'            => true,
+			'supports'           => [ 'title' ],
 		];
 
 		register_post_type( self::WORKFLOW_TASK_POST_TYPE, $args );
@@ -92,7 +92,7 @@ class Post_Type {
 				'fields'         => 'ids',
 				'order'          => 'ASC',
 				'orderby'        => 'title',
-				'post_type'      => Post_Type::WORKFLOW_TASK_POST_TYPE,
+				'post_type'      => self::WORKFLOW_TASK_POST_TYPE,
 				'posts_per_page' => -1,
 			]
 		);
@@ -104,13 +104,14 @@ class Post_Type {
 
 			$args = [
 				'label'                     => $task_name,
-				'label_count'               => _n_noop( "{$task_name} <span class=\"count\">(%s)</span>", "{$task_name} <span class=\"count\">(%s)</span>", 'mercury' ),
+				/* translators: number of posts */
+				'label_count'               => _n_noop( "{$task_name} <span class=\"count\">(%s)</span>", "{$task_name} <span class=\"count\">(%s)</span>", 'mercury' ), // phpcs:ignore
 				'public'                    => true,
 				'show_in_admin_status_list' => true,
 			];
 
 			register_post_status( $task_post_status, $args );
-		}	
+		}
 	}
 
 	/**
@@ -122,7 +123,7 @@ class Post_Type {
 			__( 'Mercury', 'mercury' ),
 			function() {
 				printf(
-					'<div id="mercury-workflow-ui" data-post-id="%1$s">asdf</div>',
+					'<div id="mercury-workflow-ui"></div>',
 					get_the_ID()
 				);
 			},
@@ -131,6 +132,9 @@ class Post_Type {
 		);
 	}
 
+	/**
+	 * Remove submenu page.
+	 */
 	public function admin_menu() {
 		remove_submenu_page( 'edit.php?post_type=mercury-workflow', 'post-new.php?post_type=mercury-workflow' );
 	}

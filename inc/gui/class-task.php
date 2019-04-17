@@ -29,10 +29,13 @@ class Task {
 		add_action( 'fm_post_' . Post_Type::WORKFLOW_TASK_POST_TYPE, [ $this, 'settings_meta_box' ] );
 		add_action( 'fm_post_' . Post_Type::WORKFLOW_TASK_POST_TYPE, [ $this, 'assignments_meta_box' ] );
 		add_action( 'fm_post_' . Post_Type::WORKFLOW_TASK_POST_TYPE, [ $this, 'next_tasks_meta_box' ] );
-		// add_action( 'fm_post_' . Post_Type::WORKFLOW_TASK_POST_TYPE, [ $this, 'due_dates_meta_box' ] );
+		// add_action( 'fm_post_' . Post_Type::WORKFLOW_TASK_POST_TYPE, [ $this, 'due_dates_meta_box' ] );.
 		add_action( 'fm_post_' . Post_Type::WORKFLOW_TASK_POST_TYPE, [ $this, 'fields_meta_box' ] );
 	}
 
+	/**
+	 * Add settings meta box.
+	 */
 	public function settings_meta_box() {
 		$fm = new \Fieldmanager_Group(
 			[
@@ -58,6 +61,9 @@ class Task {
 		$fm->add_meta_box( __( 'Settings', 'mercury' ), [ Post_Type::WORKFLOW_TASK_POST_TYPE ], 'normal', 'high' );
 	}
 
+	/**
+	 * Add assignments meta box.
+	 */
 	public function assignments_meta_box() {
 
 		$fm = new \Fieldmanager_Group(
@@ -71,7 +77,7 @@ class Task {
 							'options'    => [
 								'none'    => __( 'None', 'mercury' ),
 								'self'    => __( 'Self', 'mercury' ),
-								'creator' => __( 'Post creator', 'mercury' ),
+								'author'  => __( 'Post author', 'mercury' ),
 								'user'    => __( 'Specific User', 'mercury' ),
 							],
 						]
@@ -87,8 +93,30 @@ class Task {
 					),
 					'enable_assignee_selection' => new \Fieldmanager_Checkbox(
 						[
-							'label' => __( 'Enable Assignee Selection', 'mercury' ),
+							'label'       => __( 'Enable Assignee Selection', 'mercury' ),
 							'description' => __( 'This will allow the assignee to be set from a filtered list of users. Use this when your default selection may need to change. By default this will include all users. Use the filter options to filter that list.', 'mercury' ),
+						]
+					),
+					'assignee_selection_permissions' => new \Fieldmanager_Group(
+						[
+							'label'       => __( 'Assignee Selection Permissions', 'mercury' ),
+							'collapsible' => true,
+							'display_if'  => [
+								'src'   => 'enable_assignee_selection',
+								'value' => true,
+							],
+							'children'    => [
+								'roles' => new \Fieldmanager_Select(
+									[
+										'limit'              => 0,
+										'extra_elements'     => 0,
+										'one_label_per_item' => false,
+										'label'              => __( 'By default only administrators can assign users to tasks. Grant this permission to additional roles for this task:', 'mercury' ),
+										'add_more_label'     => __( 'Add Role', 'mercury' ),
+										'options'            => \Mercury\Users::get_role_options(),
+									]
+								),
+							],
 						]
 					),
 					'assignee_selection' => new \Fieldmanager_Group(
@@ -124,6 +152,9 @@ class Task {
 		$fm->add_meta_box( __( 'Assignments', 'mercury' ), [ Post_Type::WORKFLOW_TASK_POST_TYPE ], 'normal', 'high' );
 	}
 
+	/**
+	 * Get assignee filters.
+	 */
 	public function get_assignee_filters() {
 		return [
 			'enable_users' => new \Fieldmanager_Checkbox(
@@ -134,7 +165,7 @@ class Task {
 			'filter_users' => new \Fieldmanager_Autocomplete(
 				[
 					'limit'          => 0,
-					'add_more_label' => __( 'Add User', 'healthline' ),
+					'add_more_label' => __( 'Add User', 'mercury' ),
 					'display_if'     => [
 						'src'   => 'enable_users',
 						'value' => true,
@@ -150,7 +181,7 @@ class Task {
 			'filter_groups' => new \Fieldmanager_Select(
 				[
 					'limit'          => 0,
-					'add_more_label' => __( 'Add Group', 'healthline' ),
+					'add_more_label' => __( 'Add Group', 'mercury' ),
 					'display_if'     => [
 						'src'   => 'enable_groups',
 						'value' => true,
@@ -166,7 +197,7 @@ class Task {
 			'filter_roles' => new \Fieldmanager_Select(
 				[
 					'limit'          => 0,
-					'add_more_label' => __( 'Add Role', 'healthline' ),
+					'add_more_label' => __( 'Add Role', 'mercury' ),
 					'display_if'     => [
 						'src'   => 'enable_roles',
 						'value' => true,
@@ -177,6 +208,9 @@ class Task {
 		];
 	}
 
+	/**
+	 * Add transitions meta box.
+	 */
 	public function next_tasks_meta_box() {
 		$fm = new \Fieldmanager_Group(
 			[
@@ -186,7 +220,7 @@ class Task {
 				'children'       => [
 					'transitions' => new \Fieldmanager_Group(
 						[
-							'add_more_label'     => __( 'Add Transition', 'healthline' ),
+							'add_more_label'     => __( 'Add Transition', 'mercury' ),
 							'children'           => [
 								'label'   => new \Fieldmanager_Textfield(
 									[
@@ -194,8 +228,9 @@ class Task {
 										'description' => __( 'Use this to describe what this transition will do. Ex. "Proceed to Final Edit", or "Return to editor"', 'mercury' ),
 									]
 								),
-								'task_id' => new \Fieldmanager_Select(
+								'task_id' => new \Fieldmanager_Autocomplete(
 									[
+										'label' => __( 'Task', 'mercury' ),
 										'datasource' => new \Fieldmanager_Datasource_Post(
 											[
 												'query_args' => [
@@ -209,7 +244,7 @@ class Task {
 							],
 							'collapsed'          => true,
 							'extra_elements'     => 0,
-							'label'              => __( 'Task Transitions', 'healthline' ),
+							'label'              => __( 'Task Transitions', 'mercury' ),
 							'label_macro'        => [ '%s', 'label' ],
 							'limit'              => 0,
 							'minimum_count'      => 0,
@@ -222,6 +257,9 @@ class Task {
 		$fm->add_meta_box( __( 'Transitions', 'mercury' ), [ Post_Type::WORKFLOW_TASK_POST_TYPE ], 'normal', 'high' );
 	}
 
+	/**
+	 * Add due dates meta box.
+	 */
 	public function due_dates_meta_box() {
 		$fm = new \Fieldmanager_Group(
 			[
@@ -236,6 +274,9 @@ class Task {
 		$fm->add_meta_box( __( 'Due Dates', 'mercury' ), [ Post_Type::WORKFLOW_TASK_POST_TYPE ], 'normal', 'high' );
 	}
 
+	/**
+	 * Add fields meta box.
+	 */
 	public function fields_meta_box() {
 		$fm = new \Fieldmanager_Group(
 			[
@@ -249,8 +290,6 @@ class Task {
 				'collapsed'      => true,
 				'sortable'       => true,
 				'children'       => [
-					'label' => new \Fieldmanager_Textfield( __( 'Label', 'mercury' ) ),
-					'slug'  => new \Fieldmanager_Textfield( __( 'Slug', 'mercury' ) ),
 					'type'  => new \Fieldmanager_Select(
 						[
 							'label'         => __( 'Type', 'mercury' ),
@@ -267,6 +306,16 @@ class Task {
 							],
 						]
 					),
+					'label' => new \Fieldmanager_Textfield( __( 'Label', 'mercury' ) ),
+					'slug'  => new \Fieldmanager_Textfield(
+						[
+							'label' => __( 'Slug', 'mercury' ),
+							'display_if' => [
+								'src'   => 'type',
+								'value' => 'checkbox,checkboxes,date,select,textarea,textfield',
+							],
+						]
+					),
 					'read_only'      => new \Fieldmanager_Checkbox( __( 'Read only?', 'mercury' ) ),
 					'required'       => new \Fieldmanager_Checkbox( __( 'Required?', 'mercury' ) ),
 					'options_source' => new \Fieldmanager_Select(
@@ -278,7 +327,7 @@ class Task {
 							],
 							'display_if' => [
 								'src'   => 'type',
-								'value' => 'select,checkboxes,radios'
+								'value' => 'select,checkboxes,radios',
 							],
 						]
 					),
@@ -287,7 +336,7 @@ class Task {
 							'label'          => __( 'First Empty?', 'mercury' ),
 							'display_if' => [
 								'src'   => 'options_source',
-								'value' => 'list'
+								'value' => 'list',
 							],
 						]
 					),
@@ -307,8 +356,26 @@ class Task {
 							],
 							'display_if' => [
 								'src'   => 'options_source',
-								'value' => 'list'
+								'value' => 'list',
 							],
+						]
+					),
+					'assignee_task_id' => new \Fieldmanager_Autocomplete(
+						[
+							'label' => __( 'Task', 'mercury' ),
+							'description' => __( 'Select the task for which this assignee field applies.', 'mercury' ),
+							'display_if' => [
+								'src'   => 'type',
+								'value' => 'assignee',
+							],
+							'datasource' => new \Fieldmanager_Datasource_Post(
+								[
+									'query_args' => [
+										'post_status' => 'any',
+										'post_type'   => Post_Type::WORKFLOW_TASK_POST_TYPE,
+									],
+								]
+							),
 						]
 					),
 				],
@@ -325,23 +392,32 @@ class Task {
 	 */
 	public static function get_task( int $task_id ) : array {
 		return [
-			'assignees'  => self::get_assignee_settings( $task_id ),
-			'fields'     => self::get_fields( $task_id ),
-			'name'       => get_post_meta( $task_id, 'name', true ),
-			'nextTasks'  => self::get_next_tasks( $task_id ),
-			'slug'       => get_post_meta( $task_id, 'slug', true ),
-			'postStatus' => get_post_meta( $task_id, 'post_status', true ),
+			'name'          => get_post_meta( $task_id, 'name', true ),
+			'assignees'     => self::get_assignee_settings( $task_id ),
+			'fields'        => self::get_fields( $task_id ),
+			'nextTasks'     => self::get_next_tasks( $task_id ),
+			'slug'          => get_post_meta( $task_id, 'slug', true ),
+			'postStatus'    => get_post_meta( $task_id, 'post_status', true ),
 		];
 	}
 
+	/**
+	 * Helper function to get the assignee settings.
+	 *
+	 * @param int $task_id Task ID.
+	 * @return array
+	 */
 	public static function get_assignee_settings( $task_id ) {
 
 		$settings_template = [
-			'default_assignee'          => 'none',
-			'default_user'              => 0,
-			'enable_assignee_selection' => false,
-			'assignee_options'          => [],
-			'assignee_selection'        => [
+			'default_assignee'               => 'none',
+			'default_user'                   => 0,
+			'enable_assignee_selection'      => false,
+			'assignee_options'               => [],
+			'assignee_selection_permissions' => [
+				'roles' => [],
+			],
+			'assignee_selection'             => [
 				'enable_users'  => false,
 				'filter_users'  => [],
 				'enable_groups' => false,
@@ -349,8 +425,8 @@ class Task {
 				'enable_roles'  => false,
 				'filter_roles'  => [],
 			],
-			'enable_ask_reject'         => false,
-			'ask_reject'                => [
+			'enable_ask_reject'              => false,
+			'ask_reject'                     => [
 				'enable_users'  => false,
 				'filter_users'  => [],
 				'enable_groups' => false,
@@ -369,10 +445,10 @@ class Task {
 		$settings = wp_parse_args( $assignments, $settings_template );
 
 		// Assignees.
-		$settings['enable_assignee_selection'] = filter_var( $settings['enable_assignee_selection'], FILTER_VALIDATE_BOOLEAN );
-		$settings['assignee_selection']['enable_users']  = filter_var($settings['assignee_selection']['enable_users'], FILTER_VALIDATE_BOOLEAN );
-		$settings['assignee_selection']['enable_groups'] = filter_var($settings['assignee_selection']['enable_groups'], FILTER_VALIDATE_BOOLEAN );
-		$settings['assignee_selection']['enable_roles']  = filter_var($settings['assignee_selection']['enable_roles'], FILTER_VALIDATE_BOOLEAN );
+		$settings['enable_assignee_selection']           = filter_var( $settings['enable_assignee_selection'], FILTER_VALIDATE_BOOLEAN );
+		$settings['assignee_selection']['enable_users']  = filter_var( $settings['assignee_selection']['enable_users'], FILTER_VALIDATE_BOOLEAN );
+		$settings['assignee_selection']['enable_groups'] = filter_var( $settings['assignee_selection']['enable_groups'], FILTER_VALIDATE_BOOLEAN );
+		$settings['assignee_selection']['enable_roles']  = filter_var( $settings['assignee_selection']['enable_roles'], FILTER_VALIDATE_BOOLEAN );
 
 		// Ask/Reject.
 		$settings['enable_ask_reject']           = filter_var( $settings['enable_ask_reject'], FILTER_VALIDATE_BOOLEAN );
@@ -382,11 +458,14 @@ class Task {
 
 		$settings['assignee_options'] = \Mercury\Users::create_user_list_from_assignee_data( $settings['assignee_selection'] );
 
+		$settings['assignee_selection_permissions']['roles'] = array_merge( $settings['assignee_selection_permissions']['roles'] ?? [], [ 'administrator' ] );
+
 		return $settings;
 	}
 
 	/**
 	 * Get the next step options for a given task.
+	 *
 	 * @param int $task_id Task post ID.
 	 * @return array
 	 */
@@ -428,16 +507,19 @@ class Task {
 		// Validate required fields.
 		if (
 			empty( $field['label'] )
-			|| empty( $field['slug'] )
 			|| empty( $field['type'] )
+			|| ( 'assignee' !== $field['type'] && empty( $field['slug'] ) )
+			|| ( 'assignee' === $field['type'] && empty( $field['assignee_task_id'] ) )
 		) {
-			return;
+			return [];
 		}
 
 		// Clean shape of each field.
 		$field = wp_parse_args(
 			$field,
 			[
+				'assignee_task_id'    => 0,
+				'assignee_task_slug'  => '',
 				'label'               => '',
 				'options_first_empty' => false,
 				'options_source'      => '',
@@ -453,6 +535,13 @@ class Task {
 		$field['options_first_empty'] = filter_var( $field['options_first_empty'], FILTER_VALIDATE_BOOLEAN );
 		$field['read_only']           = filter_var( $field['read_only'], FILTER_VALIDATE_BOOLEAN );
 		$field['required']            = filter_var( $field['required'], FILTER_VALIDATE_BOOLEAN );
+
+		// Handle assignee field.
+		if ( 'assignee' === $field['type'] ) {
+			$task_slug     = (string) get_post_meta( $field['assignee_task_id'], 'slug', true );
+			$field['slug'] = "mercury_{$task_slug}_assignee_id";
+			$field['assignee_task_slug'] = $task_slug;
+		}
 
 		return $field;
 	}

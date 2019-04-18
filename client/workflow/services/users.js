@@ -31,7 +31,7 @@ export function getDefaultAssigneeId(taskSlug) {
   let defaultUserId = null;
   switch (task.assignees.defaultAssignee) {
     case 'self':
-      // @todo get current user ID.
+      defaultUserId = getUser().id;
       break;
     case 'author':
       defaultUserId = wp.data.select('core/editor')

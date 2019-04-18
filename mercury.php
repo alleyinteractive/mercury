@@ -63,27 +63,38 @@ function webpack_query_vars( $vars ) {
 }
 add_filter( 'query_vars', __NAMESPACE__ . '\webpack_query_vars' );
 
-// Admin enqueue scripts.
-add_action(
-	'admin_enqueue_scripts',
-	function() {
-		if ( ( ! empty( $_GET['mercury-dev'] ) && true == $_GET['mercury-dev'] ) ) {
-			wp_enqueue_script(
-				'mercury-workflow-js',
-				'//localhost:8080/build/js/workflow.js',
-				[ 'wp-api-fetch' ],
-				MERCURY_VERSION,
-				true
-			);
-		} else {
-			wp_enqueue_script(
-				'mercury-workflow-js',
-				plugins_url( '/build/js/workflow.js', __FILE__ ),
-				[ 'wp-api-fetch' ],
-				MERCURY_VERSION,
-				true
-			);
-		}
+/**
+ * Enqueue admin scripts.
+ */
+function enqueue_scripts() {
+	global $post;
+	$screen = get_current_screen();
+
+	// Bail if this isn't the Post edit screen.
+	if (
+		'post' !== ( $post->post_type ?? '' ) ||
+		'post' !== ( $screen->base ?? '' )
+	) {
+		return;
 	}
-);
+
+	if ( ( ! empty( $_GET['mercury-dev'] ) && true == $_GET['mercury-dev'] ) ) {
+		wp_enqueue_script(
+			'mercury-workflow-js',
+			'//localhost:8080/build/js/workflow.js',
+			[ 'wp-api-fetch' ],
+			MERCURY_VERSION,
+			true
+		);
+	} else {
+		wp_enqueue_script(
+			'mercury-workflow-js',
+			plugins_url( '/build/js/workflow.js', __FILE__ ),
+			[ 'wp-api-fetch' ],
+			MERCURY_VERSION,
+			true
+		);
+	}
+}
+add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\enqueue_scripts' );
 

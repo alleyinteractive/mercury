@@ -60,4 +60,26 @@ trait Table_Helpers {
 		$task = \Mercury\GUI\Task::get_task_by_slug( $task_slug );
 		return $task['name'] ?? '';
 	}
+
+	/**
+	 * Get the orderby value, defaulting to ID.
+	 *
+	 * @return string
+	 */
+	protected function get_orderby() : string {
+		return ( ! empty( $_GET['orderby'] ) )
+			? sanitize_text_field( wp_unslash( $_GET['orderby'] ) )
+			: 'ID';
+	}
+
+	/**
+	 * Get the order value, defaulting to DESC.
+	 *
+	 * @return string
+	 */
+	protected function get_order() : string {
+		return ( ! empty( $_GET['order'] ) )
+			? sanitize_text_field( wp_unslash( $_GET['order'] ) )
+			: 'DESC';
+	}
 }

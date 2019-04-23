@@ -62,6 +62,8 @@ class Assignments_Table extends \WP_List_Table {
 			'offset'         => ( $this->get_pagenum() - 1 ) * $this->per_page,
 			'meta_key'       => 'mercury_in_progress_task_assignee_id',
 			'meta_value'     => 1, // @todo Update to dynamic user ID.
+			'orderby'        => $this->get_orderby(),
+			'order'          => $this->get_order(),
 		];
 
 		// Fetch the data.
@@ -92,6 +94,21 @@ class Assignments_Table extends \WP_List_Table {
 				'title'         => __( 'Title', 'mercury' ),
 				'publish_date'  => __( 'Publish Date', 'mercury' ),
 				'assigned_task' => __( 'Assigned Task', 'mercury' ),
+			]
+		);
+	}
+
+	/**
+	 * Define the sortable columns for our list table.
+	 *
+	 * @return array
+	 */
+	public function get_sortable_columns() : array {
+		return apply_filters(
+			'mercury_sortable_columns',
+			[
+				'title'        => [ 'title', false ],
+				'publish_date' => [ 'date', false ],
 			]
 		);
 	}

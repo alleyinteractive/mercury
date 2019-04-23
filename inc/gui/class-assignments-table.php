@@ -59,7 +59,7 @@ class Assignments_Table extends \WP_List_Table {
 		$args = [
 			'post_type'      => [ 'post' ],
 			'posts_per_page' => $this->per_page,
-			'offset'         => 0,
+			'offset'         => ( $this->get_pagenum() - 1 ) * $this->per_page,
 			'meta_key'       => 'mercury_in_progress_task_assignee_id',
 			'meta_value'     => 1, // @todo Update to dynamic user ID.
 		];

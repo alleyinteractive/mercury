@@ -392,13 +392,32 @@ class Task {
 	 */
 	public static function get_task( int $task_id ) : array {
 		return [
-			'name'          => get_post_meta( $task_id, 'name', true ),
-			'assignees'     => self::get_assignee_settings( $task_id ),
-			'fields'        => self::get_fields( $task_id ),
-			'nextTasks'     => self::get_next_tasks( $task_id ),
-			'slug'          => get_post_meta( $task_id, 'slug', true ),
-			'postStatus'    => get_post_meta( $task_id, 'post_status', true ),
+			'name'       => get_post_meta( $task_id, 'name', true ),
+			'assignees'  => self::get_assignee_settings( $task_id ),
+			'fields'     => self::get_fields( $task_id ),
+			'nextTasks'  => self::get_next_tasks( $task_id ),
+			'slug'       => get_post_meta( $task_id, 'slug', true ),
+			'postStatus' => get_post_meta( $task_id, 'post_status', true ),
 		];
+	}
+
+	/**
+	 * Helper function to get a task by slug.
+	 *
+	 * @param string $task_slug Task slug.
+	 * @return array
+	 */
+	public static function get_task_by_slug( string $task_slug ) : array {
+		$task_query = new \WP_Query(
+			[
+				'fields'         => 'ids',
+				'post_type'      => 'mercury-task',
+				'posts_per_page' => 1,
+				'meta_key'       => 'slug',
+				'meta_value'     => $task_slug,
+			]
+		);
+		return self::get_task( (int) ( $task_query->posts[0] ?? 0 ) );
 	}
 
 	/**

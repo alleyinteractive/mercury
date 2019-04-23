@@ -24,6 +24,9 @@ define( 'MERCURY_VERSION', '1.1.0' );
  */
 define( 'MERCURY_PATH', dirname( __FILE__ ) );
 
+// Traits.
+require_once MERCURY_PATH . '/inc/traits/trait-table-helpers.php';
+
 // Base functionality.
 require_once MERCURY_PATH . '/inc/class-assignments.php';
 require_once MERCURY_PATH . '/inc/class-endpoints.php';

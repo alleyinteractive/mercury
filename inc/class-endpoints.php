@@ -36,6 +36,7 @@ class Endpoints {
 		$meta_fields = [
 			'mercury_active_workflow_slug',
 			'mercury_in_progress_task_slug',
+			'mercury_in_progress_task_assignee_id',
 			'mercury_selected_task_slug',
 		];
 

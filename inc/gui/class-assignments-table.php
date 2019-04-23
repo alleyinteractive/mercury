@@ -19,6 +19,15 @@ if ( ! class_exists( 'WP_List_Table' ) ) {
  */
 class Assignments_Table extends \WP_List_Table {
 
+	use \Mercury\Traits\Table_Helpers;
+
+	/**
+	 * Number of entries to display per page.
+	 *
+	 * @var int
+	 */
+	public $per_page = 20;
+
 	/**
 	 * Constuctor for GUI.
 	 */
@@ -49,8 +58,10 @@ class Assignments_Table extends \WP_List_Table {
 
 		$args = [
 			'post_type'      => [ 'post' ],
-			'posts_per_page' => 10,
+			'posts_per_page' => $this->per_page,
 			'offset'         => 0,
+			'meta_key'       => 'mercury_in_progress_task_assignee_id',
+			'meta_value'     => 1, // @todo Update to dynamic user ID.
 		];
 
 		// Fetch the data.
@@ -69,7 +80,6 @@ class Assignments_Table extends \WP_List_Table {
 		);
 	}
 
-
 	/**
 	 * Define the columns for our list table.
 	 *
@@ -79,11 +89,45 @@ class Assignments_Table extends \WP_List_Table {
 		return apply_filters(
 			'mercury_assignments_column_names',
 			[
-				'title'          => __( 'Title', 'mercury' ),
-				'publish_date'   => __( 'Publish Date', 'mercury' ),
-				'status'         => __( 'Status', 'mercury' ),
-				'tasks_assigned' => __( 'Tasks Assigned to User', 'mercury' ),
+				'title'         => __( 'Title', 'mercury' ),
+				'publish_date'  => __( 'Publish Date', 'mercury' ),
+				'assigned_task' => __( 'Assigned Task', 'mercury' ),
 			]
 		);
+	}
+
+	/**
+	 * Set column defaults.
+	 *
+	 * @param \WP_Post $post        Post object.
+	 * @param string   $column_name The name of the column.
+	 * @return string
+	 */
+	public function column_default( $post, $column_name ) : string {
+
+		switch ( $column_name ) {
+			case 'title':
+				$default = wp_kses(
+					$this->get_title( $post ),
+					[
+						'a' => [
+							'href'       => true,
+							'class'      => true,
+							'aria-label' => true,
+						],
+					]
+				);
+				break;
+			case 'publish_date':
+				$default = esc_html( $this->get_publish_date( $post ) );
+				break;
+			case 'assigned_task':
+				$default = esc_html( $this->get_assigned_task( $post ) );
+				break;
+			default:
+				$default = '';
+		}
+
+		return apply_filters( 'mercury_column_default', $default, $column_name, $post );
 	}
 }

@@ -25,3 +25,12 @@ export const task = {
   slug: '',
   postStatus: '',
 };
+
+export const user = {
+  capabilities: {},
+  id: 0,
+  meta: [],
+  name: '',
+  roles: [],
+  username: '',
+};

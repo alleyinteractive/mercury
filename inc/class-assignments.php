@@ -70,6 +70,7 @@ class Assignments {
 				<form method="get">
 					<h2><?php esc_html_e( 'Assignments', 'mercury' ); ?></h2>
 					<input type="hidden" id="page" name="page" value="<?php echo esc_attr( $assignments_table->get_page() ); ?>">
+					<input type="hidden" id="post_type" name="post_type" value="<?php echo esc_attr( $assignments_table->get_post_type() ); ?>">
 					<?php
 					$assignments_table->display();
 					$assignments_table->get_user_dropdown();

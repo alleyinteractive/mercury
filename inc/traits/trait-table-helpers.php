@@ -119,11 +119,22 @@ trait Table_Helpers {
 	}
 
 	/**
-	 * Get the post type(s).
+	 * Get the post type.
+	 *
+	 * @return string
+	 */
+	public function get_post_type() : string {
+		return ( ! empty( $_GET['post_type'] ) )
+			? sanitize_text_field( wp_unslash( $_GET['post_type'] ) )
+			: '';
+	}
+
+	/**
+	 * Get the post type(s) for the assignments table WP_Query.
 	 *
 	 * @return string|array
 	 */
-	public function get_post_type() {
+	public function get_post_types_for_query() {
 
 		// Get the value of the page query param.
 		$page = $this->get_page();

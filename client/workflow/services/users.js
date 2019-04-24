@@ -1,4 +1,5 @@
 /* global wp */
+import { user as defaultUserState } from 'config/defaultState';
 import { getMeta } from 'services/meta';
 import { getTask } from 'services/tasks';
 
@@ -6,7 +7,11 @@ import { getTask } from 'services/tasks';
  * Get the current user from the mercury/workflows data store.
  */
 export default function getUser() {
-  return wp.data.select('mercury/workflows').receiveUser();
+  const user = wp.data.select('mercury/workflows').receiveUser();
+  if (user.id) {
+    return user;
+  }
+  return defaultUserState;
 }
 
 /**
@@ -31,7 +36,7 @@ export function getDefaultAssigneeId(taskSlug) {
   let defaultUserId = null;
   switch (task.assignees.defaultAssignee) {
     case 'self':
-      // @todo get current user ID.
+      defaultUserId = getUser().id;
       break;
     case 'author':
       defaultUserId = wp.data.select('core/editor')

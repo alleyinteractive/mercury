@@ -24,6 +24,9 @@ define( 'MERCURY_VERSION', '1.1.0' );
  */
 define( 'MERCURY_PATH', dirname( __FILE__ ) );
 
+// Traits.
+require_once MERCURY_PATH . '/inc/traits/trait-table-helpers.php';
+
 // Base functionality.
 require_once MERCURY_PATH . '/inc/class-assignments.php';
 require_once MERCURY_PATH . '/inc/class-endpoints.php';
@@ -50,6 +53,15 @@ add_action(
 );
 
 /**
+ * Get post types for which Mercury is enabled.
+ *
+ * @return array
+ */
+function get_mercury_post_types() {
+	return apply_filters( 'mercury_post_types', [ 'post' ] );
+}
+
+/**
  * Add custom query var for webpack hot-reloading.
  *
  * @param array $vars Array of current query vars.
@@ -63,27 +75,38 @@ function webpack_query_vars( $vars ) {
 }
 add_filter( 'query_vars', __NAMESPACE__ . '\webpack_query_vars' );
 
-// Admin enqueue scripts.
-add_action(
-	'admin_enqueue_scripts',
-	function() {
-		if ( ( ! empty( $_GET['mercury-dev'] ) && true == $_GET['mercury-dev'] ) ) {
-			wp_enqueue_script(
-				'mercury-workflow-js',
-				'//localhost:8080/build/js/workflow.js',
-				[ 'wp-api-fetch' ],
-				MERCURY_VERSION,
-				true
-			);
-		} else {
-			wp_enqueue_script(
-				'mercury-workflow-js',
-				plugins_url( '/build/js/workflow.js', __FILE__ ),
-				[ 'wp-api-fetch' ],
-				MERCURY_VERSION,
-				true
-			);
-		}
+/**
+ * Enqueue admin scripts.
+ */
+function enqueue_scripts() {
+	global $post;
+	$screen = get_current_screen();
+
+	// Bail if this isn't the edit screen of an enabled post type.
+	if (
+		! in_array( $post->post_type ?? '', get_mercury_post_types(), true ) ||
+		'post' !== ( $screen->base ?? '' )
+	) {
+		return;
 	}
-);
+
+	if ( ( ! empty( $_GET['mercury-dev'] ) && true == $_GET['mercury-dev'] ) ) {
+		wp_enqueue_script(
+			'mercury-workflow-js',
+			'//localhost:8080/build/js/workflow.js',
+			[ 'wp-api-fetch' ],
+			MERCURY_VERSION,
+			true
+		);
+	} else {
+		wp_enqueue_script(
+			'mercury-workflow-js',
+			plugins_url( '/build/js/workflow.js', __FILE__ ),
+			[ 'wp-api-fetch' ],
+			MERCURY_VERSION,
+			true
+		);
+	}
+}
+add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\enqueue_scripts' );
 

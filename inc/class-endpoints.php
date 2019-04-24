@@ -36,6 +36,7 @@ class Endpoints {
 		$meta_fields = [
 			'mercury_active_workflow_slug',
 			'mercury_in_progress_task_slug',
+			'mercury_in_progress_task_assignee_id',
 			'mercury_selected_task_slug',
 		];
 
@@ -74,14 +75,16 @@ class Endpoints {
 	 * @param string $field_slug Slug.
 	 */
 	public function register_meta( $field_slug ) {
-		register_post_meta(
-			'post',
-			$field_slug,
-			[
-				'show_in_rest' => true,
-				'single'       => true,
-			]
-		);
+		foreach ( get_mercury_post_types() as $post_type ) {
+			register_post_meta(
+				$post_type,
+				$field_slug,
+				[
+					'show_in_rest' => true,
+					'single'       => true,
+				]
+			);
+		}
 	}
 
 	/**

@@ -17,24 +17,25 @@ class Assignments {
 	 */
 	public function __construct() {
 
-		// Register admin menu items.
-		add_action( 'admin_menu', [ $this, 'add_menu_item' ] );
+		// Register top-level menu item for assignments.
+		add_action( 'admin_menu', [ $this, 'add_menu_page' ] );
 
 		// Update the assignee of a post on save.
 		add_action( 'save_post', [ $this, 'update_post_assignee' ] );
 	}
 
 	/**
-	 * Menu item will allow us to load the page to display the table
+	 * Menu item will allow us to load the page to display the table.
 	 */
-	public function add_menu_item() {
-		add_submenu_page(
-			'edit.php?post_type=mercury-workflow',
+	public function add_menu_page() {
+		add_menu_page(
 			__( 'My Assignments', 'mercury' ),
 			__( 'My Assignments', 'mercury' ),
-			'manage_options',
+			'edit_posts',
 			'mercury-assignments',
-			[ $this, 'list_table_page' ]
+			[ $this, 'list_table_page' ],
+			'dashicons-list-view',
+			4
 		);
 	}
 

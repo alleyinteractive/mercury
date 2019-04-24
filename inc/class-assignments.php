@@ -47,9 +47,11 @@ class Assignments {
 		$assignments_table->prepare_items();
 		?>
 			<div class="wrap">
-				<div id="icon-users" class="icon32"></div>
-				<h2><?php esc_html_e( 'Assignments', 'mercury' ); ?></h2>
-				<?php $assignments_table->display(); ?>
+				<form method="get">
+					<h2><?php esc_html_e( 'Assignments', 'mercury' ); ?></h2>
+					<input type="hidden" id="page" name="page" value="mercury-assignments">
+					<?php $assignments_table->display(); ?>
+				</form>
 			</div>
 		<?php
 	}

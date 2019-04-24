@@ -60,10 +60,9 @@ class Assignments_Table extends \WP_List_Table {
 			'post_type'      => [ 'post' ],
 			'posts_per_page' => $this->per_page,
 			'offset'         => ( $this->get_pagenum() - 1 ) * $this->per_page,
-			'meta_key'       => 'mercury_in_progress_task_assignee_id',
-			'meta_value'     => 1, // @todo Update to dynamic user ID.
 			'orderby'        => $this->get_orderby(),
 			'order'          => $this->get_order(),
+			'meta_query'     => $this->get_meta_query(),
 		];
 
 		// Fetch the data.
@@ -80,6 +79,29 @@ class Assignments_Table extends \WP_List_Table {
 				'total_pages' => ceil( $total_items / $this->per_page ),
 			]
 		);
+	}
+
+	/**
+	 * Build the `meta_query` WP_Query arg.
+	 * 
+	 * @return array
+	 */
+	private function get_meta_query() : array {
+		$meta_query = [];
+
+		$meta_query[] = [
+			'key'   => 'mercury_in_progress_task_assignee_id',
+			'value' => 1, // @todo Update to dynamic user ID.
+		];
+
+		if ( ! empty( $this->get_task_filter() ) ) {
+			$meta_query[] = [
+				'key'   => 'mercury_in_progress_task_slug',
+				'value' => $this->get_task_filter(),
+			];
+		}
+
+		return $meta_query;
 	}
 
 	/**
@@ -146,5 +168,66 @@ class Assignments_Table extends \WP_List_Table {
 		}
 
 		return apply_filters( 'mercury_column_default', $default, $column_name, $post );
+	}
+
+	/**
+	 * Display extra filtering options.
+	 *
+	 * @param string $which Which section of the table we are on.
+	 */
+	protected function extra_tablenav( $which ) {
+		// Only display on the top of the table.
+		if ( 'top' !== $which ) {
+			return;
+		}
+		?>
+		<div class="alignleft actions">
+			<?php
+			// Task filter.
+			$this->task_filter();
+
+			submit_button( __( 'Filter', 'mercury' ), 'button', null, false );
+			?>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Add dropdown for filtering by task.
+	 */
+	private function task_filter() {
+		// Build the markup for the dropdown.
+		?>
+		<select name="task" id="task">
+			<option value=""><?php esc_html_e( 'All tasks', 'mercury' ); ?></option>
+			<?php
+			$workflow_ids = Workflow::get_workflow_ids();
+
+			foreach ( $workflow_ids as $id ) {
+
+				// Get the workflow.
+				$workflow = Workflow::get_workflow( $id );
+
+				// Open `<optgroup>` tag.
+				printf(
+					'<optgroup label="%1$s">',
+					esc_html( $workflow['name'] )
+				);
+
+				foreach ( $workflow['tasks'] as $task ) {
+					printf(
+						'<option value="%1$s" %2$s>%3$s</option>',
+						esc_attr( $task['slug'] ),
+						selected( $task['slug'], $this->get_task_filter(), false ),
+						esc_html( $task['name'] )
+					);
+				}
+
+				// Close `<optgroup>` tag.
+				echo '</optgroup>';
+			}
+			?>
+		</select>
+		<?php
 	}
 }

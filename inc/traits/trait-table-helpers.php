@@ -82,4 +82,15 @@ trait Table_Helpers {
 			? sanitize_text_field( wp_unslash( $_GET['order'] ) )
 			: 'DESC';
 	}
+
+	/**
+	 * Get the task filter value.
+	 *
+	 * @return string
+	 */
+	protected function get_task_filter() {
+		return ( ! empty( $_GET['task'] ) )
+			? sanitize_text_field( wp_unslash( $_GET['task'] ) )
+			: '';
+	}
 }

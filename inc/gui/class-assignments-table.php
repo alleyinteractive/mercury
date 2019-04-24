@@ -91,7 +91,7 @@ class Assignments_Table extends \WP_List_Table {
 
 		$meta_query[] = [
 			'key'   => 'mercury_in_progress_task_assignee_id',
-			'value' => 1, // @todo Update to dynamic user ID.
+			'value' => $this->get_user_id(),
 		];
 
 		if ( ! empty( $this->get_task_filter() ) ) {
@@ -226,6 +226,40 @@ class Assignments_Table extends \WP_List_Table {
 				// Close `<optgroup>` tag.
 				echo '</optgroup>';
 			}
+			?>
+		</select>
+		<?php
+	}
+
+	/**
+	 * Get dropdown for switching between users.
+	 */
+	public function get_user_dropdown() {
+
+		// Restrict visibility to certain users.
+		if ( ! current_user_can( 'edit_others_posts' ) ) {
+			return;
+		}
+
+		// Get a full list of users.
+		$users = get_users(
+			[
+				'orderby' => 'display_name',
+			]
+		);
+		?>
+		<span><?php esc_html_e( 'Select a different user:', 'mercury' ); ?></span>
+		<select name="user_id" id="user_id">
+			<?php
+			foreach ( $users as $user ) {
+				printf(
+					'<option value="%1$s" %2$s>%3$s</option>',
+					esc_attr( $user->ID ),
+					selected( $user->ID, $this->get_user_id(), false ),
+					esc_html( $user->display_name )
+				);
+			}
+			submit_button( __( 'Go', 'mercury' ), 'button', null, false );
 			?>
 		</select>
 		<?php

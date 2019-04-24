@@ -50,7 +50,10 @@ class Assignments {
 				<form method="get">
 					<h2><?php esc_html_e( 'Assignments', 'mercury' ); ?></h2>
 					<input type="hidden" id="page" name="page" value="mercury-assignments">
-					<?php $assignments_table->display(); ?>
+					<?php
+					$assignments_table->display();
+					$assignments_table->get_user_dropdown();
+					?>
 				</form>
 			</div>
 		<?php

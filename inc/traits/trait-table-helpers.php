@@ -93,4 +93,16 @@ trait Table_Helpers {
 			? sanitize_text_field( wp_unslash( $_GET['task'] ) )
 			: '';
 	}
+
+	/**
+	 * Get the user ID.
+	 *
+	 * @return int
+	 */
+	public function get_user_id() : int {
+		return ( ! empty( $_GET['user_id'] ) )
+			? absint( wp_unslash( $_GET['user_id'] ) )
+			: get_current_user_id();
+	}
+
 }

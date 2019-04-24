@@ -127,7 +127,7 @@ class Post_Type {
 					get_the_ID()
 				);
 			},
-			[ 'post' ],
+			get_mercury_post_types(),
 			'normal'
 		);
 	}

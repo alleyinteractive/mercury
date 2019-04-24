@@ -7,6 +7,8 @@
 
 namespace Mercury\Traits;
 
+use function Mercury\get_mercury_post_types;
+
 /**
  * Helper functions for the assignments table.
  */
@@ -105,4 +107,14 @@ trait Table_Helpers {
 			: get_current_user_id();
 	}
 
+	/**
+	 * Get the post type(s).
+	 *
+	 * @return string|array
+	 */
+	public function get_post_type() {
+		return ( ! empty( $_GET['post_type'] ) )
+			? sanitize_text_field( wp_unslash( $_GET['post_type'] ) )
+			: get_mercury_post_types();
+	}
 }

@@ -57,7 +57,7 @@ class Assignments_Table extends \WP_List_Table {
 		];
 
 		$args = [
-			'post_type'      => [ 'post' ],
+			'post_type'      => $this->get_post_type(),
 			'posts_per_page' => $this->per_page,
 			'offset'         => ( $this->get_pagenum() - 1 ) * $this->per_page,
 			'orderby'        => $this->get_orderby(),

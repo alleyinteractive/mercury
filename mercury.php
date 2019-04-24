@@ -53,6 +53,15 @@ add_action(
 );
 
 /**
+ * Get post types for which Mercury is enabled.
+ *
+ * @return array
+ */
+function get_mercury_post_types() {
+	return apply_filters( 'mercury_post_types', [ 'post' ] );
+}
+
+/**
  * Add custom query var for webpack hot-reloading.
  *
  * @param array $vars Array of current query vars.
@@ -73,9 +82,9 @@ function enqueue_scripts() {
 	global $post;
 	$screen = get_current_screen();
 
-	// Bail if this isn't the Post edit screen.
+	// Bail if this isn't the edit screen of an enabled post type.
 	if (
-		'post' !== ( $post->post_type ?? '' ) ||
+		! in_array( $post->post_type ?? '', get_mercury_post_types(), true ) ||
 		'post' !== ( $screen->base ?? '' )
 	) {
 		return;

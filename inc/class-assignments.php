@@ -17,17 +17,19 @@ class Assignments {
 	 */
 	public function __construct() {
 
-		// Register top-level menu item for assignments.
-		add_action( 'admin_menu', [ $this, 'add_menu_page' ] );
+		// Register menu items for assignments.
+		add_action( 'admin_menu', [ $this, 'add_menu_pages' ] );
 
 		// Update the assignee of a post on save.
 		add_action( 'save_post', [ $this, 'update_post_assignee' ] );
 	}
 
 	/**
-	 * Menu item will allow us to load the page to display the table.
+	 * Menu items will allow us to load the page to display the table.
 	 */
-	public function add_menu_page() {
+	public function add_menu_pages() {
+
+		// Add top-level menu item for all assignments.
 		add_menu_page(
 			__( 'My Assignments', 'mercury' ),
 			__( 'My Assignments', 'mercury' ),
@@ -37,10 +39,28 @@ class Assignments {
 			'dashicons-list-view',
 			4
 		);
+
+		foreach( get_mercury_post_types() as $post_type ) {
+
+			// Determine the appropriate parent slug.
+			$parent_slug = ( 'post' === $post_type )
+				? 'edit.php'
+				: "edit.php?post_type={$post_type}";
+
+			// Add a submenu page for the post type.
+			add_submenu_page(
+				$parent_slug,
+				__( 'My Assignments', 'mercury' ),
+				__( 'My Assignments', 'mercury' ),
+				'edit_posts',
+				"mercury-assignments-{$post_type}",
+				[ $this, 'list_table_page' ]
+			);
+		}
 	}
 
 	/**
-	 * Display the list table page
+	 * Display the list table page.
 	 */
 	public function list_table_page() {
 		$assignments_table = new GUI\Assignments_Table();
@@ -49,7 +69,7 @@ class Assignments {
 			<div class="wrap">
 				<form method="get">
 					<h2><?php esc_html_e( 'Assignments', 'mercury' ); ?></h2>
-					<input type="hidden" id="page" name="page" value="mercury-assignments">
+					<input type="hidden" id="page" name="page" value="<?php echo esc_attr( $assignments_table->get_page() ); ?>">
 					<?php
 					$assignments_table->display();
 					$assignments_table->get_user_dropdown();

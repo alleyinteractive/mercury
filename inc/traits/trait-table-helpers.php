@@ -108,13 +108,32 @@ trait Table_Helpers {
 	}
 
 	/**
+	 * Get the page.
+	 *
+	 * @return string
+	 */
+	public function get_page() : string {
+		return ( ! empty( $_GET['page'] ) )
+			? sanitize_text_field( wp_unslash( $_GET['page'] ) )
+			: '';
+	}
+
+	/**
 	 * Get the post type(s).
 	 *
 	 * @return string|array
 	 */
 	public function get_post_type() {
-		return ( ! empty( $_GET['post_type'] ) )
-			? sanitize_text_field( wp_unslash( $_GET['post_type'] ) )
-			: get_mercury_post_types();
+
+		// Get the value of the page query param.
+		$page = $this->get_page();
+
+		// This is the top-level menu item, so fetch all post types.
+		if ( 'mercury-assignments' === $page ) {
+			return get_mercury_post_types();
+		}
+
+		// Parse the post type from the page query param.
+		return str_replace( 'mercury-assignments-', '', $page );
 	}
 }

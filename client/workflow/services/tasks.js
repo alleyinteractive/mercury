@@ -131,6 +131,7 @@ export function setTaskStatus(taskSlug, status) {
  */
 export function completeTask(currentTaskSlug, nextTaskSlug) {
   // Mark as complete in meta.
+  // @todo Do we need this? If so, need to register `mercury_${activeWorkflowSlug}_status` meta.
   setTaskStatus(currentTaskSlug, 'complete');
   setTaskStatus(nextTaskSlug, 'active');
   setPostStatus(nextTaskSlug);

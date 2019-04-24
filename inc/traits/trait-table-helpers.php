@@ -46,7 +46,7 @@ trait Table_Helpers {
 		$date = get_the_date( 'Y/m/d', $post->ID );
 		return $date ?: '';
 	}
-	
+
 	/**
 	 * Get the task assigned to the user for a post.
 	 *
@@ -54,7 +54,7 @@ trait Table_Helpers {
 	 * @return string
 	 */
 	protected function get_assigned_task( \WP_Post $post ) : string {
-		
+
 		// Get the task in progress.
 		$task_slug = get_post_meta( $post->ID, 'mercury_in_progress_task_slug', true );
 

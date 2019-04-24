@@ -75,7 +75,7 @@ class Endpoints {
 	 * @param string $field_slug Slug.
 	 */
 	public function register_meta( $field_slug ) {
-		foreach( get_mercury_post_types() as $post_type ) {
+		foreach ( get_mercury_post_types() as $post_type ) {
 			register_post_meta(
 				$post_type,
 				$field_slug,

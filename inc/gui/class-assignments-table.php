@@ -83,7 +83,7 @@ class Assignments_Table extends \WP_List_Table {
 
 	/**
 	 * Build the `meta_query` WP_Query arg.
-	 * 
+	 *
 	 * @return array
 	 */
 	private function get_meta_query() : array {

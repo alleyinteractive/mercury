@@ -40,7 +40,7 @@ class Assignments {
 			4
 		);
 
-		foreach( get_mercury_post_types() as $post_type ) {
+		foreach ( get_mercury_post_types() as $post_type ) {
 
 			// Determine the appropriate parent slug.
 			$parent_slug = ( 'post' === $post_type )

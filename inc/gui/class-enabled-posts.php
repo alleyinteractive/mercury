@@ -35,6 +35,8 @@ class Enabled_Posts {
 
 	/**
 	 * Insert filters.
+	 *
+	 * @param string $post_type Post type.
 	 */
 	public function add_post_filters( $post_type ) {
 		// Only `post` is supported currently.

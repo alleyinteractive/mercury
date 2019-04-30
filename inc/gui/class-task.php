@@ -28,7 +28,7 @@ class Task {
 		// Add meta box of settings. Has an FM dependency here.
 		add_action( 'fm_post_' . Post_Type::WORKFLOW_TASK_POST_TYPE, [ $this, 'settings_meta_box' ] );
 		add_action( 'fm_post_' . Post_Type::WORKFLOW_TASK_POST_TYPE, [ $this, 'assignments_meta_box' ] );
-		add_action( 'fm_post_' . Post_Type::WORKFLOW_TASK_POST_TYPE, [ $this, 'next_tasks_meta_box' ] );
+		add_action( 'fm_post_' . Post_Type::WORKFLOW_TASK_POST_TYPE, [ $this, 'transitions_meta_box' ] );
 		// add_action( 'fm_post_' . Post_Type::WORKFLOW_TASK_POST_TYPE, [ $this, 'due_dates_meta_box' ] );.
 		add_action( 'fm_post_' . Post_Type::WORKFLOW_TASK_POST_TYPE, [ $this, 'fields_meta_box' ] );
 	}
@@ -211,10 +211,10 @@ class Task {
 	/**
 	 * Add transitions meta box.
 	 */
-	public function next_tasks_meta_box() {
+	public function transitions_meta_box() {
 		$fm = new \Fieldmanager_Group(
 			[
-				'name'           => 'next_tasks',
+				'name'           => 'transitions',
 				'serialize_data' => false,
 				'add_to_prefix'  => false,
 				'children'       => [
@@ -222,13 +222,13 @@ class Task {
 						[
 							'add_more_label'     => __( 'Add Transition', 'mercury' ),
 							'children'           => [
-								'label'   => new \Fieldmanager_Textfield(
+								'label'           => new \Fieldmanager_Textfield(
 									[
 										'label'       => __( 'Action Label', 'mercury' ),
 										'description' => __( 'Use this to describe what this transition will do. Ex. "Proceed to Final Edit", or "Return to editor"', 'mercury' ),
 									]
 								),
-								'task_id' => new \Fieldmanager_Autocomplete(
+								'task_id'         => new \Fieldmanager_Autocomplete(
 									[
 										'label' => __( 'Task', 'mercury' ),
 										'datasource' => new \Fieldmanager_Datasource_Post(
@@ -239,6 +239,21 @@ class Task {
 												],
 											]
 										),
+									]
+								),
+								'enable_redirect' => new \Fieldmanager_Checkbox(
+									[
+										'label'       => __( 'Enable Transition Redirect?', 'mercury' ),
+										'description' => __( 'When the task is complete, redirect the user to a URL instead of continuing to the next task (the transition will still complete, and the transitioned task will take effect.', 'mercury' ),
+									]
+								),
+								'redirect_url'    => new \Fieldmanager_Link(
+									[
+										'label' => __( 'Redirect URL', 'mercury' ),
+										'display_if' => [
+											'src'   => 'enable_redirect',
+											'value' => true,
+										],
 									]
 								),
 							],
@@ -392,12 +407,13 @@ class Task {
 	 */
 	public static function get_task( int $task_id ) : array {
 		return [
-			'name'       => get_post_meta( $task_id, 'name', true ),
-			'assignees'  => self::get_assignee_settings( $task_id ),
-			'fields'     => self::get_fields( $task_id ),
-			'nextTasks'  => self::get_next_tasks( $task_id ),
-			'slug'       => get_post_meta( $task_id, 'slug', true ),
-			'postStatus' => get_post_meta( $task_id, 'post_status', true ),
+			'assignees'   => self::get_assignee_settings( $task_id ),
+			'fields'      => self::get_fields( $task_id ),
+			'name'        => get_post_meta( $task_id, 'name', true ),
+			'nextTasks'   => self::get_transitions( $task_id ), // @todo deprecate this in favor of `transitions` verbage.
+			'postStatus'  => get_post_meta( $task_id, 'post_status', true ),
+			'slug'        => get_post_meta( $task_id, 'slug', true ),
+			'transitions' => self::get_transitions( $task_id ),
 		];
 	}
 
@@ -488,7 +504,7 @@ class Task {
 	 * @param int $task_id Task post ID.
 	 * @return array
 	 */
-	public static function get_next_tasks( $task_id ) {
+	public static function get_transitions( $task_id ) {
 
 		// Setup transition structure.
 		$transitions = (array) get_post_meta( $task_id, 'transitions', true );
@@ -496,8 +512,10 @@ class Task {
 		return array_map(
 			function( $transition ) {
 				return [
-					'label' => $transition['label'] ?? '',
-					'slug'  => get_post_meta( absint( $transition['task_id'] ?? 0 ), 'slug', true ),
+					'enable_redirect' => filter_var( $transition['enable_redirect'] ?? false, FILTER_VALIDATE_BOOLEAN ),
+					'label'           => $transition['label'] ?? '',
+					'redirect_url'    => $transition['redirect_url'] ?? '',
+					'slug'            => get_post_meta( absint( $transition['task_id'] ?? 0 ), 'slug', true ),
 				];
 			},
 			$transitions

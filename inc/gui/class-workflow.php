@@ -63,7 +63,7 @@ class Workflow {
 									'query_args' => [
 										'post_status'    => 'any',
 										'post_type'      => Post_Type::WORKFLOW_TASK_POST_TYPE,
-										'posts_per_page' => -1,
+										'posts_per_page' => 500,
 									],
 								]
 							),
@@ -94,7 +94,7 @@ class Workflow {
 				'order'          => 'ASC',
 				'orderby'        => 'title',
 				'post_type'      => Post_Type::WORKFLOW_POST_TYPE,
-				'posts_per_page' => 20,
+				'posts_per_page' => -1,
 			]
 		);
 
@@ -109,6 +109,7 @@ class Workflow {
 	 */
 	public static function get_workflow( $workflow_id ) {
 		return [
+			'id'    => $workflow_id,
 			'name'  => get_post_meta( $workflow_id, 'name', true ),
 			'slug'  => get_post_meta( $workflow_id, 'slug', true ),
 			'tasks' => array_map( '\Mercury\GUI\Task::get_task', self::get_task_ids_by_workflow( $workflow_id ) ),

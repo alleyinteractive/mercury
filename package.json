@@ -30,6 +30,7 @@
     "react-pose": "^4.0.8",
     "react-tabs": "^3.0.0",
     "styled-components": "^4.2.0",
+    "whatwg-url": "^7.0.0",
     "yup": "^0.27.0"
   },
   "devDependencies": {

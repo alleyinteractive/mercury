@@ -47,3 +47,28 @@ export function useSelectedTaskSlug() {
 
   return selectedTaskSlug;
 }
+
+/**
+ * Custom hook to check if a transition from one task to the next is complete
+ * based on comparison with the current in-progress and selected tasks.
+ *
+ * @return {string} Task slug to compare against (should be task which currently selected transition targets)
+ */
+export function useSaveOnTransitionComplete(taskSlug) {
+  // Subscribe to changes in the store.
+  useEffect(() => wp.data.subscribe(() => {
+    const inProgress = getSelectedTaskSlug();
+    const selected = getSelectedTaskSlug();
+
+    if (
+      inProgress === taskSlug
+      && selected === taskSlug
+    ) {
+      const edits = wp.data.select('core/editor').getPostEdits();
+
+      // Save post
+      wp.data.dispatch('core/editor').savePost();
+      wp.data.dispatch('core/editor').updatePost(edits);
+    }
+  }));
+}

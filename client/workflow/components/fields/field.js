@@ -61,18 +61,12 @@ const FormField = (props) => {
             {required && <RequiredLabel>required</RequiredLabel>}
           </LabelWrapper>
           <InputWrapper>
-            <FieldComponent {...props} />
+            <FieldComponent
+              {...props}
+              value={'checkbox' === type ? !! value : value}
+            />
           </InputWrapper>
           {error && <ErrorText>{error}</ErrorText>}
-          {/* {readOnly ? (
-            <Fragment>
-              <LabelWrapper>
-                <LabelText>{label}</LabelText>
-                <ReadOnlyLabel>(Read only)</ReadOnlyLabel>
-              </LabelWrapper>
-              <ReadOnly slug={slug} />
-            </Fragment>
-          )} */}
         </Label>
       </Wrapper>
     </ThemeProvider>

@@ -35,6 +35,9 @@ class Post_Type {
 		// Register meta box for rendering the React component.
 		add_action( 'add_meta_boxes', [ $this, 'add_meta_boxes' ] );
 
+		// Update the post status when needed.
+		add_action( 'save_post', [ $this, 'update_post_status' ], 11, 2 );
+
 		// Admin menu modifications.
 		add_action( 'admin_menu', [ $this, 'admin_menu' ] );
 	}
@@ -137,5 +140,36 @@ class Post_Type {
 	 */
 	public function admin_menu() {
 		remove_submenu_page( 'edit.php?post_type=mercury-workflow', 'post-new.php?post_type=mercury-workflow' );
+	}
+
+	/**
+	 * When a post is saved, update its post status to the appropriate custom
+	 * status based on the active workflow task.
+	 *
+	 * @param int      $post_id Post ID.
+	 * @param \WP_Post $post    Post object.
+	 */
+	public function update_post_status( int $post_id, \WP_Post $post ) {
+		// Leave posts being trashed, published, or scheduled alone.
+		if ( in_array( $post->post_status, [ 'trash', 'publish', 'future' ], true ) ) {
+			return;
+		}
+
+		// Get the task in progress.
+		$task_slug = get_post_meta( $post_id, 'mercury_in_progress_task_slug', true );
+
+		if ( ! empty( $task_slug ) && $task_slug !== $post->post_status ) {
+			// Remove action to prevent an infinite loop.
+			remove_action( 'save_post', [ $this, 'update_post_status' ], 11 );
+
+			// Update the post status to reflect the new active task.
+			$id = wp_update_post( [
+				'ID'          => $post_id,
+				'post_status' => $task_slug,
+			] );
+
+			// Re-add action.
+			add_action( 'save_post', [ $this, 'update_post_status' ], 11, 2 );
+		}
 	}
 }

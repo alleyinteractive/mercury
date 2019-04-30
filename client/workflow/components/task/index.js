@@ -6,23 +6,18 @@ import { completeTask } from 'services/tasks';
 import { setMetaGroup } from 'services/meta';
 import getInitialValues from 'utils/getInitialTaskValues';
 import getValidationSchema from 'utils/getValidationSchema';
+import resolveUrl from 'utils/resolveUrl';
 import Header from 'components/task/header';
-import Footer from 'components/task/footer';
-import Fields from 'components/fields';
-import Assignee from './assignee';
-import {
-  Wrapper,
-  Form,
-  FormHeader,
-} from './taskStyles.js';
+import { Wrapper } from './taskStyles.js';
+import TaskForm from './form';
 
 const Task = (props) => {
   const {
-    slug,
-    name,
-    fields,
     assignees,
+    fields,
+    name,
     nextTasks,
+    slug,
   } = props;
   const inProgressTaskSlug = useInProgressTaskSlug();
 
@@ -34,41 +29,41 @@ const Task = (props) => {
       />
       <Formik
         onSubmit={(values, actions) => {
+          const nextTaskSlug = values['next-task-slug'];
+          const {
+            enableRedirect,
+            redirectUrl,
+          } = nextTasks.find((nextTask) => nextTask.slug === nextTaskSlug);
+          actions.setSubmitting(true);
+
+          // Save meta, just in case (it also saves onChange for each field).
           setMetaGroup(values);
+
+          // Complete the current task (also saves post).
           completeTask(slug, values['next-task-slug']);
+
           actions.setSubmitting(false);
+          // Redirect user, if applicable.
+          if (enableRedirect) {
+            const urlResolved = resolveUrl(redirectUrl);
+
+            if (urlResolved) {
+              window.location = urlResolved;
+            }
+          }
         }}
         initialValues={getInitialValues(props)}
         validationSchema={getValidationSchema(props)}
-        render={(formProps) => {
-          const { handleSubmit, values, errors } = formProps;
-
-          return (
-            <Form onSubmit={handleSubmit}>
-              <FormHeader>
-                <div>Due June 3rd</div>
-                <Assignee
-                  assignees={assignees}
-                  taskSlug={slug}
-                  formProps={formProps}
-                />
-              </FormHeader>
-              <Fields
-                errors={errors}
-                fields={fields}
-                slug={slug}
-                {...formProps}
-              />
-              <Footer
-                errors={errors}
-                inProgressTaskSlug={inProgressTaskSlug}
-                selectedTaskSlug={slug}
-                nextTaskSlug={values['next-task-slug']}
-                nextTasks={nextTasks}
-              />
-            </Form>
-          );
-        }}
+        render={(formProps) => (
+          <TaskForm
+            assignees={assignees}
+            fields={fields}
+            inProgressTaskSlug={inProgressTaskSlug}
+            nextTasks={nextTasks}
+            slug={slug}
+            {...formProps}
+          />
+        )}
       />
     </Wrapper>
   );
@@ -77,19 +72,21 @@ const Task = (props) => {
 Task.propTypes = {
   // eslint-disable-next-line react/forbid-prop-types
   assignees: PropTypes.object.isRequired,
-  slug: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
-  nextTasks: PropTypes.arrayOf(
-    PropTypes.shape({
-      label: PropTypes.string,
-      value: PropTypes.number,
-    })
-  ).isRequired,
   fields: PropTypes.arrayOf(
     PropTypes.shape({
       label: PropTypes.string,
     })
   ).isRequired,
+  name: PropTypes.string.isRequired,
+  nextTasks: PropTypes.arrayOf(
+    PropTypes.shape({
+      enableRedirect: PropTypes.bool,
+      label: PropTypes.string,
+      slug: PropTypes.string,
+      redirectUrl: PropTypes.string,
+    })
+  ).isRequired,
+  slug: PropTypes.string.isRequired,
 };
 
 export default Task;

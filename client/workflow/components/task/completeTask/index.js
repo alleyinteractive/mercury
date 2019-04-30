@@ -16,7 +16,6 @@ const CompleteTask = (props) => {
     nextTaskSlug,
     nextTasks,
   } = props;
-
   const getButtonLabel = () => {
     if (1 === nextTasks.length) {
       return nextTasks[0].label;

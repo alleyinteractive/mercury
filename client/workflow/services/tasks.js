@@ -1,6 +1,6 @@
 import { task as defaultTaskState } from 'config/defaultState';
 import { getMeta, setMeta } from './meta';
-import { getActiveWorkflow, getActiveWorkflowSlug } from './workflows';
+import { getActiveWorkflow } from './workflows';
 
 /**
  * Get a task by slug (for the current active workflow).
@@ -119,8 +119,7 @@ export function setSelectedTaskSlug(slug) {
  * @param {string} status   Status.
  */
 export function setTaskStatus(taskSlug, status) {
-  const activeWorkflowSlug = getActiveWorkflowSlug();
-  setMeta(`mercury_${activeWorkflowSlug}_status`, status);
+  setMeta(`mercury_${taskSlug}_status`, status);
 }
 
 /**
@@ -131,10 +130,8 @@ export function setTaskStatus(taskSlug, status) {
  */
 export function completeTask(currentTaskSlug, nextTaskSlug) {
   // Mark as complete in meta.
-  // @todo Do we need this? If so, need to register `mercury_${activeWorkflowSlug}_status` meta.
   setTaskStatus(currentTaskSlug, 'complete');
   setTaskStatus(nextTaskSlug, 'active');
-  setPostStatus(nextTaskSlug);
 
   // Set the InProgress and Selected tasks to the next task.
   setInProgressTaskSlug(nextTaskSlug);
@@ -147,7 +144,10 @@ export function completeTask(currentTaskSlug, nextTaskSlug) {
  * @param  {string} taskSlug Slug of the task.
  */
 export function setPostStatus(taskSlug) {
+  const task = getTask(taskSlug);
+
+  // Fall back to task slug, limited to 20 characters.
   wp.data.dispatch('core/editor').editPost({
-    status: getTask(taskSlug).postStatus,
+    status: task.postStatus || task.slug.slice(0, 19),
   });
 }

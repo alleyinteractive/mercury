@@ -87,8 +87,8 @@ class Enabled_Posts {
 		}
 
 		// Validate workflow ID.
-		$workflow_id = get_query_var( 'workflow_id' );
-		if ( 0 === absint( $workflow_id ) ) {
+		$workflow_id = absint( get_query_var( 'workflow_id' ) );
+		if ( 0 === $workflow_id ) {
 			return;
 		}
 

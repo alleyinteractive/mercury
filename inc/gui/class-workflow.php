@@ -63,7 +63,7 @@ class Workflow {
 									'query_args' => [
 										'post_status'    => 'any',
 										'post_type'      => Post_Type::WORKFLOW_TASK_POST_TYPE,
-										'posts_per_page' => -1,
+										'posts_per_page' => 500,
 									],
 								]
 							),

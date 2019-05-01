@@ -45,7 +45,7 @@ export function useActiveWorkflowSlug() {
       setCurrentWorkflowSlugState(newSlug);
       // @todo update active and viewing tasks when the workflow changes.
     }
-  }));
+  }), []);
 
   return activeWorkflowSlug;
 }

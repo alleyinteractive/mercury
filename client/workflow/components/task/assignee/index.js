@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import FormField from 'components/fields/field';
-import useUser from 'hooks/users';
 import * as fieldTheme from './assigneeStyles.js';
+
+const { withSelect, select } = wp.data;
 
 const Assignee = (props) => {
   const {
@@ -15,9 +16,9 @@ const Assignee = (props) => {
       values,
       errors,
     },
+    user: { roles },
   } = props;
   const fieldSlug = `mercury_${taskSlug}_assignee_id`;
-  const { roles } = useUser();
 
   // Determine if user has permission to see the select field.
   const editAssignee = roles.some(
@@ -59,6 +60,13 @@ Assignee.propTypes = {
     handleChange: PropTypes.func.isRequired,
     values: PropTypes.object.isRequired,
   }).isRequired,
+  // eslint-disable-next-line react/forbid-prop-types
+  user: PropTypes.object.isRequired,
 };
 
-export default Assignee;
+const assigneeSelect = withSelect(() => ({
+  user: select('mercury/workflows').requestUser(),
+  loading: select('mercury/workflows').getLoading(),
+}));
+
+export default assigneeSelect(Assignee);

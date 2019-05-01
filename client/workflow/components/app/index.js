@@ -1,30 +1,35 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { hot } from 'react-hot-loader/root';
 import Workflow from 'components/workflow';
-import useWorkflows from 'hooks/workflows';
-import useUser from 'hooks/users';
 
-const App = () => {
-  const workflows = useWorkflows();
-  const user = useUser();
+const { withSelect, select } = wp.data;
 
-  // Workflows haven't loaded.
-  if (0 === workflows.length) {
+const App = (props) => {
+  const { workflows, loading } = props;
+
+  // Loading
+  if (loading) {
     return (
-      <div>Loading Workflows</div>
-    );
-  }
-
-  // User hasn't loaded.
-  if ({} === user) {
-    return (
-      <div>Loading User</div>
+      <div>Loading</div>
     );
   }
 
   return (
-    <Workflow />
+    <Workflow workflows={workflows} />
   );
 };
 
-export default hot(App);
+App.propTypes = {
+  workflows: PropTypes.arrayOf(
+    PropTypes.object
+  ).isRequired,
+  loading: PropTypes.bool.isRequired,
+};
+
+const appSelect = withSelect(() => ({
+  workflows: select('mercury/workflows').requestWorkflows(),
+  loading: select('mercury/workflows').getLoading(),
+}));
+
+export default hot(appSelect(App));

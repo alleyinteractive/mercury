@@ -34,3 +34,11 @@ export const user = {
   roles: [],
   username: '',
 };
+
+const defaultState = {
+  loading: false,
+  workflows: [],
+  user,
+};
+
+export default defaultState;

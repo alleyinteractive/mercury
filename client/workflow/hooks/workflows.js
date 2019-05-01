@@ -3,28 +3,10 @@ import {
   useState,
   useEffect,
 } from 'react';
-import getWorkflows, {
+import {
   getWorkflow,
   getActiveWorkflowSlug,
 } from 'services/workflows';
-
-/**
- * Custom hook that manages a meta state.
- *
- * @param  {string} metaKey      Meta key in the core/editor WP store.
- * @param  {string} defaultValue Default value to populate the store if empty.
- * @return {mixed} Meta value.
- */
-export default function useWorkflows() {
-  const [workflows, setWorkflows] = useState(getWorkflows());
-
-  useEffect(() => (
-    wp.data.subscribe(() => {
-      setWorkflows(getWorkflows());
-    })
-  ));
-  return workflows;
-}
 
 /**
  * Custom hook that manages the active workflow state.

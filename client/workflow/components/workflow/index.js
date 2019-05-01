@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { useActiveWorkflowSlug } from 'hooks/workflows';
 import { useSelectedTaskSlug } from 'hooks/tasks';
 import { getWorkflow } from 'services/workflows';
@@ -10,7 +11,8 @@ import {
   TaskWrapper,
 } from './workflowStyles.js';
 
-const Workflow = () => {
+const Workflow = (props) => {
+  const { workflows } = props;
   const currentWorkflowSlug = useActiveWorkflowSlug();
   const currentTaskSlug = useSelectedTaskSlug();
 
@@ -38,7 +40,10 @@ const Workflow = () => {
 
   return (
     <Wrapper>
-      <Menu selectedTaskSlug={task ? task.slug : 'none'} />
+      <Menu
+        selectedTaskSlug={task ? task.slug : 'none'}
+        workflows={workflows}
+      />
       {task && (
         <TaskWrapper>
           <Task {...task} key={task.slug} />
@@ -52,6 +57,12 @@ const Workflow = () => {
       )}
     </Wrapper>
   );
+};
+
+Workflow.propTypes = {
+  workflows: PropTypes.arrayOf(
+    PropTypes.object
+  ).isRequired,
 };
 
 export default Workflow;

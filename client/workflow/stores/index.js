@@ -1,44 +1,61 @@
+import defaultState, {
+  workflow as defaultWorkflow,
+  user as defaultUser,
+} from 'config/defaultState';
+
 const { data, apiFetch } = wp;
 const { registerStore } = data;
 
 const actions = {
-  setWorkflows(workflows) {
+  requestWorkflows(path) {
     return {
-      type: 'SET_WORKFLOWS',
+      type: 'REQUEST_WORKFLOWS',
+      path,
+    };
+  },
+  receiveWorkflows(workflows) {
+    return {
+      type: 'RECEIVE_WORKFLOWS',
       workflows,
     };
   },
-  receiveWorkflows(path) {
+  requestUser(path) {
     return {
-      type: 'RECEIVE_WORKFLOWS',
+      type: 'REQUEST_USER',
       path,
     };
   },
-  setUser(user) {
+  receiveUser(user) {
     return {
-      type: 'SET_USER',
+      type: 'RECEIVE_USER',
       user,
     };
   },
-  receiveUser(path) {
-    return {
-      type: 'RECEIVE_USER',
-      path,
-    };
+  beginLoading() {
+    return { type: 'BEGIN_LOADING' };
   },
 };
 
-registerStore('mercury/workflows', {
-  reducer(state = { workflows: [], user: {} }, action) {
+const mercuryStore = registerStore('mercury/workflows', {
+  reducer(state = defaultState, action) {
     switch (action.type) {
-      case 'SET_WORKFLOWS':
+      case 'BEGIN_LOADING':
         return {
           ...state,
+          loading: true,
+        };
+
+      case 'RECEIVE_WORKFLOWS':
+        return {
+          ...state,
+          loading: false,
           workflows: action.workflows,
         };
-      case 'SET_USER':
+
+      case 'RECEIVE_USER':
         return {
           ...state,
+          loading: false,
           user: action.user,
         };
 
@@ -50,37 +67,62 @@ registerStore('mercury/workflows', {
   actions,
 
   selectors: {
-    receiveWorkflows(state) {
+    requestWorkflows(state) {
       const { workflows } = state;
       return workflows;
     },
-    receiveUser(state) {
+    getWorkflow(state, slug) {
+      const { workflows } = state;
+
+      const selectedWorkflow = workflows
+        .find((workflow) => workflow.slug === slug);
+
+      if (! selectedWorkflow) {
+        return defaultWorkflow;
+      }
+
+      return selectedWorkflow;
+    },
+    requestUser(state) {
       const { user } = state;
-      return user;
+
+      if (user.id) {
+        return user;
+      }
+
+      return defaultUser;
+    },
+    getLoading(state) {
+      const { loading } = state;
+      return loading;
     },
   },
 
   controls: {
-    RECEIVE_WORKFLOWS(action) {
+    REQUEST_WORKFLOWS(action) {
       return apiFetch({ path: action.path });
     },
-    RECEIVE_USER(action) {
+    REQUEST_USER(action) {
       return apiFetch({ path: action.path });
     },
   },
 
   resolvers: {
-    * receiveWorkflows() {
-      const workflows = yield actions.receiveWorkflows(
+    * requestWorkflows() {
+      wp.data.dispatch('mercury/workflows').beginLoading();
+      const workflows = yield actions.requestWorkflows(
         '/mercury/v1/workflows/'
       );
-      return actions.setWorkflows(workflows);
+      return actions.receiveWorkflows(workflows);
     },
-    * receiveUser() {
-      const user = yield actions.receiveUser(
+    * requestUser() {
+      wp.data.dispatch('mercury/workflows').beginLoading();
+      const user = yield actions.requestUser(
         '/wp/v2/users/me?context=edit'
       );
-      return actions.setUser(user);
+      return actions.receiveUser(user);
     },
   },
 });
+
+export default mercuryStore;

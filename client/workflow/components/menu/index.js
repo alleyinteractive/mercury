@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import getWorkflows, { setActiveWorkflowSlug } from 'services/workflows';
+import { setActiveWorkflowSlug } from 'services/workflows';
 import { setSelectedTaskSlug } from 'services/tasks';
 import { useActiveWorkflow } from 'hooks/workflows';
 import { useInProgressTaskSlug } from 'hooks/tasks';
@@ -14,8 +14,10 @@ import {
 } from './menuStyles';
 
 const Menu = (props) => {
-  const { selectedTaskSlug } = props;
-  const workflows = getWorkflows();
+  const {
+    selectedTaskSlug,
+    workflows,
+  } = props;
   const activeWorkflow = useActiveWorkflow();
   const inProgressTaskSlug = useInProgressTaskSlug();
   const { slug, tasks } = activeWorkflow;
@@ -72,6 +74,9 @@ const Menu = (props) => {
 
 Menu.propTypes = {
   selectedTaskSlug: PropTypes.string.isRequired,
+  workflows: PropTypes.arrayOf(
+    PropTypes.object
+  ).isRequired,
 };
 
 export default Menu;

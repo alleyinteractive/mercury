@@ -1,36 +1,21 @@
 /* global wp */
-import { workflow as defaultWorkflowState } from 'config/defaultState';
 import { getMeta, setMeta } from './meta';
 import { setInProgressTaskSlug } from './tasks';
+
+const { select } = wp.data;
 
 /**
  * Get the workflows from the custom mercury/workflows data store.
  */
-export default function getWorkflows() {
-  return wp.data.select('mercury/workflows').receiveWorkflows();
-}
-
-/**
- * Get a workflow by slug.
- *
- * @param  {string} slug Workflow slug.
- * @return {object|bool} Workflow object or false.
- */
 export function getWorkflow(slug) {
-  const selectedWorklow = getWorkflows().find(
-    (workflow) => workflow.slug === slug
-  );
-  if (undefined === selectedWorklow) {
-    return defaultWorkflowState;
-  }
-  return selectedWorklow;
+  return wp.data.select('mercury/workflows').getWorkflow(slug);
 }
 
 /**
  * Set the active workflow slug to the first workflow in the list of workflows.
  */
 export function setDefaultActiveWorkflowSlug() {
-  const defaultWorkflow = getWorkflows()[0];
+  const defaultWorkflow = select('mercury/workflows').requestWorkflows()[0];
   setMeta(
     'mercury_in_progress_task_slug',
     defaultWorkflow.tasks[0].slug

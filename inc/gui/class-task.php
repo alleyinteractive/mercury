@@ -560,7 +560,7 @@ class Task {
 				'label'               => '',
 				'options_first_empty' => false,
 				'options_source'      => '',
-				'options_source_list' => '',
+				'options_source_list' => [],
 				'read_only'           => false,
 				'required'            => false,
 				'slug'                => '',

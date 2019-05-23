@@ -9,6 +9,7 @@ import TextField from './textfield';
 import Checkbox from './checkbox';
 import CheckboxGroup from './checkboxGroup';
 import RadioGroup from './radioGroup';
+import Date from './date';
 import {
   Wrapper,
   LabelWrapper,
@@ -37,6 +38,7 @@ const FormField = (props) => {
     checkboxes: CheckboxGroup,
     radios: RadioGroup,
     textfield: TextField,
+    date: Date,
   };
   const FieldComponent = fieldMap[type] ? fieldMap[type] : TextField;
 

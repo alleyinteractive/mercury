@@ -316,6 +316,7 @@ class Task {
 								'date'       => __( 'Date', 'mercury' ),
 								'select'     => __( 'Dropdown', 'mercury' ),
 								'textarea'   => __( 'Textarea', 'mercury' ),
+								'rich-textarea'   => __( 'Rich Textarea', 'mercury' ),
 								'textfield'  => __( 'Textfield', 'mercury' ),
 								'assignee'   => __( 'Assignee', 'mercury' ),
 							],

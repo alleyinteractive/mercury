@@ -5,6 +5,7 @@ import { ThemeProvider } from 'styled-components';
 import Select from './select';
 import Assignee from './assignee';
 import TextArea from './textarea';
+import RichTextArea from './richTextarea';
 import TextField from './textfield';
 import Checkbox from './checkbox';
 import CheckboxGroup from './checkboxGroup';
@@ -34,6 +35,7 @@ const FormField = (props) => {
     assignee: Assignee,
     select: Select,
     textarea: TextArea,
+    'rich-textarea': RichTextArea,
     checkbox: Checkbox,
     checkboxes: CheckboxGroup,
     radios: RadioGroup,

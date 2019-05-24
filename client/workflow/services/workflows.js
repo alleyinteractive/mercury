@@ -1,6 +1,6 @@
 /* global wp */
 import { getMeta, setMeta } from './meta';
-import { setInProgressTaskSlug } from './tasks';
+import { setInProgressTaskSlug } from './tasks'; // eslint-disable-line import/no-cycle
 
 const { select } = wp.data;
 

@@ -1,6 +1,6 @@
 import { task as defaultTaskState } from 'config/defaultState';
 import { getMeta, setMeta } from './meta';
-import { getActiveWorkflow, getActiveWorkflowSlug } from './workflows';
+import { getActiveWorkflow, getActiveWorkflowSlug } from './workflows'; // eslint-disable-line import/no-cycle
 
 /**
  * Get a task by slug (for the current active workflow).

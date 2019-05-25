@@ -6,6 +6,7 @@ const TextArea = (props) => {
   const {
     slug,
     readOnly,
+    defaultValue,
   } = props;
 
   return (
@@ -14,6 +15,7 @@ const TextArea = (props) => {
       id={slug}
       name={slug}
       readOnly={readOnly}
+      value={defaultValue}
     />
   );
 };
@@ -21,6 +23,11 @@ const TextArea = (props) => {
 TextArea.propTypes = {
   slug: PropTypes.string.isRequired,
   readOnly: PropTypes.bool.isRequired,
+  defaultValue: PropTypes.string,
+};
+
+TextArea.defaultProps = {
+  defaultValue: '',
 };
 
 export default TextArea;

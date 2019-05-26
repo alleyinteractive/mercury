@@ -12,12 +12,14 @@ export default function getInitialValues(task) {
     const {
       slug: fieldSlug,
       type,
+      defaultValue,
     } = currentField;
-    const defaultValue = 'checkboxes' === type ? [] : '';
+
+    const emptyValue = 'checkboxes' === type ? [] : '';
 
     return {
       ...acc,
-      [fieldSlug]: getMeta(fieldSlug) || defaultValue,
+      [fieldSlug]: getMeta(fieldSlug) || defaultValue || emptyValue,
     };
   }, {});
 

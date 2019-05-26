@@ -18,6 +18,7 @@ const RichTextEditor = ({
       setFieldValue(id, newValue);
     }}
     onBlur={onBlur}
+    modules={readOnly ? { toolbar: false } : {}}
   />
 );
 

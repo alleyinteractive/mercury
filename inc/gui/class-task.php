@@ -119,12 +119,6 @@ class Task {
 							],
 						]
 					),
-					'limit_user_roles' => new \Fieldmanager_Checkbox(
-						[
-							'label'       => __( 'Limit User Roles', 'mercury' ),
-							'description' => __( 'By default, the task will be visible to all user roles. Enabling this will allow the task to be visible only for specified roles.', 'mercury' ),
-						]
-					),
 					'assignee_selection' => new \Fieldmanager_Group(
 						[
 							'label'       => __( 'Assignee Selection Options', 'mercury' ),
@@ -134,6 +128,12 @@ class Task {
 								'value' => true,
 							],
 							'children'    => $this->get_assignee_filters(),
+						]
+					),
+					'limit_user_roles' => new \Fieldmanager_Checkbox(
+						[
+							'label'       => __( 'Limit User Roles', 'mercury' ),
+							'description' => __( 'By default, the task will be visible to all user roles. Enabling this will allow the task to be visible only for specified roles.', 'mercury' ),
 						]
 					),
 					'user_role_visibility' => new \Fieldmanager_Group(

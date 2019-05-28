@@ -322,6 +322,15 @@ class Task {
 							],
 						]
 					),
+					'default_value' => new \Fieldmanager_Textfield(
+						[
+							'label' => __( 'Default Value', 'mercury' ),
+							'display_if' => [
+								'src'   => 'type',
+								'value' => 'textarea,rich-textarea,textfield',
+							],
+						]
+					),
 					'label' => new \Fieldmanager_Textfield( __( 'Label', 'mercury' ) ),
 					'slug'  => new \Fieldmanager_Textfield(
 						[

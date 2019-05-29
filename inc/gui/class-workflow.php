@@ -112,7 +112,29 @@ class Workflow {
 			'id'    => $workflow_id,
 			'name'  => get_post_meta( $workflow_id, 'name', true ),
 			'slug'  => get_post_meta( $workflow_id, 'slug', true ),
-			'tasks' => array_map( '\Mercury\GUI\Task::get_task', self::get_task_ids_by_workflow( $workflow_id ) ),
+			'tasks' => array_reduce(
+				self::get_task_ids_by_workflow( $workflow_id ),
+				function( array $accumulator, int $task_id ) {
+					$task = \Mercury\GUI\Task::get_task( $task_id );
+					$user = wp_get_current_user();
+
+					// Check if the task is limited to specific user roles,
+					// and if the current user is NOT in one of those roles.
+					// Unless they're an admin.
+					if (
+						! empty( $task['assignees']['limit_user_roles'] ) &&
+						true === (bool) $task['assignees']['limit_user_roles'] &&
+						isset( $task['assignees']['user_role_visibility']['roles'] ) &&
+						! array_intersect( $user->roles, $task['assignees']['user_role_visibility']['roles'] ) &&
+						! in_array( 'administrator', $user->roles )
+					) {
+						return $accumulator;
+					}
+
+					return array_merge( $accumulator, [ $task ] );
+				},
+				[]
+			),
 		];
 	}
 

@@ -126,7 +126,7 @@ class Workflow {
 						true === (bool) $task['assignees']['limit_user_roles'] &&
 						isset( $task['assignees']['user_role_visibility']['roles'] ) &&
 						! array_intersect( $user->roles, $task['assignees']['user_role_visibility']['roles'] ) &&
-						! in_array( 'administrator',  $user->roles )
+						! in_array( 'administrator', $user->roles )
 					) {
 						return $accumulator;
 					}

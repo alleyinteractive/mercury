@@ -124,6 +124,22 @@ export function setTaskStatus(taskSlug, status) {
 }
 
 /**
+ * Returns a function to redirect to the given parameter when
+ * the editor indicates that a post save has succeeded.
+ *
+ * To be connected with wp.data.subscribe().
+ *
+ * @param {string} redirectURL URL to redirect to.
+ */
+const maybeRedirectOnSave = (redirectURL) => () => {
+  if (! wp.data.select('core/editor').didPostSaveRequestSucceed()) {
+    return;
+  }
+
+  window.location.replace(redirectURL);
+};
+
+/**
  * Complete a task and transition to a new one.
  *
  * @param  {string} currentTaskSlug Slug of the task to complete.
@@ -139,6 +155,21 @@ export function completeTask(currentTaskSlug, nextTaskSlug) {
   // Set the InProgress and Selected tasks to the next task.
   setInProgressTaskSlug(nextTaskSlug);
   setSelectedTaskSlug(nextTaskSlug);
+
+  // If the current task's selected action has a redirect URL,
+  // set that up to redirect after the save happens.
+  const currentTask = getTask(currentTaskSlug);
+
+  const nextTaskTransition = currentTask.nextTasks.find(
+    (task) => task.slug === nextTaskSlug
+  );
+
+  if (nextTaskTransition && nextTaskTransition.redirectUrl) {
+    wp.data.subscribe(maybeRedirectOnSave(nextTaskTransition.redirectUrl));
+  }
+
+  // Save the post.
+  wp.data.dispatch('core/editor').savePost();
 }
 
 /**

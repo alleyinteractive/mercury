@@ -51,7 +51,8 @@ add_action(
 		new GUI\Task();
 		new GUI\Enabled_Posts();
 		new GUI\Workflow();
-	}
+	},
+	15
 );
 
 /**

@@ -18,7 +18,7 @@ const Select = (props) => {
       disabled={readOnly}
     >
       {optionsFirstEmpty && (
-        <option value />
+        <option value="" />
       )}
       {optionsSourceList.map((option) => {
         const { label, value: optionValue } = option;

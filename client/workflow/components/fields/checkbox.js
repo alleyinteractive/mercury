@@ -20,7 +20,7 @@ const Checkbox = (props) => {
         type="checkbox"
         id={slug}
         name={slug}
-        checked={value}
+        checked={!! value}
         disabled={readOnly}
       />
       <OptionText>{label}</OptionText>
@@ -31,7 +31,7 @@ const Checkbox = (props) => {
 Checkbox.propTypes = {
   label: PropTypes.string.isRequired,
   slug: PropTypes.string.isRequired,
-  value: PropTypes.bool.isRequired,
+  value: PropTypes.string.isRequired,
   readOnly: PropTypes.bool.isRequired,
 };
 

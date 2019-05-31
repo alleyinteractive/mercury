@@ -93,7 +93,7 @@ function enqueue_scripts() {
 	}
 
 	if (
-		( ! empty( $_GET['mercury-dev'] ) && true == $_GET['mercury-dev'] ) ||
+		( ! empty( $_GET['mercury-dev'] ) && true === $_GET['mercury-dev'] ) ||
 		( defined( 'MERCURY_DEBUG' ) && true === MERCURY_DEBUG )
 	) {
 		wp_enqueue_script(

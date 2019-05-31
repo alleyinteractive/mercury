@@ -92,7 +92,10 @@ function enqueue_scripts() {
 		return;
 	}
 
-	if ( ( ! empty( $_GET['mercury-dev'] ) && true == $_GET['mercury-dev'] ) ) {
+	if (
+		( ! empty( $_GET['mercury-dev'] ) && true === $_GET['mercury-dev'] ) ||
+		( defined( 'MERCURY_DEBUG' ) && true === MERCURY_DEBUG )
+	) {
 		wp_enqueue_script(
 			'mercury-workflow-js',
 			'//localhost:8080/build/js/workflow.js',

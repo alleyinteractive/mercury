@@ -10,7 +10,7 @@
   "scripts": {
     "dev": "webpack-dev-server --config client/config/webpack.config.js --mode development --env.certPath=broadway/config/nginx-config",
     "build": "webpack --config client/config/webpack.config.js --mode production --env.certPath=broadway/config/nginx-config",
-    "lint": "eslint .",
+    "lint": "eslint ./client",
     "scaffold": "scaffold dir ./scaffold --theme=./",
     "test": "jest",
     "test:watch": "jest --watch"

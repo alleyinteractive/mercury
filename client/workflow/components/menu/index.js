@@ -17,6 +17,7 @@ const Menu = (props) => {
   const {
     selectedTaskSlug,
     workflows,
+    disabled,
   } = props;
   const activeWorkflow = useActiveWorkflow();
   const inProgressTaskSlug = useInProgressTaskSlug();
@@ -29,6 +30,7 @@ const Menu = (props) => {
         <select
           onChange={(e) => setActiveWorkflowSlug(e.target.value)}
           defaultValue={slug || 'none'}
+          disabled={disabled}
         >
           <option value="none">Select a Workflow</option>
           {workflows.map((workflow) => {
@@ -77,6 +79,7 @@ Menu.propTypes = {
   workflows: PropTypes.arrayOf(
     PropTypes.object
   ).isRequired,
+  disabled: PropTypes.bool.isRequired,
 };
 
 export default Menu;

@@ -37,6 +37,12 @@ class Post_Type {
 
 		// Admin menu modifications.
 		add_action( 'admin_menu', [ $this, 'admin_menu' ] );
+
+		// User capabilities.
+		// Note: the priority is set high here so that this connects after
+		// EF_Workflows_Assignments's equivalent filter, or else our value will be
+		// overwritten.
+		add_filter( 'map_meta_cap', [ $this, 'allow_user_access_to_their_tasks' ], 100, 4 );
 	}
 
 	/**
@@ -137,5 +143,50 @@ class Post_Type {
 	 */
 	public function admin_menu() {
 		remove_submenu_page( 'edit.php?post_type=mercury-workflow', 'post-new.php?post_type=mercury-workflow' );
+	}
+
+	/**
+	 * Allow users access to posts where they are assigned a task.
+	 *
+	 * @param  array  $caps    Capabilities to filter.
+	 * @param  string $cap     Current capability.
+	 * @param  int    $user_id User id.
+	 * @param  array  $args    Arguments for filter.
+	 * @return array Updated capabilities.
+	 */
+	public function allow_user_access_to_their_tasks( $caps, $cap, $user_id, $args ) {
+
+		// Only check the `edit_post` capability.
+		if ( 'edit_post' !== $cap ) {
+			return $caps;
+		}
+
+		// We are only concerned with altering access for contributors.
+		if ( ! in_array( 'contributor', get_userdata( $user_id )->roles ?? [], true ) ) {
+			return $caps;
+		}
+
+		// Check to see if the argument is a valid post.
+		$post_id = $args[0] ?? 0;
+		$post = get_post( $post_id );
+
+		if ( ! $post instanceof \WP_Post ) {
+			return $caps;
+		}
+
+		// Is this post in the user's assigned task list?
+		$assigned_user = get_post_meta(
+			$post_id,
+			'mercury_in_progress_task_assignee_id',
+			true
+		);
+
+		if ( intval( $assigned_user ) !== intval( $user_id ) ) {
+			// Explicitly deny access to this post since it is not a current assignment.
+			return [ 'do_not_allow' ];
+		}
+
+		// Allow ability to edit this post.
+		return [ 'edit_posts' ];
 	}
 }

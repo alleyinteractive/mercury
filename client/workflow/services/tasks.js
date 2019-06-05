@@ -1,6 +1,6 @@
 import { task as defaultTaskState } from 'config/defaultState';
 import { getMeta, setMeta } from './meta';
-import { getActiveWorkflow, getActiveWorkflowSlug } from './workflows'; // eslint-disable-line import/no-cycle
+import { getActiveWorkflow } from './workflows'; // eslint-disable-line import/no-cycle
 
 /**
  * Get a task by slug (for the current active workflow).
@@ -116,11 +116,10 @@ export function setSelectedTaskSlug(slug) {
  * Set the status for a given task.
  *
  * @param {string} taskSlug Task slug.
- * @param {string} status   Status.
+ * @param {string} status   Status, either "active" or "complete".
  */
 export function setTaskStatus(taskSlug, status) {
-  const activeWorkflowSlug = getActiveWorkflowSlug();
-  setMeta(`mercury_${activeWorkflowSlug}_status`, status);
+  setMeta(`mercury_${taskSlug}_status`, status);
 }
 
 /**
@@ -147,7 +146,6 @@ const maybeRedirectOnSave = (redirectURL) => () => {
  */
 export function completeTask(currentTaskSlug, nextTaskSlug) {
   // Mark as complete in meta.
-  // @todo Do we need this? If so, need to register `mercury_${activeWorkflowSlug}_status` meta.
   setTaskStatus(currentTaskSlug, 'complete');
   setTaskStatus(nextTaskSlug, 'active');
   setPostStatus(nextTaskSlug);

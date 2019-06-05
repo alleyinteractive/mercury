@@ -39,6 +39,9 @@ require_once MERCURY_PATH . '/inc/gui/class-enabled-posts.php';
 require_once MERCURY_PATH . '/inc/gui/class-task.php';
 require_once MERCURY_PATH . '/inc/gui/class-workflow.php';
 
+// Helpers.
+require_once MERCURY_PATH . '/inc/helpers.php';
+
 // Init.
 add_action(
 	'init',

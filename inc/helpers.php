@@ -34,7 +34,7 @@ function get_mercury_task_slugs() : array {
 
 	// Get the slug for each task.
 	$task_slugs = [];
-	foreach ( ($tasks_query->posts ?? [] ) as $task_id ) {
+	foreach ( ( $tasks_query->posts ?? [] ) as $task_id ) {
 		$task_slugs[ $task_id ] = (string) get_post_meta( $task_id, 'slug', true );
 	}
 

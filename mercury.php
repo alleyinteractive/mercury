@@ -17,7 +17,7 @@ namespace Mercury;
 /**
  * Current version of Mercury.
  */
-define( 'MERCURY_VERSION', '1.1.2' );
+define( 'MERCURY_VERSION', '1.1.3' );
 
 /**
  * Filesystem path to Mercury.

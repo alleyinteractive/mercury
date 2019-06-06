@@ -114,3 +114,21 @@ function get_mercury_workflow_slug_from_task( string $slug ) : string {
 	$workflow_id = get_mercury_workflow_id_from_task( $slug );
 	return (string) get_post_meta( $workflow_id, 'slug', true );
 }
+
+/**
+ * Get the task slug from a task status.
+ *
+ * @param string $slug Task slug.
+ * @return string
+ */
+function get_mercury_task_slug_from_task_status( string $status ) : string {
+	$task = new \WP_Query(
+		[
+			'post_type'  => 'mercury-task',
+			'meta_key'   => 'post_status',
+			'meta_value' => $status,
+		]
+	);
+
+	return (string) get_post_meta( $task->post->ID ?? 0, 'slug', true );
+}

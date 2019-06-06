@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { useActiveWorkflowSlug } from 'hooks/workflows';
 import { useSelectedTaskSlug } from 'hooks/tasks';
 import { getWorkflow } from 'services/workflows';
+import { getAssignee } from 'services/users';
 import Task from 'components/task';
 import TaskHeader from 'components/task/header';
 import Menu from 'components/menu';
@@ -37,17 +38,28 @@ const Workflow = (props) => {
     return false;
   };
   const task = getTask();
+  const assignee = task ? getAssignee(task.slug) : null;
+
+  const userData = wp.data.select('mercury/workflows').requestUser();
+  const isContributor = userData.roles.includes('contributor');
+  const isContributorAssignedTask = isContributor && (userData.id === assignee);
+  const shouldSeeTask = (! isContributor) || isContributorAssignedTask;
 
   return (
     <Wrapper>
       <Menu
         selectedTaskSlug={task ? task.slug : 'none'}
         workflows={workflows}
+        disabled={isContributor}
       />
-      {task && (
+      {shouldSeeTask && task && (
         <TaskWrapper>
           <Task {...task} key={task.slug} />
         </TaskWrapper>
+      )}
+      {(! shouldSeeTask && task) && (
+        /* eslint-disable-next-line max-len */
+        <TaskHeader name="You are not assigned to this task and lack privileges to view it." />
       )}
       {('none' !== currentWorkflowSlug && ! task) && (
         <TaskHeader name="No Task Selected" />

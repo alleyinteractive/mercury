@@ -17,7 +17,7 @@ namespace Mercury;
 /**
  * Current version of Mercury.
  */
-define( 'MERCURY_VERSION', '1.1.2' );
+define( 'MERCURY_VERSION', '1.1.3' );
 
 /**
  * Filesystem path to Mercury.
@@ -39,6 +39,9 @@ require_once MERCURY_PATH . '/inc/gui/class-enabled-posts.php';
 require_once MERCURY_PATH . '/inc/gui/class-task.php';
 require_once MERCURY_PATH . '/inc/gui/class-workflow.php';
 
+// Helpers.
+require_once MERCURY_PATH . '/inc/helpers.php';
+
 // Init.
 add_action(
 	'init',
@@ -51,7 +54,8 @@ add_action(
 		new GUI\Task();
 		new GUI\Enabled_Posts();
 		new GUI\Workflow();
-	}
+	},
+	15
 );
 
 /**

@@ -130,34 +130,6 @@ class Task {
 							'children'    => $this->get_assignee_filters(),
 						]
 					),
-					'limit_user_roles' => new \Fieldmanager_Checkbox(
-						[
-							'label'       => __( 'Limit User Roles', 'mercury' ),
-							'description' => __( 'By default, the task will be visible to all user roles. Enabling this will allow the task to be visible only for specified roles.', 'mercury' ),
-						]
-					),
-					'user_role_visibility' => new \Fieldmanager_Group(
-						[
-							'label'       => __( 'User Role Visibility', 'mercury' ),
-							'collapsible' => true,
-							'display_if'  => [
-								'src'   => 'limit_user_roles',
-								'value' => true,
-							],
-							'children'    => [
-								'roles' => new \Fieldmanager_Select(
-									[
-										'limit'              => 0,
-										'extra_elements'     => 0,
-										'one_label_per_item' => false,
-										'label'              => __( 'Grant permission for additional roles (other than administrators) for this task:', 'mercury' ),
-										'add_more_label'     => __( 'Add Role', 'mercury' ),
-										'options'            => \Mercury\Users::get_role_options(),
-									]
-								),
-							],
-						]
-					),
 					'enable_ask_reject' => new \Fieldmanager_Checkbox(
 						[
 							'label' => __( 'Enable Ask/Reject', 'mercury' ),
@@ -377,6 +349,7 @@ class Task {
 							'options' => [
 								'function' => __( 'Function', 'mercury' ),
 								'list'     => __( 'List', 'mercury' ),
+								'filter'   => __( 'Filter', 'mercury' ),
 							],
 							'display_if' => [
 								'src'   => 'type',
@@ -391,6 +364,11 @@ class Task {
 								'src'   => 'options_source',
 								'value' => 'list',
 							],
+						]
+					),
+					'options_source_filter' => new \Fieldmanager_Textfield(
+						[
+							'label' => __( 'Filter', 'mercury' ),
 						]
 					),
 					'options_source_list' => new \Fieldmanager_Group(
@@ -593,18 +571,39 @@ class Task {
 		$field = wp_parse_args(
 			$field,
 			[
-				'assignee_task_id'    => 0,
-				'assignee_task_slug'  => '',
-				'label'               => '',
-				'options_first_empty' => false,
-				'options_source'      => '',
-				'options_source_list' => [],
-				'read_only'           => false,
-				'required'            => false,
-				'slug'                => '',
-				'type'                => '',
+				'assignee_task_id'      => 0,
+				'assignee_task_slug'    => '',
+				'label'                 => '',
+				'options_first_empty'   => false,
+				'options_source'        => '',
+				'options_source_filter' => '',
+				'options_source_list'   => [],
+				'read_only'             => false,
+				'required'              => false,
+				'slug'                  => '',
+				'type'                  => '',
 			]
 		);
+
+		// Allow filtering of options source for more dynamic sources.
+		if ( 'filter' === $field['options_source'] && ! empty( $field['options_source_filter'] ) ) {
+
+			/**
+			 * Allow a options source list to be filtered.
+			 *
+			 * @param array $field['options_source_list'] Options source list
+			 *                                            for field.
+			 * @param array $field                        Field whose options
+			 *                                            are being filtered.
+			 */
+			$field['options_source_list'] = array_filter(
+				apply_filters(
+					'mercury_field_options_' . $field['options_source_filter'],
+					$field['options_source_list'],
+					$field
+				)
+			);
+		}
 
 		// Type cast as needed.
 		$field['options_first_empty'] = filter_var( $field['options_first_empty'], FILTER_VALIDATE_BOOLEAN );

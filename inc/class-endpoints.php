@@ -40,20 +40,9 @@ class Endpoints {
 			'mercury_selected_task_slug',
 		];
 
-		$tasks_query = new \WP_Query(
-			[
-				'fields'         => 'ids',
-				'order'          => 'ASC',
-				'orderby'        => 'title',
-				'post_type'      => Post_Type::WORKFLOW_TASK_POST_TYPE,
-				'posts_per_page' => -1,
-			]
-		);
-
-		foreach ( ( $tasks_query->posts ?? [] ) as $task_id ) {
+		foreach ( get_mercury_task_slugs() as $task_id => $task_slug ) {
 
 			// Add meta fields that every task has.
-			$task_slug     = (string) get_post_meta( $task_id, 'slug', true );
 			$meta_fields[] = "mercury_{$task_slug}_status";
 			$meta_fields[] = "mercury_{$task_slug}_assignee_id";
 			$meta_fields[] = "mercury_{$task_slug}_due_date";

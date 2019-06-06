@@ -46,7 +46,6 @@ const Task = (props) => {
           return (
             <Form onSubmit={handleSubmit}>
               <FormHeader>
-                <div>Due June 3rd</div>
                 <Assignee
                   assignees={assignees}
                   taskSlug={slug}

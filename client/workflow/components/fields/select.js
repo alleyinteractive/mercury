@@ -45,7 +45,11 @@ Select.propTypes = {
     })
   ).isRequired,
   optionsFirstEmpty: PropTypes.bool.isRequired,
-  readOnly: PropTypes.bool.isRequired,
+  readOnly: PropTypes.bool,
+};
+
+Select.defaultProps = {
+  readOnly: false,
 };
 
 export default Select;

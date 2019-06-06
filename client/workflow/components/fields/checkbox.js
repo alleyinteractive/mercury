@@ -31,7 +31,10 @@ const Checkbox = (props) => {
 Checkbox.propTypes = {
   label: PropTypes.string.isRequired,
   slug: PropTypes.string.isRequired,
-  value: PropTypes.string.isRequired,
+  value: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.bool,
+  ]).isRequired,
   readOnly: PropTypes.bool.isRequired,
 };
 

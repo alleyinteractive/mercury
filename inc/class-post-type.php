@@ -43,6 +43,7 @@ class Post_Type {
 		// EF_Workflows_Assignments's equivalent filter, or else our value will be
 		// overwritten.
 		add_filter( 'map_meta_cap', [ $this, 'allow_user_access_to_their_tasks' ], 100, 4 );
+		add_filter( 'user_has_cap', [ $this, 'allow_user_to_update_their_tasks' ], 10, 3 );
 	}
 
 	/**
@@ -188,5 +189,57 @@ class Post_Type {
 
 		// Allow ability to edit this post.
 		return [ 'edit_posts' ];
+	}
+
+	/**
+	 * Allow users to update posts where they are assigned a task.
+	 *
+	 * Filtering the `edit_post` capability is not sufficient (see the
+	 * `allow_user_access_to_their_tasks` function in this class), because
+	 * the REST API checks the primitive `edit_others_posts` capability before
+	 * allowing the user to update the post.
+	 *
+	 * @see WP_REST_Posts_Controller::update_item_permissions_check() in WP core.
+	 *
+	 * @param array $allcaps All the capabilities of the user
+	 * @param array $cap     [0] Required capability
+	 * @param array $args    [0] Requested capability
+	 *                       [1] User ID
+	 *                       [2] Associated object ID
+	 */
+	public function allow_user_to_update_their_tasks( $allcaps, $cap, $args ) {
+
+		// Bail out if we're not asking about editing others' posts.
+		if ( 'edit_others_posts' !== $args[0] ) {
+			return $allcaps;
+		}
+
+		// Bail out for users who can already edit others posts.
+		if ( isset( $allcaps['edit_others_posts'] ) ) {
+			return $allcaps;
+		}
+
+		// Bail if user ID happens to be missing.
+		if ( empty( $args[1] ) ) {
+			return $allcaps;
+		}
+
+		// If we're trying to edit another user's post, get the assigned
+		// user, and compare it to the user that we're checking capabilities for.
+		if ( empty( $_POST['post_ID'] ) ) {
+			return $allcaps;
+		}
+
+		$assigned_user = get_post_meta(
+			absint( $_POST['post_ID'] ),
+			'mercury_in_progress_task_assignee_id',
+			true
+		);
+
+		if ( absint( $assigned_user ) === absint( $args[1] ) ) {
+			$allcaps['edit_others_posts'] = true;
+		}
+
+		return $allcaps;
 	}
 }

@@ -29,10 +29,6 @@ const CheckboxGroup = (props) => {
     <FieldArray
       name={slug}
       render={(arrayHelpers) => {
-        // Generate an array of duplicate values, if they exist.
-        // We will then use this array to attempt to ensure
-        // unique input values in the checkbox group.
-
         // Sort the options by their value (which will group any duplicates).
         const sortedOptions = sortBy(
           ({ value: optionValue }) => optionValue,

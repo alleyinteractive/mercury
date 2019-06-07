@@ -201,11 +201,11 @@ class Post_Type {
 	 *
 	 * @see WP_REST_Posts_Controller::update_item_permissions_check() in WP core.
 	 *
-	 * @param array $allcaps All the capabilities of the user
-	 * @param array $cap     [0] Required capability
-	 * @param array $args    [0] Requested capability
-	 *                       [1] User ID
-	 *                       [2] Associated object ID
+	 * @param array $allcaps All the capabilities of the user.
+	 * @param array $cap     [0] Required capability.
+	 * @param array $args    [0] Requested capability.
+	 *                       [1] User ID.
+	 *                       [2] Associated object ID.
 	 */
 	public function allow_user_to_update_their_tasks( $allcaps, $cap, $args ) {
 
@@ -226,12 +226,13 @@ class Post_Type {
 
 		// If we're trying to edit another user's post, get the assigned
 		// user, and compare it to the user that we're checking capabilities for.
+		// phpcs:disable WordPress.Security.NonceVerification.NoNonceVerification
 		if ( empty( $_POST['post_ID'] ) ) {
 			return $allcaps;
 		}
 
 		$assigned_user = get_post_meta(
-			absint( $_POST['post_ID'] ),
+			absint( $_POST['post_ID'] ), // phpcs:disable WordPress.Security.NonceVerification.NoNonceVerification
 			'mercury_in_progress_task_assignee_id',
 			true
 		);

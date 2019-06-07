@@ -226,13 +226,13 @@ class Post_Type {
 
 		// If we're trying to edit another user's post, get the assigned
 		// user, and compare it to the user that we're checking capabilities for.
-		// phpcs:disable WordPress.Security.NonceVerification.NoNonceVerification WordPress.Security.NonceVerification.Missing
+		// phpcs:disable WordPress.Security.NonceVerification.NoNonceVerification, WordPress.Security.NonceVerification.Missing
 		if ( empty( $_POST['post_ID'] ) ) {
 			return $allcaps;
 		}
 
 		$assigned_user = get_post_meta(
-			absint( $_POST['post_ID'] ), // phpcs:disable WordPress.Security.NonceVerification.NoNonceVerification WordPress.Security.NonceVerification.Missing
+			absint( $_POST['post_ID'] ), // phpcs:disable WordPress.Security.NonceVerification.NoNonceVerification, WordPress.Security.NonceVerification.Missing
 			'mercury_in_progress_task_assignee_id',
 			true
 		);

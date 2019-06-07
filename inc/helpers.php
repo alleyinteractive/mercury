@@ -118,7 +118,7 @@ function get_mercury_workflow_slug_from_task( string $slug ) : string {
 /**
  * Get the task slug from a task status.
  *
- * @param string $slug Task slug.
+ * @param string $status Task status.
  * @return string
  */
 function get_mercury_task_slug_from_task_status( string $status ) : string {

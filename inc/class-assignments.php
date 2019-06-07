@@ -91,8 +91,16 @@ class Assignments {
 		// Get the task in progress.
 		$task_slug = get_post_meta( $post_id, 'mercury_in_progress_task_slug', true );
 
+		if ( empty( $task_slug ) ) {
+			return;
+		}
+
 		// Get the assignee for that task.
 		$assignee  = get_post_meta( $post_id, "mercury_{$task_slug}_assignee_id", true );
+
+		if ( empty( $assignee ) ) {
+			return;
+		}
 
 		// Save to a new field.
 		update_post_meta( $post_id, 'mercury_in_progress_task_assignee_id', $assignee );

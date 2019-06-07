@@ -12,8 +12,10 @@ module.exports = function getDevServer(mode, env) {
   switch (mode) {
     case 'development':
       return {
+        disableHostCheck: true,
         quiet: false,
         hot: true,
+        port: 8080,
         noInfo: false,
         contentBase: '/build',
         stats: { colors: true },

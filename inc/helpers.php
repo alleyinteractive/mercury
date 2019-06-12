@@ -132,3 +132,33 @@ function get_mercury_task_slug_from_task_status( string $status ) : string {
 
 	return (string) get_post_meta( $task->post->ID ?? 0, 'slug', true );
 }
+
+/**
+ * Get the active workflow slug.
+ *
+ * @param int $post_id Post ID.
+ * @return string
+ */
+function get_active_workflow_slug( int $post_id ) {
+	return get_post_meta( $post_id, 'mercury_active_workflow_slug', true );
+}
+
+/**
+ * Get the in progress task slug.
+ *
+ * @param int $post_id Post ID.
+ * @return string
+ */
+function get_in_progress_task_slug( int $post_id ) {
+	return get_post_meta( $post_id, 'mercury_in_progress_task_slug', true );
+}
+
+/**
+ * Get the selected task slug.
+ *
+ * @param int $post_id Post ID.
+ * @return string
+ */
+function get_selected_task_slug( int $post_id ) {
+	return get_post_meta( $post_id, 'mercury_selected_task_slug', true );
+}

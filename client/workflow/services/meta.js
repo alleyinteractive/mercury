@@ -45,9 +45,28 @@ export function setMetaGroup(meta) {
  * @param {string} value New value for meta field.
  */
 export function setMeta(field, value) {
-  if (value !== getMeta(field)) {
+  const { hooks } = wp;
+  const oldValue = getMeta(field);
+
+  // Only update if value has changed.
+  if (value !== oldValue) {
+    /**
+     * Hook when meta is set.
+     *
+     * @param {mixed} [value] New value for this field.
+     * @param {mixed} [oldValue] Old value for this field.
+     * @param {string} [field] Key of the field.
+     * @type {mixed}
+     */
+    const newValue = hooks.applyFilters(
+      'mercurySetMeta',
+      value,
+      oldValue,
+      field
+    );
+
     const newMeta = {
-      [field]: stringifyValue(value),
+      [field]: stringifyValue(newValue),
     };
 
     wp.data.dispatch('core/editor').editPost({ meta: newMeta });

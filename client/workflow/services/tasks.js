@@ -138,6 +138,16 @@ const maybeRedirectOnSave = (redirectURL) => () => {
   window.location.replace(redirectURL);
 };
 
+export function updateAskReject(taskSlug) {
+  const task = getTask(taskSlug);
+  if (! task.assignees.enableAskReject) {
+    setMeta('mercury_ask_reject_user_ids', []);
+    setMeta('mercury_ask_reject_group_ids', []);
+    setMeta('mercury_ask_reject_roles', []);
+  }
+  console.log('Update ask reject', getTask(taskSlug));
+}
+
 /**
  * Complete a task and transition to a new one.
  *
@@ -163,6 +173,9 @@ export function completeTask(currentTaskSlug, nextTaskSlug) {
   const nextTaskTransition = currentTask.nextTasks.find(
     (task) => task.slug === nextTaskSlug
   );
+
+  // Setup ask and reject meta.
+  updateAskReject(nextTaskSlug);
 
   hooks.doAction('mercuryCompletedTask', currentTaskSlug, nextTaskSlug);
 

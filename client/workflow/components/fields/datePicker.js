@@ -18,7 +18,7 @@ const DatePicker = ({
     <SingleDatePicker
       date={momentObject}
       onDateChange={(date) => {
-        setFieldValue(id, date);
+        setFieldValue(id, date.unix());
       }}
       focused={isFocused}
       onFocusChange={({ focused }) => {

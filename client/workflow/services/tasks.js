@@ -145,6 +145,8 @@ const maybeRedirectOnSave = (redirectURL) => () => {
  * @param  {string} nextTaskSlug    Slug of the task to transition to.
  */
 export function completeTask(currentTaskSlug, nextTaskSlug) {
+  const { hooks } = wp;
+
   // Mark as complete in meta.
   setTaskStatus(currentTaskSlug, 'complete');
   setTaskStatus(nextTaskSlug, 'active');
@@ -161,6 +163,8 @@ export function completeTask(currentTaskSlug, nextTaskSlug) {
   const nextTaskTransition = currentTask.nextTasks.find(
     (task) => task.slug === nextTaskSlug
   );
+
+  hooks.doAction('mercuryCompletedTask', currentTaskSlug, nextTaskSlug);
 
   if (nextTaskTransition && nextTaskTransition.redirectUrl) {
     wp.data.subscribe(maybeRedirectOnSave(nextTaskTransition.redirectUrl));

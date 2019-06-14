@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
 import 'react-dates/initialize';
+import moment from 'moment';
 import { SingleDatePicker } from 'react-dates';
 import 'react-dates/lib/css/_datepicker.css';
 
@@ -12,13 +12,13 @@ const DatePicker = ({
   readOnly,
 }) => {
   const [isFocused, setIsFocused] = useState(false);
-  const momentObject = value ? moment(value) : null;
+  const momentObject = value ? moment.unix(value) : null;
 
   return (
     <SingleDatePicker
       date={momentObject}
       onDateChange={(date) => {
-        setFieldValue(id, date.unix());
+        setFieldValue(id, date ? date.unix() : '');
       }}
       focused={isFocused}
       onFocusChange={({ focused }) => {
@@ -36,7 +36,10 @@ DatePicker.propTypes = {
   id: PropTypes.string.isRequired,
   readOnly: PropTypes.bool.isRequired,
   field: PropTypes.shape({
-    value: PropTypes.string.isRequired,
+    value: PropTypes.oneOfType([
+      PropTypes.number,
+      PropTypes.string,
+    ]).isRequired,
   }).isRequired,
   form: PropTypes.shape({
     setFieldValue: PropTypes.func.isRequired,

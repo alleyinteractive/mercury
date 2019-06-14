@@ -3,6 +3,7 @@ import {
   stringifyValue,
   parseValue,
 } from 'utils/jsonHelpers';
+import { getAssignee } from 'services/users';
 
 const { isEqual } = lodash;
 
@@ -51,7 +52,7 @@ export function setMeta(field, value) {
   // Only update if value has changed.
   if (value !== oldValue) {
     /**
-     * Hook when meta is set.
+     * Hook fired before meta is set to allow modification before setting the value.
      *
      * @param {mixed} [value] New value for this field.
      * @param {mixed} [oldValue] Old value for this field.
@@ -59,18 +60,67 @@ export function setMeta(field, value) {
      * @type {mixed}
      */
     const newValue = hooks.applyFilters(
-      'mercurySetMeta',
+      'mercuryPreSetMeta',
       value,
       oldValue,
-      field
+      field,
     );
 
     const newMeta = {
       [field]: stringifyValue(newValue),
     };
 
-    wp.data.dispatch('core/editor').editPost({ meta: newMeta });
+    wp.data.dispatch('core/editor').editPost({
+      meta: newMeta,
+    });
+
+    /**
+     * Hook fired after meta is set to perform logic as a response.
+     *
+     * @param {mixed} [value] New value for this field.
+     * @param {string} [field] Key of the field.
+     * @type {mixed}
+     */
+    hooks.applyFilters(
+      'mercuryPostSetMeta',
+      newValue,
+      field
+    );
   }
 
   return value;
+}
+
+/**
+ * Get values from meta for a given task in order to initialize Formik with the correct data.
+ *
+ * @param {string} task Task object for which data should be retrieved.
+ */
+export function getInitialValues(task) {
+  const {
+    nextTasks,
+    fields,
+    slug,
+  } = task;
+  const nextTaskSlug = nextTasks.length ? nextTasks[0].slug : '';
+  const defaultFormikState = fields.reduce((acc, currentField) => {
+    const {
+      slug: fieldSlug,
+      type,
+      defaultValue,
+    } = currentField;
+
+    const emptyValue = 'checkboxes' === type ? [] : '';
+
+    return {
+      ...acc,
+      [fieldSlug]: getMeta(fieldSlug) || defaultValue || emptyValue,
+    };
+  }, {});
+
+  return {
+    'next-task-slug': nextTaskSlug,
+    [`mercury_${slug}_assignee_id`]: getAssignee(slug),
+    ...defaultFormikState,
+  };
 }

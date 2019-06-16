@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { task as defaultTaskState } from 'config/defaultState';
 import { getMeta, setMeta } from './meta';
 import { getActiveWorkflow } from './workflows'; // eslint-disable-line import/no-cycle
@@ -122,22 +123,6 @@ export function setTaskStatus(taskSlug, status) {
   setMeta(`mercury_${taskSlug}_status`, status);
 }
 
-/**
- * Returns a function to redirect to the given parameter when
- * the editor indicates that a post save has succeeded.
- *
- * To be connected with wp.data.subscribe().
- *
- * @param {string} redirectURL URL to redirect to.
- */
-const maybeRedirectOnSave = (redirectURL) => () => {
-  if (! wp.data.select('core/editor').didPostSaveRequestSucceed()) {
-    return;
-  }
-
-  window.location.href = redirectURL;
-};
-
 export function updateAskReject(taskSlug) {
   const task = getTask(taskSlug);
   if (! task.assignees.enableAskReject) {
@@ -170,10 +155,6 @@ export function completeTask(currentTaskSlug, nextTaskSlug) {
   // set that up to redirect after the save happens.
   const currentTask = getTask(currentTaskSlug);
 
-  const nextTaskTransition = currentTask.nextTasks.find(
-    (task) => task.slug === nextTaskSlug
-  );
-
   // Setup ask and reject meta.
   updateAskReject(nextTaskSlug);
 
@@ -188,10 +169,6 @@ export function completeTask(currentTaskSlug, nextTaskSlug) {
     getTask(currentTaskSlug),
     getTask(nextTaskSlug)
   );
-
-  if (nextTaskTransition && nextTaskTransition.redirectUrl) {
-    wp.data.subscribe(maybeRedirectOnSave(nextTaskTransition.redirectUrl));
-  }
 
   // Save the post.
   wp.data.dispatch('core/editor').savePost();

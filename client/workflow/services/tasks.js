@@ -135,7 +135,7 @@ const maybeRedirectOnSave = (redirectURL) => () => {
     return;
   }
 
-  window.location.replace(redirectURL);
+  window.location.href = redirectURL;
 };
 
 export function updateAskReject(taskSlug) {
@@ -177,7 +177,17 @@ export function completeTask(currentTaskSlug, nextTaskSlug) {
   // Setup ask and reject meta.
   updateAskReject(nextTaskSlug);
 
-  hooks.doAction('mercuryCompletedTask', currentTaskSlug, nextTaskSlug);
+  /**
+   * Action fired as a task is completing.
+   *
+   * @param {object} [currentTask] Task completing.
+   * @param {object} [nextTask].   Next task.
+   */
+  hooks.doAction(
+    'mercuryCompletedTask',
+    getTask(currentTaskSlug),
+    getTask(nextTaskSlug)
+  );
 
   if (nextTaskTransition && nextTaskTransition.redirectUrl) {
     wp.data.subscribe(maybeRedirectOnSave(nextTaskTransition.redirectUrl));

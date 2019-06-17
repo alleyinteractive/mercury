@@ -241,21 +241,6 @@ class Task {
 										),
 									]
 								),
-								'enable_redirect' => new \Fieldmanager_Checkbox(
-									[
-										'label'       => __( 'Enable Transition Redirect?', 'mercury' ),
-										'description' => __( 'When the task is complete, redirect the user to a URL instead of continuing to the next task (the transition will still complete, and the transitioned task will take effect.', 'mercury' ),
-									]
-								),
-								'redirect_url'    => new \Fieldmanager_Link(
-									[
-										'label' => __( 'Redirect URL', 'mercury' ),
-										'display_if' => [
-											'src'   => 'enable_redirect',
-											'value' => true,
-										],
-									]
-								),
 							],
 							'collapsed'          => true,
 							'extra_elements'     => 0,

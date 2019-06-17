@@ -44,7 +44,9 @@ const FormField = (props) => {
   };
   const FieldComponent = fieldMap[type] ? fieldMap[type] : TextField;
 
-  // Set value in Gutenberg meta whenever it changes.
+  /**
+   * Effect for syncing form value to Gutenberg meta.
+   */
   useEffect(() => {
     setMeta(slug, value);
     return () => {};

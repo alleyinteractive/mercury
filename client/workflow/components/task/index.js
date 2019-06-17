@@ -3,8 +3,10 @@ import PropTypes from 'prop-types';
 import { Formik } from 'formik';
 import { useInProgressTaskSlug } from 'hooks/tasks';
 import { completeTask } from 'services/tasks';
-import { setMetaGroup } from 'services/meta';
-import getInitialValues from 'utils/getInitialTaskValues';
+import {
+  setMetaGroup,
+  getInitialValues,
+} from 'services/meta';
 import getValidationSchema from 'utils/getValidationSchema';
 import Header from 'components/task/header';
 import Footer from 'components/task/footer';
@@ -25,6 +27,7 @@ const Task = (props) => {
     nextTasks,
   } = props;
   const inProgressTaskSlug = useInProgressTaskSlug();
+  const initialValues = getInitialValues(props);
 
   return (
     <Wrapper>
@@ -32,43 +35,46 @@ const Task = (props) => {
         name={name}
         inProgress={slug === inProgressTaskSlug}
       />
-      <Formik
-        onSubmit={(values, actions) => {
-          setMetaGroup(values);
-          completeTask(slug, values['next-task-slug']);
-          actions.setSubmitting(false);
-        }}
-        initialValues={getInitialValues(props)}
-        validationSchema={getValidationSchema(props)}
-        render={(formProps) => {
-          const { handleSubmit, values, errors } = formProps;
+      {(!! Object.keys(initialValues).length) && (
+        <Formik
+          onSubmit={(values, actions) => {
+            setMetaGroup(values);
+            completeTask(slug, values['next-task-slug']);
+            actions.setSubmitting(false);
+          }}
+          initialValues={initialValues}
+          enableReinitialize
+          validationSchema={getValidationSchema(props)}
+          render={(formProps) => {
+            const { handleSubmit, values, errors } = formProps;
 
-          return (
-            <Form onSubmit={handleSubmit}>
-              <FormHeader>
-                <Assignee
-                  assignees={assignees}
-                  taskSlug={slug}
-                  formProps={formProps}
+            return (
+              <Form onSubmit={handleSubmit}>
+                <FormHeader>
+                  <Assignee
+                    assignees={assignees}
+                    taskSlug={slug}
+                    formProps={formProps}
+                  />
+                </FormHeader>
+                <Fields
+                  errors={errors}
+                  fields={fields}
+                  slug={slug}
+                  {...formProps}
                 />
-              </FormHeader>
-              <Fields
-                errors={errors}
-                fields={fields}
-                slug={slug}
-                {...formProps}
-              />
-              <Footer
-                errors={errors}
-                inProgressTaskSlug={inProgressTaskSlug}
-                selectedTaskSlug={slug}
-                nextTaskSlug={values['next-task-slug']}
-                nextTasks={nextTasks}
-              />
-            </Form>
-          );
-        }}
-      />
+                <Footer
+                  errors={errors}
+                  inProgressTaskSlug={inProgressTaskSlug}
+                  selectedTaskSlug={slug}
+                  nextTaskSlug={values['next-task-slug']}
+                  nextTasks={nextTasks}
+                />
+              </Form>
+            );
+          }}
+        />
+      )}
     </Wrapper>
   );
 };

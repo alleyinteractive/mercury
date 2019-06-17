@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { task as defaultTaskState } from 'config/defaultState';
 import { getMeta, setMeta } from './meta';
 import { getActiveWorkflow } from './workflows'; // eslint-disable-line import/no-cycle
@@ -122,21 +123,15 @@ export function setTaskStatus(taskSlug, status) {
   setMeta(`mercury_${taskSlug}_status`, status);
 }
 
-/**
- * Returns a function to redirect to the given parameter when
- * the editor indicates that a post save has succeeded.
- *
- * To be connected with wp.data.subscribe().
- *
- * @param {string} redirectURL URL to redirect to.
- */
-const maybeRedirectOnSave = (redirectURL) => () => {
-  if (! wp.data.select('core/editor').didPostSaveRequestSucceed()) {
-    return;
+export function updateAskReject(taskSlug) {
+  const task = getTask(taskSlug);
+  if (! task.assignees.enableAskReject) {
+    setMeta('mercury_ask_reject_user_ids', []);
+    setMeta('mercury_ask_reject_group_ids', []);
+    setMeta('mercury_ask_reject_roles', []);
   }
-
-  window.location.replace(redirectURL);
-};
+  console.log('Update ask reject', getTask(taskSlug));
+}
 
 /**
  * Complete a task and transition to a new one.
@@ -145,6 +140,8 @@ const maybeRedirectOnSave = (redirectURL) => () => {
  * @param  {string} nextTaskSlug    Slug of the task to transition to.
  */
 export function completeTask(currentTaskSlug, nextTaskSlug) {
+  const { hooks } = wp;
+
   // Mark as complete in meta.
   setTaskStatus(currentTaskSlug, 'complete');
   setTaskStatus(nextTaskSlug, 'active');
@@ -158,13 +155,20 @@ export function completeTask(currentTaskSlug, nextTaskSlug) {
   // set that up to redirect after the save happens.
   const currentTask = getTask(currentTaskSlug);
 
-  const nextTaskTransition = currentTask.nextTasks.find(
-    (task) => task.slug === nextTaskSlug
-  );
+  // Setup ask and reject meta.
+  updateAskReject(nextTaskSlug);
 
-  if (nextTaskTransition && nextTaskTransition.redirectUrl) {
-    wp.data.subscribe(maybeRedirectOnSave(nextTaskTransition.redirectUrl));
-  }
+  /**
+   * Action fired as a task is completing.
+   *
+   * @param {object} [currentTask] Task completing.
+   * @param {object} [nextTask].   Next task.
+   */
+  hooks.doAction(
+    'mercuryCompletedTask',
+    getTask(currentTaskSlug),
+    getTask(nextTaskSlug)
+  );
 
   // Save the post.
   wp.data.dispatch('core/editor').savePost();

@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import FormField from 'components/fields/field';
 import { Wrapper, FieldWrapper } from './fieldsStyles';
+
+const { hooks } = wp;
 
 const Fields = (props) => {
   const {
@@ -11,6 +13,31 @@ const Fields = (props) => {
     values,
     errors,
   } = props;
+
+  /**
+   * Effect for syncing interal form state with any external changes to gutenberg meta.
+   */
+  useEffect(() => {
+    hooks.addFilter(
+      'mercuryPostSetMeta',
+      'formikState',
+      (newValue, field) => {
+        const currentValue = values[field];
+
+        if (
+          setFieldValue
+          && newValue
+          && newValue !== currentValue
+        ) {
+          setFieldValue(field, newValue);
+        }
+      }
+    );
+
+    return () => {
+      hooks.removeFilter('mercuryPostSetMeta', 'formikState');
+    };
+  }, []);
 
   if (! fields || 0 === fields.length) {
     return (

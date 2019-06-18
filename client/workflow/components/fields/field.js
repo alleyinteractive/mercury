@@ -21,6 +21,8 @@ import {
   ErrorText,
 } from './fieldStyles.js';
 
+const { hooks } = wp;
+
 const FormField = (props) => {
   const {
     label,
@@ -30,6 +32,7 @@ const FormField = (props) => {
     error,
     theme,
     value,
+    setFieldValue,
   } = props;
   const fieldMap = {
     assignee: Assignee,
@@ -43,12 +46,32 @@ const FormField = (props) => {
     date: Date,
   };
   const FieldComponent = fieldMap[type] ? fieldMap[type] : TextField;
+  const handlerNamespace = `mercury.formField.${slug}`;
 
   /**
    * Effect for syncing form value to Gutenberg meta.
    */
   useEffect(() => {
+    // Hook for syncing external changes to meta with formik state.
+    hooks.addFilter(
+      'mercury.postSetMeta',
+      handlerNamespace,
+      (newValue, field) => {
+        if (
+          newValue
+          && value !== newValue
+          && slug === field
+        ) {
+          setFieldValue(slug, newValue);
+        }
+
+        return newValue;
+      }
+    );
+
+    // Update gutenberg meta.
     setMeta(slug, value);
+
     return () => {};
   }, [value]);
 
@@ -70,15 +93,6 @@ const FormField = (props) => {
             <FieldComponent {...props} />
           </InputWrapper>
           {error && <ErrorText>{error}</ErrorText>}
-          {/* {readOnly ? (
-            <Fragment>
-              <LabelWrapper>
-                <LabelText>{label}</LabelText>
-                <ReadOnlyLabel>(Read only)</ReadOnlyLabel>
-              </LabelWrapper>
-              <ReadOnly slug={slug} />
-            </Fragment>
-          )} */}
         </Label>
       </Wrapper>
     </ThemeProvider>
@@ -102,6 +116,7 @@ FormField.propTypes = {
   readOnly: PropTypes.bool,
   required: PropTypes.bool,
   slug: PropTypes.string.isRequired,
+  setFieldValue: PropTypes.func,
   value: PropTypes.oneOfType([
     PropTypes.bool,
     PropTypes.array,
@@ -114,6 +129,7 @@ FormField.defaultProps = {
   theme: {},
   readOnly: false,
   required: false,
+  setFieldValue: () => {},
 };
 
 export default FormField;

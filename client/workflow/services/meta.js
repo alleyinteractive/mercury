@@ -2,7 +2,7 @@ import {
   stringifyValues,
   stringifyValue,
   parseValue,
-} from 'utils/jsonHelpers';
+} from 'utils/formValueHelpers';
 import { getAssignee } from 'services/users';
 
 const { isEqual } = lodash;
@@ -60,7 +60,7 @@ export function setMeta(field, value) {
      * @type {mixed}
      */
     const newValue = hooks.applyFilters(
-      'mercuryPreSetMeta',
+      'mercury.preSetMeta',
       value,
       oldValue,
       field,
@@ -78,14 +78,12 @@ export function setMeta(field, value) {
      * Hook fired after meta is set to perform logic as a response.
      *
      * @param {mixed} [newValue] New value for this field.
-     * @param {mixed} [oldValue] New value for this field.
      * @param {string} [field] Key of the field.
      * @type {mixed}
      */
     hooks.applyFilters(
-      'mercuryPostSetMeta',
+      'mercury.postSetMeta',
       newValue,
-      oldValue,
       field
     );
   }

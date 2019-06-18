@@ -130,6 +130,7 @@ FormField.defaultProps = {
   theme: {},
   readOnly: false,
   required: false,
+  // This comes in undefined sometimes, no idea why.
   setFieldValue: () => {},
 };
 

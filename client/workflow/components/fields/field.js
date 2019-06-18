@@ -65,6 +65,7 @@ const FormField = (props) => {
           setFieldValue(slug, newValue);
         }
 
+        // Always return a value or the next hook in line won't receive anything.
         return newValue;
       }
     );

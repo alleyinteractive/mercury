@@ -78,12 +78,14 @@ export function setMeta(field, value) {
      * Hook fired after meta is set to perform logic as a response.
      *
      * @param {mixed} [newValue] New value for this field.
+     * @param {mixed} [oldValue] Old value for this field.
      * @param {string} [field] Key of the field.
      * @type {mixed}
      */
     hooks.applyFilters(
       'mercury.postSetMeta',
       newValue,
+      oldValue,
       field
     );
   }

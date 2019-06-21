@@ -56,7 +56,7 @@ const FormField = (props) => {
     hooks.addFilter(
       'mercury.postSetMeta',
       handlerNamespace,
-      (newValue, field) => {
+      (newValue, oldValue, field) => {
         if (
           newValue
           && value !== newValue

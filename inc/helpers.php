@@ -162,3 +162,14 @@ function get_in_progress_task_slug( int $post_id ) {
 function get_selected_task_slug( int $post_id ) {
 	return get_post_meta( $post_id, 'mercury_selected_task_slug', true );
 }
+
+/**
+ * Get the assignee for a task.
+ *
+ * @param int    $post_id   Post ID.
+ * @param string $task_slug Task slug.
+ * @return int
+ */
+function get_task_assignee( $post_id, $task_slug ) {
+	return absint( get_post_meta( $post_id, "mercury_{$task_slug}_assignee_id", true ) );
+}

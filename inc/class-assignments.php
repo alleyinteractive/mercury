@@ -96,7 +96,7 @@ class Assignments {
 		}
 
 		// Get the assignee for that task.
-		$assignee  = get_post_meta( $post_id, "mercury_{$task_slug}_assignee_id", true );
+		$assignee = get_post_meta( $post_id, "mercury_{$task_slug}_assignee_id", true );
 
 		// Save to a new field.
 		update_post_meta( $post_id, 'mercury_in_progress_task_assignee_id', $assignee );

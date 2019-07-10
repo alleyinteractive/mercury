@@ -322,7 +322,7 @@ class Task {
 							'label' => __( 'Slug', 'mercury' ),
 							'display_if' => [
 								'src'   => 'type',
-								'value' => 'checkbox,checkboxes,date,select,textarea,textfield',
+								'value' => 'checkbox,checkboxes,date,select,textarea,textfield,rich-textarea',
 							],
 						]
 					),

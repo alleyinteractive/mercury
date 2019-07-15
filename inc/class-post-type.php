@@ -51,15 +51,23 @@ class Post_Type {
 	 */
 	protected function register_workflow_post_type() {
 		$args = [
-			'capability_type'    => 'post',
+			'capabilities' => [
+				'edit_post'          => 'manage_options',
+				'read_post'          => 'manage_options',
+				'delete_post'        => 'manage_options',
+				'edit_posts'         => 'manage_options',
+				'edit_others_posts'  => 'manage_options',
+				'delete_posts'       => 'manage_options',
+				'publish_posts'      => 'manage_options',
+				'read_private_posts' => 'manage_options',
+			],
 			'description'        => __( 'Workflow Management.', 'mercury' ),
 			'has_archive'        => false,
 			'label'              => __( 'Workflows', 'mercury' ),
-			'menu_icon'          => 'dashicons-yes',
 			'public'             => false,
 			'show_in_rest'       => true,
 			'publicly_queryable' => true,
-			'show_in_menu'       => true,
+			'show_in_menu'       => 'mercury',
 			'show_ui'            => true,
 			'supports'           => [ 'title' ],
 		];
@@ -73,14 +81,23 @@ class Post_Type {
 	 */
 	protected function register_task_post_type() {
 		$args = [
-			'capability_type'    => 'post',
+			'capabilities' => [
+				'edit_post'          => 'manage_options',
+				'read_post'          => 'manage_options',
+				'delete_post'        => 'manage_options',
+				'edit_posts'         => 'manage_options',
+				'edit_others_posts'  => 'manage_options',
+				'delete_posts'       => 'manage_options',
+				'publish_posts'      => 'manage_options',
+				'read_private_posts' => 'manage_options',
+			],
 			'has_archive'        => false,
 			'label'              => __( 'Tasks', 'mercury' ),
 			'menu_icon'          => 'dashicons-yes',
 			'public'             => false,
 			'show_in_rest'       => true,
 			'publicly_queryable' => true,
-			'show_in_menu'       => 'edit.php?post_type=mercury-workflow',
+			'show_in_menu'       => 'mercury',
 			'show_ui'            => true,
 			'supports'           => [ 'title' ],
 		];

@@ -26,8 +26,8 @@ class Settings {
 			fm_register_submenu_page(
 				'mercury',
 				'mercury',
-				__( 'Mercury', 'healthline' ),
-				__( 'Mercury', 'healthline' ),
+				__( 'Mercury Settings', 'healthline' ),
+				__( 'Settings', 'healthline' ),
 				'manage_options'
 			);
 		}
@@ -46,7 +46,7 @@ class Settings {
 			'manage_options',
 			'mercury',
 			'__return_false',
-			'dashicons-migrate', // @todo pick new
+			'dashicons-yes',
 			null
 		);
 	}

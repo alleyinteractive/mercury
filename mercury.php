@@ -36,6 +36,7 @@ require_once MERCURY_PATH . '/inc/class-users.php';
 // GUI workflow management.
 require_once MERCURY_PATH . '/inc/gui/class-assignments-table.php';
 require_once MERCURY_PATH . '/inc/gui/class-enabled-posts.php';
+require_once MERCURY_PATH . '/inc/gui/class-settings.php';
 require_once MERCURY_PATH . '/inc/gui/class-task.php';
 require_once MERCURY_PATH . '/inc/gui/class-workflow.php';
 
@@ -51,6 +52,7 @@ add_action(
 		new Post_Type();
 
 		// GUI for managing workflows.
+		new GUI\Settings();
 		new GUI\Task();
 		new GUI\Enabled_Posts();
 		new GUI\Workflow();
@@ -64,7 +66,8 @@ add_action(
  * @return array
  */
 function get_mercury_post_types() {
-	return apply_filters( 'mercury_post_types', [ 'post' ] );
+	$settings = get_option( 'mercury', [] );
+	return $settings['post_types']['post_types'] ?? [ 'post' ];
 }
 
 /**

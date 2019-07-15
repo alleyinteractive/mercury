@@ -125,14 +125,19 @@ class Post_Type {
 	 * Meta box to render the React component.
 	 */
 	public function add_meta_boxes() {
+
+		if ( empty( get_mercury_post_types() ) ) {
+			return;
+		}
+
+		$settings = get_option( 'mercury', [] );
+		$title    = $settings['meta_box']['meta_box_label'] ?? __( 'Mercury', 'mercury' );
+
 		add_meta_box(
 			'post',
-			__( 'Mercury', 'mercury' ),
+			$title,
 			function() {
-				printf(
-					'<div id="mercury-workflow-ui"></div>',
-					get_the_ID()
-				);
+				echo '<div id="mercury-workflow-ui"></div>';
 			},
 			get_mercury_post_types(),
 			'normal'

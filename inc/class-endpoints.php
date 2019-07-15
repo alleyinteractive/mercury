@@ -94,6 +94,16 @@ class Endpoints {
 				'callback' => [ $this, 'get_workflows' ],
 			]
 		);
+
+		// Get settings.
+		register_rest_route(
+			self::NAMESPACE,
+			'/settings/',
+			[
+				'methods' => 'GET',
+				'callback' => [ $this, 'get_settings' ],
+			]
+		);
 	}
 
 	/**
@@ -110,6 +120,32 @@ class Endpoints {
 		$workflows = self::camel_case_keys( $workflows );
 
 		return new \WP_REST_Response( $workflows );
+	}
+
+	/**
+	 * Callback to retrieve Mercury settings.
+	 *
+	 * @return \WP_REST_Resopnse
+	 */
+	public function get_settings() {
+
+		$defaults = [
+			'meta_box' => [
+				'meta_box_label' => __( 'Mercury', 'mercury' ),
+			],
+			'post_types' => [
+				'post_types' => [],
+			],
+			'colors' => [
+				'primary'      => '#fad703',
+				'primary_dark' => '#faaf03',
+				'secondary'    => '#e81717',
+			],
+		];
+
+		$settings = wp_parse_args( get_option( 'mercury', [] ), $defaults );
+		$settings = self::camel_case_keys( $settings );
+		return new \WP_REST_Response( $settings );
 	}
 
 	/**

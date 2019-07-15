@@ -119,6 +119,22 @@ function enqueue_scripts() {
 			true
 		);
 	}
+
+	// Localize any settings configured in WP.
+	$settings = get_option( 'mercury', [] );
+	$colors   = $settings['colors'] ?? [];
+
+	wp_localize_script(
+		'mercury-workflow-js',
+		'mercurySettings',
+		[
+			'colors' => [
+				'primary' => $colors['primary'] ?? false,
+				'primaryDark' => $colors['primary_dark'] ?? false,
+				'secondary' => $colors['secondary'] ?? false,
+			],
+		]
+	);
 }
 add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\enqueue_scripts' );
 

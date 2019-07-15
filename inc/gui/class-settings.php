@@ -26,8 +26,8 @@ class Settings {
 			fm_register_submenu_page(
 				'mercury',
 				'mercury',
-				__( 'Mercury Settings', 'healthline' ),
-				__( 'Settings', 'healthline' ),
+				__( 'Mercury Settings', 'mercury' ),
+				__( 'Settings', 'mercury' ),
 				'manage_options'
 			);
 		}
@@ -66,10 +66,10 @@ class Settings {
 							'children' => [
 								'meta_box_label' => new \Fieldmanager_TextField(
 									[
-											'label'         => __( 'Meta box label', 'mercury' ),
-											'default_value' => __( 'Mercury', 'mercury' ),
-										]
-									),
+										'label'         => __( 'Meta box label', 'mercury' ),
+										'default_value' => __( 'Mercury', 'mercury' ),
+									]
+								),
 							],
 						]
 					),

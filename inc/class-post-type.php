@@ -151,7 +151,7 @@ class Post_Type {
 		$title    = $settings['meta_box']['meta_box_label'] ?? __( 'Mercury', 'mercury' );
 
 		add_meta_box(
-			'post',
+			'mercury',
 			$title,
 			function() {
 				echo '<div id="mercury-workflow-ui"></div>';

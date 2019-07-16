@@ -17,7 +17,7 @@ namespace Mercury;
 /**
  * Current version of Mercury.
  */
-define( 'MERCURY_VERSION', '1.1.6' );
+define( 'MERCURY_VERSION', '1.1.7' );
 
 /**
  * Filesystem path to Mercury.
@@ -36,6 +36,7 @@ require_once MERCURY_PATH . '/inc/class-users.php';
 // GUI workflow management.
 require_once MERCURY_PATH . '/inc/gui/class-assignments-table.php';
 require_once MERCURY_PATH . '/inc/gui/class-enabled-posts.php';
+require_once MERCURY_PATH . '/inc/gui/class-settings.php';
 require_once MERCURY_PATH . '/inc/gui/class-task.php';
 require_once MERCURY_PATH . '/inc/gui/class-workflow.php';
 
@@ -51,6 +52,7 @@ add_action(
 		new Post_Type();
 
 		// GUI for managing workflows.
+		new GUI\Settings();
 		new GUI\Task();
 		new GUI\Enabled_Posts();
 		new GUI\Workflow();
@@ -64,7 +66,8 @@ add_action(
  * @return array
  */
 function get_mercury_post_types() {
-	return apply_filters( 'mercury_post_types', [ 'post' ] );
+	$settings = get_option( 'mercury', [] );
+	return $settings['post_types']['post_types'] ?? [ 'post' ];
 }
 
 /**
@@ -116,6 +119,22 @@ function enqueue_scripts() {
 			true
 		);
 	}
+
+	// Localize any settings configured in WP.
+	$settings = get_option( 'mercury', [] );
+	$colors   = $settings['colors'] ?? [];
+
+	wp_localize_script(
+		'mercury-workflow-js',
+		'mercurySettings',
+		[
+			'colors' => [
+				'primary' => $colors['primary'] ?? false,
+				'primaryDark' => $colors['primary_dark'] ?? false,
+				'secondary' => $colors['secondary'] ?? false,
+			],
+		]
+	);
 }
 add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\enqueue_scripts' );
 

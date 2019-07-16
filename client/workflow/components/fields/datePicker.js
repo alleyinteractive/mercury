@@ -26,6 +26,7 @@ const DatePicker = ({
       }}
       id={id}
       readOnly={readOnly}
+      disabled={readOnly}
       showClearDate
       isOutsideRange={() => false}
     />

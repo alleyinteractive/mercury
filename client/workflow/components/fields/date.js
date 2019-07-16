@@ -15,6 +15,7 @@ const Date = (props) => {
       id={slug}
       name={slug}
       readOnly={readOnly}
+      disabled={readOnly}
     />
   );
 };

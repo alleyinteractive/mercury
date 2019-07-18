@@ -20,6 +20,8 @@ class Users {
 	 */
 	public static function create_user_list_from_assignee_data( $data ) {
 
+		global $edit_flow;
+
 		$user_ids = [];
 
 		// Add users.
@@ -30,8 +32,7 @@ class Users {
 		// Add groups.
 		if ( $data['enable_groups'] ) {
 			foreach ( ( $data['filter_groups'] ?? [] ) as $group_id ) {
-				$ef_user_groups = new \EF_User_Groups();
-				$usergroup      = $ef_user_groups->get_usergroup_by( 'id', $group_id );
+				$usergroup = $edit_flow->user_groups->get_usergroup_by( 'id', $group_id );
 				if ( $usergroup instanceof \WP_Term ) {
 					$user_ids = array_merge( $user_ids, ( $usergroup->user_ids ?? [] ) );
 				}

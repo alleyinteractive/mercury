@@ -86,6 +86,19 @@ class Settings {
 							],
 						]
 					),
+					'posts_table' => new \Fieldmanager_Group(
+						[
+							'label'    => __( 'Posts Table', 'mercury' ),
+							'children' => [
+								'posts_table_filters' => new \Fieldmanager_Checkbox(
+									[
+										'label'       => __( 'Enable filters on Posts Table', 'mercury' ),
+										'description' => __( 'Adds the ability to filter posts by workflow.', 'mercury' ),
+									]
+								),
+							],
+						]
+					),
 					'colors' => new \Fieldmanager_Group(
 						[
 							'label'    => __( 'Colors', 'mercury' ),

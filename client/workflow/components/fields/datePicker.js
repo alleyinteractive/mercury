@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import 'react-dates/initialize';
 import moment from 'moment';
 import { SingleDatePicker } from 'react-dates';
+import { OPEN_UP } from 'react-dates/lib/constants';
+
 import 'react-dates/lib/css/_datepicker.css';
 
 const DatePicker = ({
@@ -29,6 +31,7 @@ const DatePicker = ({
       disabled={readOnly}
       showClearDate
       isOutsideRange={() => false}
+      openDirection={OPEN_UP}
     />
   );
 };

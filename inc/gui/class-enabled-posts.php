@@ -17,6 +17,13 @@ class Enabled_Posts {
 	 */
 	public function __construct() {
 
+		// Only proceed if the feature is enabled.
+		$settings = get_option( 'mercury', [] );
+		$enabled  = $settings['posts_table']['posts_table_filters'] ?? false;
+		if ( empty( $enabled ) ) {
+			return;
+		}
+
 		// Allow filter vars.
 		add_filter(
 			'query_vars',

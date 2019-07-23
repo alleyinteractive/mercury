@@ -7,7 +7,7 @@
  * @param {mixed} val Value to convert.
  */
 export default function typecast(val) {
-  const newVal = val.trim().replace(/(^['"]|['"]$)/g, '');
+  const newVal = val.trim();
 
   if (/^\d+$/.test(newVal)) {
     return parseInt(newVal, 10);

@@ -16,12 +16,17 @@ const Select = (props) => {
     // options, unless the "empty" option is available. Without this,
     // the field will look like it's set, but the actual post meta will
     // never be updated.
-    if (optionsFirstEmpty || ! optionsSourceList.length) {
+    if (
+      ! setFieldValue
+      || optionsFirstEmpty
+      || ! optionsSourceList.length
+      || ! optionsSourceList[0].value
+    ) {
       return;
     }
 
     setFieldValue(slug, optionsSourceList[0].value);
-  }, [slug, optionsFirstEmpty, optionsSourceList]);
+  }, [setFieldValue, slug, optionsFirstEmpty, optionsSourceList]);
 
   return (
     <Field

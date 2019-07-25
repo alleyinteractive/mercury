@@ -4,7 +4,7 @@ import colors from 'css/colors';
 export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  overflow: initial;
   width: 100%;
 `;
 

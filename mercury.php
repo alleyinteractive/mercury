@@ -7,7 +7,7 @@
  * Author URI:      YOUR SITE HERE
  * Text Domain:     mercury
  * Domain Path:     /languages
- * Version:         1.1.8
+ * Version:         1.1.9
  *
  * @package         Mercury
  */
@@ -17,7 +17,7 @@ namespace Mercury;
 /**
  * Current version of Mercury.
  */
-define( 'MERCURY_VERSION', '1.1.8' );
+define( 'MERCURY_VERSION', '1.1.9' );
 
 /**
  * Filesystem path to Mercury.

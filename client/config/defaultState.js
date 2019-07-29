@@ -13,8 +13,6 @@ export const assignees = {
     roles: [],
   },
   assigneeSelection: {},
-  enableAskReject: false,
-  askReject: {},
 };
 
 export const task = {

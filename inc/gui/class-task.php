@@ -130,22 +130,6 @@ class Task {
 							'children'    => $this->get_assignee_filters(),
 						]
 					),
-					'enable_ask_reject' => new \Fieldmanager_Checkbox(
-						[
-							'label' => __( 'Enable Ask/Reject', 'mercury' ),
-							'description' => __( 'This will display the task to a subset of users, asking them to "accept" or "reject" the task. By default this will include all users. Use the filter options to filter that list.', 'mercury' ),
-						]
-					),
-					'ask_reject'        => new \Fieldmanager_Group(
-						[
-							'children'   => $this->get_assignee_filters(),
-							'display_if' => [
-								'src' => 'enable_ask_reject',
-								'value' => true,
-							],
-							'label'    => __( 'Ask/Reject Options', 'mercury' ),
-						]
-					),
 				],
 			]
 		);
@@ -461,15 +445,6 @@ class Task {
 				'enable_roles'  => false,
 				'filter_roles'  => [],
 			],
-			'enable_ask_reject'              => false,
-			'ask_reject'                     => [
-				'enable_users'  => false,
-				'filter_users'  => [],
-				'enable_groups' => false,
-				'filter_groups' => [],
-				'enable_roles'  => false,
-				'filter_roles'  => [],
-			],
 		];
 
 		// Get assignee options.
@@ -485,12 +460,6 @@ class Task {
 		$settings['assignee_selection']['enable_users']  = filter_var( $settings['assignee_selection']['enable_users'], FILTER_VALIDATE_BOOLEAN );
 		$settings['assignee_selection']['enable_groups'] = filter_var( $settings['assignee_selection']['enable_groups'], FILTER_VALIDATE_BOOLEAN );
 		$settings['assignee_selection']['enable_roles']  = filter_var( $settings['assignee_selection']['enable_roles'], FILTER_VALIDATE_BOOLEAN );
-
-		// Ask/Reject.
-		$settings['enable_ask_reject']           = filter_var( $settings['enable_ask_reject'], FILTER_VALIDATE_BOOLEAN );
-		$settings['ask_reject']['enable_users']  = filter_var( $settings['ask_reject']['enable_users'], FILTER_VALIDATE_BOOLEAN );
-		$settings['ask_reject']['enable_groups'] = filter_var( $settings['ask_reject']['enable_groups'], FILTER_VALIDATE_BOOLEAN );
-		$settings['ask_reject']['enable_roles']  = filter_var( $settings['ask_reject']['enable_roles'], FILTER_VALIDATE_BOOLEAN );
 
 		$settings['assignee_options'] = \Mercury\Users::create_user_list_from_assignee_data( $settings['assignee_selection'] );
 

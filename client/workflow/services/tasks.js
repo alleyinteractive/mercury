@@ -130,7 +130,7 @@ export function updateAskReject(taskSlug) {
     setMeta('mercury_ask_reject_group_ids', []);
     setMeta('mercury_ask_reject_roles', []);
   }
-  console.log('Update ask reject', getTask(taskSlug));
+  // console.log('Update ask reject', getTask(taskSlug));
 }
 
 /**
@@ -145,7 +145,6 @@ export function completeTask(currentTaskSlug, nextTaskSlug) {
   // Mark as complete in meta.
   setTaskStatus(currentTaskSlug, 'complete');
   setTaskStatus(nextTaskSlug, 'active');
-  setPostStatus(nextTaskSlug);
 
   // Set the InProgress and Selected tasks to the next task.
   setInProgressTaskSlug(nextTaskSlug);
@@ -180,7 +179,13 @@ export function completeTask(currentTaskSlug, nextTaskSlug) {
  * @param  {string} taskSlug Slug of the task.
  */
 export function setPostStatus(taskSlug) {
-  wp.data.dispatch('core/editor').editPost({
-    status: getTask(taskSlug).postStatus,
-  });
+  const currentStatus = wp.data.select('core/editor')
+    .getCurrentPostAttribute('status');
+  const taskStatus = getTask(taskSlug).postStatus;
+
+  if (currentStatus !== taskStatus) {
+    wp.data.dispatch('core/editor').editPost({
+      status: taskStatus,
+    });
+  }
 }

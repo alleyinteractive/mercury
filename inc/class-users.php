@@ -102,7 +102,7 @@ class Users {
 					$section,
 					[
 						'label'   => $label,
-						'heading' => true, // Flag to indicate this is only a lable.
+						'heading' => true, // Flag to indicate this is only a label.
 						'value'   => '',
 					]
 				);

@@ -332,7 +332,6 @@ class Task {
 						[
 							'label' => __( 'Source', 'mercury' ),
 							'options' => [
-								'function' => __( 'Function', 'mercury' ),
 								'list'     => __( 'List', 'mercury' ),
 								'filter'   => __( 'Filter', 'mercury' ),
 							],
@@ -344,16 +343,20 @@ class Task {
 					),
 					'options_first_empty' => new \Fieldmanager_Checkbox(
 						[
-							'label'          => __( 'First Empty?', 'mercury' ),
+							'label'      => __( 'First Empty?', 'mercury' ),
 							'display_if' => [
 								'src'   => 'options_source',
-								'value' => 'list',
+								'value' => 'list,filter',
 							],
 						]
 					),
 					'options_source_filter' => new \Fieldmanager_Textfield(
 						[
 							'label' => __( 'Filter', 'mercury' ),
+							'display_if' => [
+								'src'   => 'options_source',
+								'value' => 'filter',
+							],
 						]
 					),
 					'options_source_list' => new \Fieldmanager_Group(

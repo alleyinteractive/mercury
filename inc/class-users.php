@@ -56,6 +56,7 @@ class Users {
 			);
 			$user_ids = array_merge( $user_ids, $role_users ?? [] );
 
+			// Include both role users and the role itself.
 			foreach ( $data['filter_roles'] as $role ) {
 				$roles[] = [
 					'label' => ucwords( $role ),

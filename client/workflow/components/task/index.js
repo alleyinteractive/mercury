@@ -35,7 +35,7 @@ const Task = (props) => {
     if (inProgress) {
       setPostStatus(slug);
     }
-  }, []);
+  }, [inProgress]);
 
   return (
     <Wrapper>

@@ -130,7 +130,6 @@ export function updateAskReject(taskSlug) {
     setMeta('mercury_ask_reject_group_ids', []);
     setMeta('mercury_ask_reject_roles', []);
   }
-  // console.log('Update ask reject', getTask(taskSlug));
 }
 
 /**

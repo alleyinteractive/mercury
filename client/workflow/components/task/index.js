@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Formik } from 'formik';
 import { useInProgressTaskSlug } from 'hooks/tasks';
-import { completeTask } from 'services/tasks';
+import { completeTask, setPostStatus } from 'services/tasks';
 import {
   setMetaGroup,
   getInitialValues,
@@ -28,12 +28,20 @@ const Task = (props) => {
   } = props;
   const inProgressTaskSlug = useInProgressTaskSlug();
   const initialValues = getInitialValues(props);
+  const inProgress = slug === inProgressTaskSlug;
+
+  // Set post status when in-progress task renders.
+  useEffect(() => {
+    if (inProgress) {
+      setPostStatus(slug);
+    }
+  }, [inProgress]);
 
   return (
     <Wrapper>
       <Header
         name={name}
-        inProgress={slug === inProgressTaskSlug}
+        inProgress={inProgress}
       />
       {(!! Object.keys(initialValues).length) && (
         <Formik

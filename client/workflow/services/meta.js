@@ -21,6 +21,16 @@ export function getMeta(field) {
 }
 
 /**
+ * Get a meta value from Gutenberg.
+ */
+export function getUnparsedMeta(field) {
+  const currentMeta = wp.data.select('core/editor')
+    .getEditedPostAttribute('meta');
+
+  return currentMeta[field] || '';
+}
+
+/**
  * Save an object of meta values from Gutenberg.
  *
  * @param {object} meta Object containing multiple meta values to set.
@@ -47,10 +57,10 @@ export function setMetaGroup(meta) {
  */
 export function setMeta(field, value) {
   const { hooks } = wp;
-  const oldValue = getMeta(field);
+  const oldValue = getUnparsedMeta(field);
 
   // Only update if value has changed.
-  if (value !== oldValue) {
+  if (stringifyValue(value) !== oldValue) {
     /**
      * Hook fired before meta is set to allow modification before setting the value.
      *

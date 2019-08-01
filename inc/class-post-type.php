@@ -25,7 +25,7 @@ class Post_Type {
 	const WORKFLOW_TASK_POST_TYPE = 'mercury-task';
 
 	/**
-	 * Constuctor for GUI.
+	 * Constructor for GUI.
 	 */
 	public function __construct() {
 		$this->register_workflow_post_type();

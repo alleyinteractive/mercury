@@ -22,7 +22,7 @@ class Task {
 	const GUI_VERSION = 1.0;
 
 	/**
-	 * Constuctor for GUI.
+	 * Constructor for GUI.
 	 */
 	public function __construct() {
 		// Add meta box of settings. Has an FM dependency here.

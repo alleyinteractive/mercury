@@ -13,7 +13,7 @@ namespace Mercury;
 class Assignments {
 
 	/**
-	 * Constuctor.
+	 * Constructor.
 	 */
 	public function __construct() {
 

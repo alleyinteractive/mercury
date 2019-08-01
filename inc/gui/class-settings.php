@@ -15,7 +15,7 @@ use Mercury\Post_Type as Post_Type;
 class Settings {
 
 	/**
-	 * Constuctor.
+	 * Constructor.
 	 */
 	public function __construct() {
 

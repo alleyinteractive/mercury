@@ -29,7 +29,7 @@ class Assignments_Table extends \WP_List_Table {
 	public $per_page = 20;
 
 	/**
-	 * Constuctor for GUI.
+	 * Constructor for GUI.
 	 */
 	public function __construct() {
 

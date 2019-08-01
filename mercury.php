@@ -35,6 +35,7 @@ require_once MERCURY_PATH . '/inc/class-users.php';
 
 // GUI workflow management.
 require_once MERCURY_PATH . '/inc/gui/class-assignments-table.php';
+require_once MERCURY_PATH . '/inc/gui/class-group-assignments-queue.php';
 require_once MERCURY_PATH . '/inc/gui/class-enabled-posts.php';
 require_once MERCURY_PATH . '/inc/gui/class-settings.php';
 require_once MERCURY_PATH . '/inc/gui/class-task.php';

@@ -54,23 +54,35 @@ class Assignments {
 				__( 'My Assignments', 'mercury' ),
 				'edit_posts',
 				"mercury-assignments-{$post_type}",
-				[ $this, 'list_table_page' ]
+				function() use ( $post_type ) {
+					$this->list_table_page( $post_type );
+				},
 			);
 		}
 	}
 
 	/**
 	 * Display the list table page.
+	 *
+	 * @param string $post_type The post type for which to get assignments.
 	 */
-	public function list_table_page() {
+	public function list_table_page( $post_type = '' ) {
 		$assignments_table = new GUI\Assignments_Table();
 		$assignments_table->prepare_items();
+
+		$post_type_object = get_post_type_object( $post_type );
+
+		$title = ! empty( $post_type_object->label ) ?
+			/* translators: Post type */
+			sprintf( __( '%1$s Assignments', 'mercury' ), $post_type_object->label )
+			: __( 'All Assignments', 'mercury' );
+
 		?>
 			<div class="wrap">
 				<form method="get">
-					<h2><?php esc_html_e( 'Assignments', 'mercury' ); ?></h2>
+					<h2><?php echo esc_html( $title ); ?></h2>
 					<input type="hidden" id="page" name="page" value="<?php echo esc_attr( $assignments_table->get_page() ); ?>">
-					<input type="hidden" id="post_type" name="post_type" value="<?php echo esc_attr( $assignments_table->get_post_type() ); ?>">
+					<input type="hidden" id="post_type" name="post_type" value="<?php echo esc_attr( $post_type ); ?>">
 					<?php
 					$assignments_table->display();
 					$assignments_table->get_user_dropdown();

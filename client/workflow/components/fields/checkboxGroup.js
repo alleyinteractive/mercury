@@ -64,6 +64,7 @@ const CheckboxGroup = (props) => {
                           disabled={readOnly}
                           type="checkbox"
                           id={fieldKey}
+                          value={fieldKey}
                           checked={value.includes(optionValueDeduped)}
                           onChange={(e) => {
                             if (e.target.checked) {

@@ -27,6 +27,7 @@ RichTextEditor.propTypes = {
   readOnly: PropTypes.bool.isRequired,
   field: PropTypes.shape({
     value: PropTypes.string.isRequired,
+    onBlur: PropTypes.func.isRequired,
   }).isRequired,
   form: PropTypes.shape({
     setFieldValue: PropTypes.func.isRequired,

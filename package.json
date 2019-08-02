@@ -13,7 +13,8 @@
     "lint": "eslint ./client",
     "scaffold": "scaffold dir ./scaffold --theme=./",
     "test": "jest",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "codeception": "docker-compose --file tests/docker-compose.yml run --rm codecept run"
   },
   "dependencies": {
     "@wordpress/dom-ready": "^2.1.0",

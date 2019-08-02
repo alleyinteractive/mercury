@@ -22,9 +22,19 @@ class Group_Assignments_Queue extends Assignments_Table {
 	use \Mercury\Traits\Table_Helpers;
 
 	/**
-	 * Constructor for GUI.
+	 * Usergroup.
+	 *
+	 * @var null
 	 */
-	public function __construct() {
+	public $usergroup = null;
+
+	/**
+	 * Constructor for GUI.
+	 *
+	 * @param \WP_Term $usergroup The usergroup for this group queue.
+	 */
+	public function __construct( $usergroup ) {
+		$this->usergroup = $usergroup;
 
 		// Initialize the table.
 		parent::__construct(
@@ -84,7 +94,7 @@ class Group_Assignments_Queue extends Assignments_Table {
 
 		$meta_query[] = [
 			'key'   => 'mercury_in_progress_task_assignee_id',
-			'value' => $this->get_user_id(),
+			'value' => $this->usergroup->term_id ?? 0,
 		];
 
 		if ( ! empty( $this->get_task_filter() ) ) {
@@ -104,26 +114,12 @@ class Group_Assignments_Queue extends Assignments_Table {
 	 */
 	public function get_columns() : array {
 		return apply_filters(
-			'mercury_assignments_column_names',
+			'mercury_group_queue_column_names',
 			[
 				'title'         => __( 'Title', 'mercury' ),
 				'publish_date'  => __( 'Publish Date', 'mercury' ),
 				'assigned_task' => __( 'Assigned Task', 'mercury' ),
-			]
-		);
-	}
-
-	/**
-	 * Define the sortable columns for our list table.
-	 *
-	 * @return array
-	 */
-	public function get_sortable_columns() : array {
-		return apply_filters(
-			'mercury_sortable_columns',
-			[
-				'title'        => [ 'title', false ],
-				'publish_date' => [ 'date', false ],
+				'claim'         => __( 'Claim Assignment', 'mercury' ),
 			]
 		);
 	}
@@ -138,123 +134,10 @@ class Group_Assignments_Queue extends Assignments_Table {
 	public function column_default( $post, $column_name ) : string {
 
 		switch ( $column_name ) {
-			case 'title':
-				$default = wp_kses(
-					$this->get_title( $post ),
-					[
-						'a' => [
-							'href'       => true,
-							'class'      => true,
-							'aria-label' => true,
-						],
-					]
-				);
-				break;
-			case 'publish_date':
-				$default = esc_html( $this->get_publish_date( $post ) );
-				break;
-			case 'assigned_task':
-				$default = esc_html( $this->get_assigned_task( $post ) );
-				break;
-			default:
-				$default = '';
+			case 'claim':
+				return wp_kses_post( $this->get_claim_assignment( $post ) );
 		}
 
-		return apply_filters( 'mercury_column_default', $default, $column_name, $post );
-	}
-
-	/**
-	 * Display extra filtering options.
-	 *
-	 * @param string $which Which section of the table we are on.
-	 */
-	protected function extra_tablenav( $which ) {
-		// Only display on the top of the table.
-		if ( 'top' !== $which ) {
-			return;
-		}
-		?>
-		<div class="alignleft actions">
-			<?php
-			// Task filter.
-			$this->task_filter();
-
-			submit_button( __( 'Filter', 'mercury' ), 'button', null, false );
-			?>
-		</div>
-		<?php
-	}
-
-	/**
-	 * Add dropdown for filtering by task.
-	 */
-	private function task_filter() {
-		// Build the markup for the dropdown.
-		?>
-		<select name="task" id="task">
-			<option value=""><?php esc_html_e( 'All tasks', 'mercury' ); ?></option>
-			<?php
-			$workflow_ids = Workflow::get_workflow_ids();
-
-			foreach ( $workflow_ids as $id ) {
-
-				// Get the workflow.
-				$workflow = Workflow::get_workflow( $id );
-
-				// Open `<optgroup>` tag.
-				printf(
-					'<optgroup label="%1$s">',
-					esc_html( $workflow['name'] )
-				);
-
-				foreach ( $workflow['tasks'] as $task ) {
-					printf(
-						'<option value="%1$s" %2$s>%3$s</option>',
-						esc_attr( $task['slug'] ),
-						selected( $task['slug'], $this->get_task_filter(), false ),
-						esc_html( $task['name'] )
-					);
-				}
-
-				// Close `<optgroup>` tag.
-				echo '</optgroup>';
-			}
-			?>
-		</select>
-		<?php
-	}
-
-	/**
-	 * Get dropdown for switching between users.
-	 */
-	public function get_user_dropdown() {
-
-		// Restrict visibility to certain users.
-		if ( ! current_user_can( 'edit_others_posts' ) ) {
-			return;
-		}
-
-		// Get a full list of users.
-		$users = get_users(
-			[
-				'orderby' => 'display_name',
-			]
-		);
-		?>
-		<span><?php esc_html_e( 'Select a different user:', 'mercury' ); ?></span>
-		<select name="user_id" id="user_id">
-			<?php
-			foreach ( $users as $user ) {
-				printf(
-					'<option value="%1$s" %2$s>%3$s</option>',
-					esc_attr( $user->ID ),
-					selected( $user->ID, $this->get_user_id(), false ),
-					esc_html( $user->display_name )
-				);
-			}
-			submit_button( __( 'Go', 'mercury' ), 'button', null, false );
-			?>
-		</select>
-		<?php
+		return parent::column_default( $post, $column_name );
 	}
 }

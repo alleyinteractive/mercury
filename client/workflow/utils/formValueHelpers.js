@@ -13,6 +13,12 @@ export const stringifyValue = (val) => {
     return val;
   }
 
+  // Don't encode an empty array as "[]", or else it will look
+  // like there's changed value.
+  if (Array.isArray(val) && 0 === val.length) {
+    return '';
+  }
+
   try {
     newVal = JSON.stringify(val);
   } catch {

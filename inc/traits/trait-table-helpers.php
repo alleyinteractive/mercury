@@ -64,6 +64,36 @@ trait Table_Helpers {
 	}
 
 	/**
+	 * Get the Claim button.
+	 *
+	 * @param \WP_Post $post Post object.
+	 * @return string
+	 */
+	protected function get_claim_assignment( \WP_Post $post ) : string {
+
+		$task        = get_post_meta( $post->ID, 'mercury_in_progress_task_slug', true );
+		$action      = 'claim_task';
+		$claim_link  = add_query_arg(
+			[
+				'post'   => $post->ID,
+				'task'   => $task,
+				'action' => $action,
+				'nonce'  => wp_create_nonce( $action ),
+				'user'   => $this->get_user_id(),
+			],
+			admin_url( 'post.php' )
+		);
+
+		ob_start();
+		?>
+		<a href="<?php echo esc_url( $claim_link ); ?>" class="button button-primary">
+			<?php esc_html_e( 'Claim', 'mercury' ); ?>
+		</a>
+		<?php
+		return ob_get_clean();
+	}
+
+	/**
 	 * Get the orderby value, defaulting to ID.
 	 *
 	 * @return string

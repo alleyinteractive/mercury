@@ -9,6 +9,10 @@ const { isEqual } = lodash;
 
 /**
  * Get a meta value from Gutenberg.
+ *
+ * @param {string} field Meta field slug.
+ *
+ * @return {mixed} Parsed value of the meta field.
  */
 export function getMeta(field) {
   const currentMeta = wp.data.select('core/editor')
@@ -22,6 +26,10 @@ export function getMeta(field) {
 
 /**
  * Get a meta value from Gutenberg.
+ *
+ * @param {string} field Meta field slug.
+ *
+ * @return {string} Unparsed value of the meta field.
  */
 export function getUnparsedMeta(field) {
   const currentMeta = wp.data.select('core/editor')

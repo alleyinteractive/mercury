@@ -466,7 +466,7 @@ class Task {
 
 		$settings['assignee_options'] = \Mercury\Users::create_user_list_from_assignee_data( $settings['assignee_selection'] );
 
-		$settings['assignee_selection_permissions']['roles'] = array_merge( $settings['assignee_selection_permissions']['roles'] ?? [], [ 'administrator' ] );
+		$settings['assignee_selection_permissions']['roles'] = array_unique( array_merge( $settings['assignee_selection_permissions']['roles'] ?? [], [ 'administrator' ] ) );
 
 		return $settings;
 	}

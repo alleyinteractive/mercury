@@ -20,6 +20,8 @@ class Assignments {
 		// Register menu items for assignments.
 		add_action( 'admin_menu', [ $this, 'add_menu_pages' ] );
 
+		add_action( 'admin_action_claim_task', [ $this, 'claim_task' ] );
+
 		// Update the assignee of a post on save.
 		add_action( 'save_post', [ $this, 'update_post_assignee' ] );
 	}
@@ -194,6 +196,41 @@ class Assignments {
 				</form>
 			</div>
 		<?php
+	}
+
+	/**
+	 * Process admin action of claiming a task.
+	 */
+	public function claim_task() {
+
+		// Verify the nonce.
+		$nonce  = ! empty( $_GET['nonce'] ) ? sanitize_key( wp_unslash( $_GET['nonce'] ) ) : '';
+		$action = ! empty( $_GET['action'] ) ? sanitize_text_field( wp_unslash( $_GET['action'] ) ) : '';
+		if ( ! wp_verify_nonce( $nonce, $action ) ) {
+			wp_die( esc_html__( 'Sorry, you are not allowed to do that.', 'mercury' ) );
+		}
+
+		$post_id = ! empty( $_GET['post'] ) ? absint( wp_unslash( $_GET['post'] ) ) : '';
+		$user_id = ! empty( $_GET['user'] ) ? absint( wp_unslash( $_GET['user'] ) ) : '';
+		$task    = ! empty( $_GET['task'] ) ? sanitize_text_field( wp_unslash( $_GET['task'] ) ) : '';
+
+		// Bail if we don't have the necessary data.
+		if (
+			empty( $action ) ||
+			empty( $post_id ) ||
+			empty( $user_id ) ||
+			empty( $task )
+		) {
+			return;
+		}
+
+		// Update the assignee.
+		update_post_meta( $post_id, "mercury_{$task}_assignee_id", $user_id );
+		update_post_meta( $post_id, 'mercury_in_progress_task_assignee_id', $user_id );
+
+		// Redirect to the post.
+		wp_safe_redirect( get_edit_post_link( $post_id, 'redirect' ) );
+		exit;
 	}
 
 	/**

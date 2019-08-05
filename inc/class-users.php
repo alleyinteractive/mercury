@@ -40,7 +40,7 @@ class Users {
 					$user_ids = array_merge( $user_ids, $usergroup->user_ids ?? [] );
 					$groups[] = [
 						'label' => $usergroup->name,
-						'value' => absint( $group_id ),
+						'value' => "group_{$group_id}",
 					];
 				}
 			}

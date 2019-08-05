@@ -95,6 +95,7 @@ class Group_Assignments_Queue extends Assignments_Table {
 		$meta_query[] = [
 			'key'   => 'mercury_in_progress_task_assignee_id',
 			'value' => $this->usergroup->term_id ?? 0,
+			'value' => 'group_' . $this->usergroup->term_id ?? 0,
 		];
 
 		if ( ! empty( $this->get_task_filter() ) ) {

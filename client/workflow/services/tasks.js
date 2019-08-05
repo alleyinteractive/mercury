@@ -123,15 +123,6 @@ export function setTaskStatus(taskSlug, status) {
   setMeta(`mercury_${taskSlug}_status`, status);
 }
 
-export function updateAskReject(taskSlug) {
-  const task = getTask(taskSlug);
-  if (! task.assignees.enableAskReject) {
-    setMeta('mercury_ask_reject_user_ids', []);
-    setMeta('mercury_ask_reject_group_ids', []);
-    setMeta('mercury_ask_reject_roles', []);
-  }
-}
-
 /**
  * Complete a task and transition to a new one.
  *
@@ -148,13 +139,6 @@ export function completeTask(currentTaskSlug, nextTaskSlug) {
   // Set the InProgress and Selected tasks to the next task.
   setInProgressTaskSlug(nextTaskSlug);
   setSelectedTaskSlug(nextTaskSlug);
-
-  // If the current task's selected action has a redirect URL,
-  // set that up to redirect after the save happens.
-  const currentTask = getTask(currentTaskSlug);
-
-  // Setup ask and reject meta.
-  updateAskReject(nextTaskSlug);
 
   /**
    * Action fired as a task is completing.

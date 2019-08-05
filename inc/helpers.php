@@ -204,9 +204,9 @@ function get_user_ids_from_assignee_id( $assignee_id ) : array {
  * Get the assignee's name from an assignee ID.
  *
  * @param  string|int $assignee_id Mercury task assignee ID.
- * @return null|string
+ * @return string
  */
-function get_assignee_name( $assignee_id ) : ?string {
+function get_assignee_name( $assignee_id ) : string {
 	global $edit_flow;
 
 	// Edit Flow user group.

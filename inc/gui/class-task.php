@@ -279,15 +279,15 @@ class Task {
 							'label'         => __( 'Type', 'mercury' ),
 							'default_value' => 'textfield',
 							'options'       => [
-								'radios'     => __( 'Radios', 'mercury' ),
-								'checkboxes' => __( 'Checkboxes', 'mercury' ),
-								'checkbox'   => __( 'Checkbox', 'mercury' ),
-								'date'       => __( 'Date', 'mercury' ),
-								'select'     => __( 'Dropdown', 'mercury' ),
-								'textarea'   => __( 'Textarea', 'mercury' ),
-								'rich-textarea'   => __( 'Rich Textarea', 'mercury' ),
-								'textfield'  => __( 'Textfield', 'mercury' ),
-								'assignee'   => __( 'Assignee', 'mercury' ),
+								'radios'        => __( 'Radios', 'mercury' ),
+								'checkboxes'    => __( 'Checkboxes', 'mercury' ),
+								'checkbox'      => __( 'Checkbox', 'mercury' ),
+								'date'          => __( 'Date', 'mercury' ),
+								'select'        => __( 'Dropdown', 'mercury' ),
+								'textarea'      => __( 'Textarea', 'mercury' ),
+								'rich-textarea' => __( 'Rich Textarea', 'mercury' ),
+								'textfield'     => __( 'Textfield', 'mercury' ),
+								'assignee'      => __( 'Assignee', 'mercury' ),
 							],
 						]
 					),
@@ -316,8 +316,8 @@ class Task {
 						[
 							'label' => __( 'Source', 'mercury' ),
 							'options' => [
-								'list'     => __( 'List', 'mercury' ),
-								'filter'   => __( 'Filter', 'mercury' ),
+								'list'   => __( 'List', 'mercury' ),
+								'filter' => __( 'Filter', 'mercury' ),
 							],
 							'display_if' => [
 								'src'   => 'type',

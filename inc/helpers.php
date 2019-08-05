@@ -15,7 +15,7 @@ namespace Mercury;
 function get_mercury_task_slugs() : array {
 
 	// Check for a cache hit.
-	$cache_key       = 'mercury_task_slugs';
+	$cache_key    = 'mercury_task_slugs';
 	$cached_slugs = get_transient( $cache_key );
 
 	if ( false !== $cached_slugs ) {

@@ -9,6 +9,10 @@ const { isEqual } = lodash;
 
 /**
  * Get a meta value from Gutenberg.
+ *
+ * @param {string} field Meta field slug.
+ *
+ * @return {mixed} Parsed value of the meta field.
  */
 export function getMeta(field) {
   const currentMeta = wp.data.select('core/editor')
@@ -18,6 +22,20 @@ export function getMeta(field) {
   }
 
   return parseValue(currentMeta[field]);
+}
+
+/**
+ * Get a meta value from Gutenberg.
+ *
+ * @param {string} field Meta field slug.
+ *
+ * @return {string} Unparsed value of the meta field.
+ */
+export function getUnparsedMeta(field) {
+  const currentMeta = wp.data.select('core/editor')
+    .getEditedPostAttribute('meta');
+
+  return currentMeta[field] || '';
 }
 
 /**
@@ -47,10 +65,10 @@ export function setMetaGroup(meta) {
  */
 export function setMeta(field, value) {
   const { hooks } = wp;
-  const oldValue = getMeta(field);
+  const oldValue = getUnparsedMeta(field);
 
   // Only update if value has changed.
-  if (value !== oldValue) {
+  if (stringifyValue(value) !== oldValue) {
     /**
      * Hook fired before meta is set to allow modification before setting the value.
      *

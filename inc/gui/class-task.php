@@ -73,12 +73,13 @@ class Task {
 					'default_assignee' => new \Fieldmanager_Select(
 						[
 							'label'      => __( 'Default Assignee', 'mercury' ),
-							'description' => __( 'This task\'s assignee will be pre-filled with this user.', 'mercury' ),
+							'description' => __( 'This task\'s assignee will be pre-filled with this user or group.', 'mercury' ),
 							'options'    => [
 								'none'    => __( 'None', 'mercury' ),
 								'self'    => __( 'Self', 'mercury' ),
 								'author'  => __( 'Post author', 'mercury' ),
 								'user'    => __( 'Specific User', 'mercury' ),
+								'group'   => __( 'Specific Group', 'mercury' ),
 							],
 						]
 					),
@@ -89,6 +90,16 @@ class Task {
 								'value' => 'user',
 							],
 							'datasource' => new \Fieldmanager_Datasource_User(),
+						]
+					),
+					'default_group' => new \Fieldmanager_Select(
+						[
+							'first_empty' => true,
+							'display_if' => [
+								'src'   => 'default_assignee',
+								'value' => 'group',
+							],
+							'options' => \Mercury\Users::get_usergroup_options(),
 						]
 					),
 					'enable_assignee_selection' => new \Fieldmanager_Checkbox(
@@ -435,6 +446,7 @@ class Task {
 		$settings_template = [
 			'default_assignee'               => 'none',
 			'default_user'                   => 0,
+			'default_group'                  => '',
 			'enable_assignee_selection'      => false,
 			'assignee_options'               => [],
 			'assignee_selection_permissions' => [
@@ -459,6 +471,7 @@ class Task {
 		$settings = wp_parse_args( $assignments, $settings_template );
 
 		// Assignees.
+		$settings['default_group']                       = ! empty( $settings['default_group'] ) ? 'group_' . $settings['default_group'] : '';
 		$settings['enable_assignee_selection']           = filter_var( $settings['enable_assignee_selection'], FILTER_VALIDATE_BOOLEAN );
 		$settings['assignee_selection']['enable_users']  = filter_var( $settings['assignee_selection']['enable_users'], FILTER_VALIDATE_BOOLEAN );
 		$settings['assignee_selection']['enable_groups'] = filter_var( $settings['assignee_selection']['enable_groups'], FILTER_VALIDATE_BOOLEAN );

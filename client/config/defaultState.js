@@ -7,6 +7,7 @@ export const workflow = {
 export const assignees = {
   defaultAssignee: 'none',
   defaultUser: null,
+  defaultGroup: null,
   enableAssigneeSelection: false,
   assigneeOptions: [],
   assigneeSelectionPermissions: {

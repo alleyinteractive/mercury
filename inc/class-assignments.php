@@ -59,7 +59,7 @@ class Assignments {
 				"mercury-assignments-{$post_type}",
 				function() use ( $post_type ) {
 					$this->list_table_page( $post_type );
-				},
+				}
 			);
 		}
 
@@ -71,6 +71,7 @@ class Assignments {
 				continue;
 			}
 
+			/* translators: Group name. */
 			$title     = sprintf( __( '%1$s Queue', 'mercury' ), $usergroup->name );
 			$menu_slug = str_replace( 'ef-usergroup', 'mercury-assignments', $usergroup->slug );
 
@@ -184,6 +185,7 @@ class Assignments {
 		$assignments_table = new GUI\Group_Assignments_Queue( $usergroup );
 		$assignments_table->prepare_items();
 
+		/* translators: Group name. */
 		$title = sprintf( __( '%1$s Queue', 'mercury' ), $usergroup->name );
 		?>
 			<div class="wrap">

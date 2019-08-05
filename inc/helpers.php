@@ -225,3 +225,37 @@ function get_assignee_name( $assignee_id ) : string {
 
 	return '';
 }
+
+/**
+ * Get the link for the appropriate assignments page (either
+ * personal or group) based on assignee ID.
+ *
+ * @param  string|int $assignee_id Mercury task assignee ID.
+ * @return string
+ */
+function get_assignments_link( $assignee_id ) : string {
+	global $edit_flow;
+
+	// Edit Flow user group.
+	if ( 'group_' === substr( $assignee_id, 0, 6 ) ) {
+		$group = $edit_flow->user_groups->get_usergroup_by( 'id', str_replace( 'group_', '', $assignee_id ) );
+		if ( $group instanceof \WP_Term ) {
+			// Group queue.
+			return add_query_arg(
+				[
+					'page' => str_replace( 'ef-usergroup', 'mercury-assignments', $group->slug ),
+				],
+				admin_url( 'admin.php' )
+			);
+		}
+	}
+
+	// User.
+	$user = get_user_by( 'ID', $assignee_id );
+	if ( $user instanceof \WP_User ) {
+		// Personal assignments page.
+		return admin_url( 'admin.php?page=mercury-assignments' );
+	}
+
+	return '';
+}

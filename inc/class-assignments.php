@@ -42,25 +42,30 @@ class Assignments {
 			4
 		);
 
-		// Get Mercury post types, and add a submenu page for each.
-		foreach ( get_mercury_post_types() as $post_type ) {
+		// Determine from settings whether to add assignments pages by post type.
+		$settings = get_option( 'mercury', [] );
+		if ( ! empty( $settings['post_types']['post_types_assignments_pages'] ?? false ) ) {
 
-			// Determine the appropriate parent slug.
-			$parent_slug = ( 'post' === $post_type )
-				? 'edit.php'
-				: "edit.php?post_type={$post_type}";
+			// Get Mercury post types, and add a submenu page for each.
+			foreach ( get_mercury_post_types() as $post_type ) {
 
-			// Add a submenu page for the post type.
-			add_submenu_page(
-				$parent_slug,
-				__( 'My Assignments', 'mercury' ),
-				__( 'My Assignments', 'mercury' ),
-				'edit_posts',
-				"mercury-assignments-{$post_type}",
-				function() use ( $post_type ) {
-					$this->list_table_page( $post_type );
-				}
-			);
+				// Determine the appropriate parent slug.
+				$parent_slug = ( 'post' === $post_type )
+					? 'edit.php'
+					: "edit.php?post_type={$post_type}";
+
+				// Add a submenu page for the post type.
+				add_submenu_page(
+					$parent_slug,
+					__( 'My Assignments', 'mercury' ),
+					__( 'My Assignments', 'mercury' ),
+					'edit_posts',
+					"mercury-assignments-{$post_type}",
+					function() use ( $post_type ) {
+						$this->list_table_page( $post_type );
+					}
+				);
+			}
 		}
 
 		// Get all usergroups used by tasks, and add a submenu page if the user is a member.

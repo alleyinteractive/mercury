@@ -113,7 +113,7 @@ class Assignments {
 			[
 				'fields'         => 'ids',
 				'post_type'      => Post_Type::WORKFLOW_TASK_POST_TYPE,
-				'posts_per_page' => -1,
+				'posts_per_page' => 250,
 			]
 		);
 

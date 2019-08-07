@@ -14,7 +14,8 @@
     "scaffold": "scaffold dir ./scaffold --theme=./",
     "test": "jest",
     "test:watch": "jest --watch",
-    "codeception": "docker-compose --file tests/docker-compose.yml run --rm codecept run"
+    "docker-wp": "docker-compose --file tests/docker-compose.yml up -d",
+    "codeception": "docker-compose --file tests/docker-compose.yml run --rm codecept run --config /var/www/html/wp-content/plugins/mercury/codeception.dist.yml"
   },
   "dependencies": {
     "@wordpress/dom-ready": "^2.1.0",

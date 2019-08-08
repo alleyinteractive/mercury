@@ -6,7 +6,7 @@
 # https://github.com/sequelpro/sequelpro
 #
 # Host: 192.168.50.4 (MySQL 5.5.5-10.0.38-MariaDB-0ubuntu0.16.04.1)
-# Database: mercury_test
+# Database: healthline
 # Generation Time: 2019-07-31 21:25:00 +0000
 # ************************************************************
 
@@ -18,6 +18,8 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+CREATE DATABASE IF NOT EXISTS healthline;
 
 
 # Dump of table wp_blog_versions

@@ -1,13 +1,18 @@
 version: '3'
 
 services:
-  # codecept:
-  #   image: codeception/codeception
-  #   depends_on:
-  #     - chrome
-  #     - web
-  #   volumes:
-  #     - .:/project
+  codecept:
+    image: codeception/codeception
+    depends_on:
+      - chrome
+      - wp
+      - wpcli
+      - db
+    volumes:
+      - ../../../..:/var/www/html
+      - ../../../..:/project
+    links:
+      - db:mysql
 
   chrome:
     image: selenium/standalone-chrome
@@ -15,42 +20,48 @@ services:
   wpcli:
     image: wordpress:cli
     volumes:
-      - ./config/php.conf.ini:/usr/local/etc/php/conf.d/conf.ini
-      - ./wp-app:/var/www/html
+       - ./config/php.conf.ini:/usr/local/etc/php/conf.d/conf.ini
+       - ../../../../wp-content:/var/www/html/wp-content
+    links:
+      - db:mysql
     depends_on:
       - db
       - wp
+    entrypoint: wp
+    command: "--info"
 
   wp:
     image: wordpress:latest
     ports:
       - 127.0.0.1:80:80
+      - 443:443
     volumes:
       - ./config/php.conf.ini:/usr/local/etc/php/conf.d/conf.ini
       - ../../../../wp-content:/var/www/html/wp-content
-      #- ./plugin-name/trunk/:/var/www/html/wp-content/plugins/plugin-name # Plugin development
     environment:
       WORDPRESS_DB_HOST: db
-      WORDPRESS_DB_NAME: wordpress
+      WORDPRESS_DB_NAME: healthline
       WORDPRESS_DB_USER: root
-      WORDPRESS_DB_PASSWORD: wordpress
+      WORDPRESS_DB_PASSWORD: root
     depends_on:
       - db
     links:
       - db
 
-  web:
-    image: php:7-apache
-    depends_on:
-      - db
-    volumes:
-      - .:/var/www/html
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    ports:
+      - 3333:80
+    environment:
+      PMA_HOST: db
+      MYSQL_ROOT_PASSWORT: root
 
   db:
-    image: mysql:5.7
     volumes:
-       - ./tests/_data/dump.sql:/docker-entrypoint-initdb.d
+       - ./_data:/docker-entrypoint-initdb.d
        - db_data:/var/lib/mysql
+    image: mysql:5.7
     command: [
       '--default_authentication_plugin=mysql_native_password',
       '--character-set-server=utf8mb4',
@@ -58,8 +69,8 @@ services:
     ]
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: wordpress
-      MYSQL_DATABASE: wordpress
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: healthline
 
 volumes:
   db_data:

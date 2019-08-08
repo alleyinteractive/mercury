@@ -1,21 +1,21 @@
 version: '3'
 
 services:
-  codecept:
-    image: codeception/codeception
-    depends_on:
-      - chrome
-      - wp
-      - wpcli
-      - db
-    volumes:
-      - ../../../..:/var/www/html
-      - ../../../..:/project
-    links:
-      - db:mysql
+  selenium-hub:
+    image: selenium/hub:3.141.59-titanium
+    container_name: selenium-hub
+    ports:
+      - "4444:4444"
 
   chrome:
-    image: selenium/standalone-chrome
+    image: selenium/node-chrome:3.141.59-titanium
+    volumes:
+      - /dev/shm:/dev/shm
+    depends_on:
+      - selenium-hub
+    environment:
+      - HUB_HOST=selenium-hub
+      - HUB_PORT=4444
 
   wpcli:
     image: wordpress:cli
@@ -31,7 +31,7 @@ services:
     command: "--info"
 
   wp:
-    image: wordpress:latest
+    build: .
     ports:
       - 127.0.0.1:80:80
       - 443:443
@@ -45,8 +45,11 @@ services:
       WORDPRESS_DB_PASSWORD: root
     depends_on:
       - db
+      - selenium-hub
+      - chrome
     links:
       - db
+      - chrome
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin

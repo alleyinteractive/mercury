@@ -27,6 +27,9 @@ modules:
             tablePrefix: '%TEST_SITE_TABLE_PREFIX%'
         WPWebDriver:
             url: '%TEST_SITE_WP_URL%'
+            browser: chrome
+            host: selenium-hub
+            port: 4444
             adminUsername: '%TEST_SITE_ADMIN_USERNAME%'
             adminPassword: '%TEST_SITE_ADMIN_PASSWORD%'
             adminPath: '%TEST_SITE_WP_ADMIN_PATH%'

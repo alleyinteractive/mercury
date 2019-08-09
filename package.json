@@ -16,7 +16,7 @@
     "test:watch": "jest --watch",
     "docker-wp-up": "docker-compose --file tests/docker-compose.yml up -d",
     "run-codeception": "docker exec tests_wp_1 /var/www/html/wp-content/plugins/mercury/vendor/bin/codecept run --config=/var/www/html/wp-content/plugins/mercury/codeception.dist.yml",
-    "codecept-all": "npm run docker-wp-up && npm run run-codeception"
+    "codecept-all": "npm run docker-wp-up && sleep 10 && npm run run-codeception"
   },
   "dependencies": {
     "@wordpress/dom-ready": "^2.1.0",

@@ -2,14 +2,10 @@
 
 class SettingsPageCest {
 	public function _before( AcceptanceTester $I ) {
-		$I->amOnPage( '/wp-login.php' );
-		$I->wait( 1 );
-		$I->fillField( [ 'name' => 'log' ], 'alley' );
-		$I->fillField( [ 'name' => 'pwd' ], 'interactive' );
-		$I->click( '#wp-submit' );
+		$I->loginAsAdmin();
     }
 
-	public function general_settings_page( AcceptanceTester $I ) {
+	public function mercury_settings_page( AcceptanceTester $I ) {
 		$I->amOnPage('/wp-admin/admin.php?page=mercury');
 
 		$I->see('Mercury Settings', 'h1');
@@ -21,5 +17,7 @@ class SettingsPageCest {
 		$I->click('Save Changes');
 
 		$I->seeCheckboxIsChecked('#fm-mercury-0-post_types-0-post_types-0-post');
+
+		$I->makeScreenshot('settings_page');
 	}
 }

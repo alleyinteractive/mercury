@@ -204,13 +204,12 @@ class Post_Type {
 			true
 		);
 
-		if ( intval( $assigned_user ) !== intval( $user_id ) ) {
-			// Explicitly deny access to this post since it is not a current assignment.
-			return [ 'do_not_allow' ];
+		// Allow ability to edit this post.
+		if ( intval( $assigned_user ) === intval( $user_id ) ) {
+			return [ 'edit_posts' ];
 		}
 
-		// Allow ability to edit this post.
-		return [ 'edit_posts' ];
+		return $caps;
 	}
 
 	/**

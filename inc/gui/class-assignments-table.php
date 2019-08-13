@@ -29,7 +29,7 @@ class Assignments_Table extends \WP_List_Table {
 	public $per_page = 20;
 
 	/**
-	 * Constuctor for GUI.
+	 * Constructor for GUI.
 	 */
 	public function __construct() {
 
@@ -57,7 +57,7 @@ class Assignments_Table extends \WP_List_Table {
 		];
 
 		$args = [
-			'post_type'      => $this->get_post_types_for_query(),
+			'post_type'      => $this->get_post_type() ?? \Mercury\get_mercury_post_types(),
 			'posts_per_page' => $this->per_page,
 			'offset'         => ( $this->get_pagenum() - 1 ) * $this->per_page,
 			'orderby'        => $this->get_orderby(),

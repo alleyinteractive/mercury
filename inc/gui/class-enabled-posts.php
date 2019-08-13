@@ -13,7 +13,7 @@ namespace Mercury\GUI;
 class Enabled_Posts {
 
 	/**
-	 * Constuctor for GUI.
+	 * Constructor for GUI.
 	 */
 	public function __construct() {
 

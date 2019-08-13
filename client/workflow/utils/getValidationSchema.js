@@ -50,7 +50,7 @@ export default function getValidationSchema(task) {
   }, {});
 
   return Yup.object().shape({
-    [`mercury_${taskSlug}_assignee_id`]: Yup.number(),
+    [`mercury_${taskSlug}_assignee_id`]: Yup.mixed(),
     'next-task-slug': Yup.string(),
     ...schemaShape,
   });

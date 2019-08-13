@@ -19,10 +19,11 @@ class Users {
 	 * @return array
 	 */
 	public static function create_user_list_from_assignee_data( $data ) {
-
 		global $edit_flow;
 
 		$user_ids = [];
+		$groups   = [];
+		$roles    = [];
 
 		// Add users.
 		if ( $data['enable_users'] ) {
@@ -33,23 +34,35 @@ class Users {
 		if ( $data['enable_groups'] ) {
 			foreach ( ( $data['filter_groups'] ?? [] ) as $group_id ) {
 				$usergroup = $edit_flow->user_groups->get_usergroup_by( 'id', $group_id );
+
+				// Include both group users and the group itself.
 				if ( $usergroup instanceof \WP_Term ) {
-					$user_ids = array_merge( $user_ids, ( $usergroup->user_ids ?? [] ) );
+					$user_ids = array_merge( $user_ids, $usergroup->user_ids ?? [] );
+					$groups[] = [
+						'label' => $usergroup->name,
+						'value' => "group_{$group_id}",
+					];
 				}
 			}
 		}
 
 		// Add roles.
 		if ( $data['enable_roles'] ) {
-			$user_ids = array_merge(
-				$user_ids,
-				get_users(
-					[
-						'fields'   => 'ids',
-						'role__in' => array_values( $data['filter_roles'] ),
-					]
-				)
+			$role_users = get_users(
+				[
+					'fields'   => 'ids',
+					'role__in' => array_values( $data['filter_roles'] ),
+				]
 			);
+			$user_ids = array_merge( $user_ids, $role_users ?? [] );
+
+			// Include both role users and the role itself.
+			foreach ( $data['filter_roles'] as $role ) {
+				$roles[] = [
+					'label' => ucwords( $role ),
+					'value' => $role,
+				];
+			}
 		}
 
 		// Clean up user ids.
@@ -58,6 +71,7 @@ class Users {
 		$users = [];
 		foreach ( $user_ids as $user_id ) {
 			$userdata = get_userdata( $user_id );
+
 			if ( $userdata instanceof \WP_User ) {
 				$users[] = [
 					'label' => $userdata->data->display_name ?? '',
@@ -67,14 +81,38 @@ class Users {
 		}
 
 		// Sort alphabetically by name (label).
-		usort(
-			$users,
-			function ( $a, $b ) {
-				return $a['label'] > $b['label'];
-			}
-		);
+		$select_sections = [
+			'Groups' => $groups,
+			'Roles'  => $roles,
+			'Users'  => $users,
+		];
+		$options = [];
+		foreach ( $select_sections as $label => $section ) {
+			if ( ! empty( $section ) ) {
+				// Alpha-sort options.
+				usort(
+					$section,
+					function ( $a, $b ) {
+						return $a['label'] > $b['label'];
+					}
+				);
 
-		return $users;
+				// Create section heading.
+				array_unshift(
+					$section,
+					[
+						'label'   => $label,
+						'heading' => true, // Flag to indicate this is only a label.
+						'value'   => '',
+					]
+				);
+
+				// Merge section label and options into options array.
+				$options = array_merge( $options, $section );
+			};
+		}
+
+		return $options;
 	}
 
 	/**

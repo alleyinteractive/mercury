@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { Fragment, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Field } from 'formik';
 
@@ -21,6 +21,9 @@ const Select = (props) => {
     ? optionsSourceList[0].value
     : null;
 
+  // Determine if there are any headings among this select's options.
+  const hasHeading = optionsSourceList.find((option) => option.heading);
+
   useEffect(() => {
     if (defaultValue) {
       setFieldValue(slug, defaultValue);
@@ -38,12 +41,30 @@ const Select = (props) => {
         <option value="" />
       )}
       {optionsSourceList.map((option) => {
-        const { label, value: optionValue } = option;
+        const {
+          label,
+          heading,
+          value: optionValue,
+        } = option;
 
         return (
-          <option value={optionValue} key={optionValue}>
-            {label}
-          </option>
+          <Fragment key={`${label}${optionValue}`}>
+            {/* Disabled heading options for hierarchical selects. */}
+            {heading && (
+              <option key={label} disabled>{label}</option>
+            )}
+            {/* Selectable options for hierarchical selects. */}
+            {(! heading && hasHeading) && (
+              <option value={optionValue}>
+                &nbsp;&nbsp;
+                {label}
+              </option>
+            )}
+            {/* Non-hierarchical options. */}
+            {(! heading && ! hasHeading) && (
+              <option value={optionValue}>{label}</option>
+            )}
+          </Fragment>
         );
       })}
     </Field>

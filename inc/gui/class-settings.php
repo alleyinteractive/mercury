@@ -15,7 +15,7 @@ use Mercury\Post_Type as Post_Type;
 class Settings {
 
 	/**
-	 * Constuctor.
+	 * Constructor.
 	 */
 	public function __construct() {
 
@@ -81,6 +81,12 @@ class Settings {
 									[
 										'label'   => __( 'Enable Mercury for the following post types:', 'mercury' ),
 										'options' => self::get_post_types(),
+									]
+								),
+								'post_types_assignments_pages' => new \Fieldmanager_Checkbox(
+									[
+										'label'       => __( 'Enable separate assignments pages by post type', 'mercury' ),
+										'description' => __( 'Adds an assigments page to the submenu of each post type.', 'mercury' ),
 									]
 								),
 							],

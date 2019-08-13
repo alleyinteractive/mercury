@@ -35,6 +35,9 @@ export function getDefaultAssigneeId(taskSlug) {
     case 'user':
       defaultUserId = task.assignees.defaultUser;
       break;
+    case 'group':
+      defaultUserId = task.assignees.defaultGroup;
+      break;
     case 'none':
     default:
       defaultUserId = '';

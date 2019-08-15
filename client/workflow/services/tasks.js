@@ -132,6 +132,9 @@ export function setTaskStatus(taskSlug, status) {
 export function completeTask(currentTaskSlug, nextTaskSlug) {
   const { hooks } = wp;
 
+  // Update the post status.
+  setPostStatus(nextTaskSlug);
+
   // Mark as complete in meta.
   setTaskStatus(currentTaskSlug, 'complete');
   setTaskStatus(nextTaskSlug, 'active');

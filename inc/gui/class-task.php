@@ -22,7 +22,7 @@ class Task {
 	const GUI_VERSION = 1.0;
 
 	/**
-	 * Constuctor for GUI.
+	 * Constructor for GUI.
 	 */
 	public function __construct() {
 		// Add meta box of settings. Has an FM dependency here.
@@ -73,12 +73,13 @@ class Task {
 					'default_assignee' => new \Fieldmanager_Select(
 						[
 							'label'      => __( 'Default Assignee', 'mercury' ),
-							'description' => __( 'This task\'s assignee will be pre-filled with this user.', 'mercury' ),
+							'description' => __( 'This task\'s assignee will be pre-filled with this user or group.', 'mercury' ),
 							'options'    => [
 								'none'    => __( 'None', 'mercury' ),
 								'self'    => __( 'Self', 'mercury' ),
 								'author'  => __( 'Post author', 'mercury' ),
 								'user'    => __( 'Specific User', 'mercury' ),
+								'group'   => __( 'Specific Group', 'mercury' ),
 							],
 						]
 					),
@@ -89,6 +90,16 @@ class Task {
 								'value' => 'user',
 							],
 							'datasource' => new \Fieldmanager_Datasource_User(),
+						]
+					),
+					'default_group' => new \Fieldmanager_Select(
+						[
+							'first_empty' => true,
+							'display_if' => [
+								'src'   => 'default_assignee',
+								'value' => 'group',
+							],
+							'options' => \Mercury\Users::get_usergroup_options(),
 						]
 					),
 					'enable_assignee_selection' => new \Fieldmanager_Checkbox(
@@ -128,22 +139,6 @@ class Task {
 								'value' => true,
 							],
 							'children'    => $this->get_assignee_filters(),
-						]
-					),
-					'enable_ask_reject' => new \Fieldmanager_Checkbox(
-						[
-							'label' => __( 'Enable Ask/Reject', 'mercury' ),
-							'description' => __( 'This will display the task to a subset of users, asking them to "accept" or "reject" the task. By default this will include all users. Use the filter options to filter that list.', 'mercury' ),
-						]
-					),
-					'ask_reject'        => new \Fieldmanager_Group(
-						[
-							'children'   => $this->get_assignee_filters(),
-							'display_if' => [
-								'src' => 'enable_ask_reject',
-								'value' => true,
-							],
-							'label'    => __( 'Ask/Reject Options', 'mercury' ),
 						]
 					),
 				],
@@ -295,15 +290,15 @@ class Task {
 							'label'         => __( 'Type', 'mercury' ),
 							'default_value' => 'textfield',
 							'options'       => [
-								'radios'     => __( 'Radios', 'mercury' ),
-								'checkboxes' => __( 'Checkboxes', 'mercury' ),
-								'checkbox'   => __( 'Checkbox', 'mercury' ),
-								'date'       => __( 'Date', 'mercury' ),
-								'select'     => __( 'Dropdown', 'mercury' ),
-								'textarea'   => __( 'Textarea', 'mercury' ),
-								'rich-textarea'   => __( 'Rich Textarea', 'mercury' ),
-								'textfield'  => __( 'Textfield', 'mercury' ),
-								'assignee'   => __( 'Assignee', 'mercury' ),
+								'radios'        => __( 'Radios', 'mercury' ),
+								'checkboxes'    => __( 'Checkboxes', 'mercury' ),
+								'checkbox'      => __( 'Checkbox', 'mercury' ),
+								'date'          => __( 'Date', 'mercury' ),
+								'select'        => __( 'Dropdown', 'mercury' ),
+								'textarea'      => __( 'Textarea', 'mercury' ),
+								'rich-textarea' => __( 'Rich Textarea', 'mercury' ),
+								'textfield'     => __( 'Textfield', 'mercury' ),
+								'assignee'      => __( 'Assignee', 'mercury' ),
 							],
 						]
 					),
@@ -332,8 +327,8 @@ class Task {
 						[
 							'label' => __( 'Source', 'mercury' ),
 							'options' => [
-								'list'     => __( 'List', 'mercury' ),
-								'filter'   => __( 'Filter', 'mercury' ),
+								'list'   => __( 'List', 'mercury' ),
+								'filter' => __( 'Filter', 'mercury' ),
 							],
 							'display_if' => [
 								'src'   => 'type',
@@ -451,21 +446,13 @@ class Task {
 		$settings_template = [
 			'default_assignee'               => 'none',
 			'default_user'                   => 0,
+			'default_group'                  => '',
 			'enable_assignee_selection'      => false,
 			'assignee_options'               => [],
 			'assignee_selection_permissions' => [
 				'roles' => [],
 			],
 			'assignee_selection'             => [
-				'enable_users'  => false,
-				'filter_users'  => [],
-				'enable_groups' => false,
-				'filter_groups' => [],
-				'enable_roles'  => false,
-				'filter_roles'  => [],
-			],
-			'enable_ask_reject'              => false,
-			'ask_reject'                     => [
 				'enable_users'  => false,
 				'filter_users'  => [],
 				'enable_groups' => false,
@@ -484,20 +471,15 @@ class Task {
 		$settings = wp_parse_args( $assignments, $settings_template );
 
 		// Assignees.
+		$settings['default_group']                       = ! empty( $settings['default_group'] ) ? 'group_' . $settings['default_group'] : '';
 		$settings['enable_assignee_selection']           = filter_var( $settings['enable_assignee_selection'], FILTER_VALIDATE_BOOLEAN );
 		$settings['assignee_selection']['enable_users']  = filter_var( $settings['assignee_selection']['enable_users'], FILTER_VALIDATE_BOOLEAN );
 		$settings['assignee_selection']['enable_groups'] = filter_var( $settings['assignee_selection']['enable_groups'], FILTER_VALIDATE_BOOLEAN );
 		$settings['assignee_selection']['enable_roles']  = filter_var( $settings['assignee_selection']['enable_roles'], FILTER_VALIDATE_BOOLEAN );
 
-		// Ask/Reject.
-		$settings['enable_ask_reject']           = filter_var( $settings['enable_ask_reject'], FILTER_VALIDATE_BOOLEAN );
-		$settings['ask_reject']['enable_users']  = filter_var( $settings['ask_reject']['enable_users'], FILTER_VALIDATE_BOOLEAN );
-		$settings['ask_reject']['enable_groups'] = filter_var( $settings['ask_reject']['enable_groups'], FILTER_VALIDATE_BOOLEAN );
-		$settings['ask_reject']['enable_roles']  = filter_var( $settings['ask_reject']['enable_roles'], FILTER_VALIDATE_BOOLEAN );
-
 		$settings['assignee_options'] = \Mercury\Users::create_user_list_from_assignee_data( $settings['assignee_selection'] );
 
-		$settings['assignee_selection_permissions']['roles'] = array_merge( $settings['assignee_selection_permissions']['roles'] ?? [], [ 'administrator' ] );
+		$settings['assignee_selection_permissions']['roles'] = array_unique( array_merge( $settings['assignee_selection_permissions']['roles'] ?? [], [ 'administrator' ] ) );
 
 		return $settings;
 	}

@@ -7,14 +7,13 @@ export const workflow = {
 export const assignees = {
   defaultAssignee: 'none',
   defaultUser: null,
+  defaultGroup: null,
   enableAssigneeSelection: false,
   assigneeOptions: [],
   assigneeSelectionPermissions: {
     roles: [],
   },
   assigneeSelection: {},
-  enableAskReject: false,
-  askReject: {},
 };
 
 export const task = {

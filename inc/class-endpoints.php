@@ -39,9 +39,6 @@ class Endpoints {
 			'mercury_in_progress_task_slug',
 			'mercury_in_progress_task_assignee_id',
 			'mercury_selected_task_slug',
-			'mercury_ask_reject_user_ids',
-			'mercury_ask_reject_group_ids',
-			'mercury_ask_reject_roles',
 		];
 
 		foreach ( get_mercury_task_slugs() as $task_id => $task_slug ) {

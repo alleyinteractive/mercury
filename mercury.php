@@ -1,13 +1,13 @@
 <?php
 /**
  * Plugin Name:     Mercury
- * Plugin URI:      PLUGIN SITE HERE
+ * Plugin URI:      https://github.com/alleyinteractive/mercury
  * Description:     Advanced editorial workflows.
  * Author:          Alley, jameswalterburke
- * Author URI:      YOUR SITE HERE
+ * Author URI:      https://alley.co
  * Text Domain:     mercury
  * Domain Path:     /languages
- * Version:         1.1.10
+ * Version:         1.1.12
  *
  * @package         Mercury
  */
@@ -17,7 +17,7 @@ namespace Mercury;
 /**
  * Current version of Mercury.
  */
-define( 'MERCURY_VERSION', '1.1.10' );
+define( 'MERCURY_VERSION', '1.1.12' );
 
 /**
  * Filesystem path to Mercury.
@@ -35,6 +35,7 @@ require_once MERCURY_PATH . '/inc/class-users.php';
 
 // GUI workflow management.
 require_once MERCURY_PATH . '/inc/gui/class-assignments-table.php';
+require_once MERCURY_PATH . '/inc/gui/class-group-assignments-queue.php';
 require_once MERCURY_PATH . '/inc/gui/class-enabled-posts.php';
 require_once MERCURY_PATH . '/inc/gui/class-settings.php';
 require_once MERCURY_PATH . '/inc/gui/class-task.php';

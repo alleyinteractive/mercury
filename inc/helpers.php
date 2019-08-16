@@ -15,7 +15,7 @@ namespace Mercury;
 function get_mercury_task_slugs() : array {
 
 	// Check for a cache hit.
-	$cache_key       = 'mercury_task_slugs';
+	$cache_key    = 'mercury_task_slugs';
 	$cached_slugs = get_transient( $cache_key );
 
 	if ( false !== $cached_slugs ) {
@@ -172,4 +172,90 @@ function get_selected_task_slug( int $post_id ) {
  */
 function get_task_assignee( $post_id, $task_slug ) {
 	return absint( get_post_meta( $post_id, "mercury_{$task_slug}_assignee_id", true ) );
+}
+
+/**
+ * Get an array of user IDs from a Mercury assignee ID.
+ *
+ * @param  string|int $assignee_id Mercury task assignee ID.
+ * @return array
+ */
+function get_user_ids_from_assignee_id( $assignee_id ) : array {
+	global $edit_flow;
+
+	// Edit Flow user group.
+	if ( 'group_' === substr( $assignee_id, 0, 6 ) ) {
+		$group = $edit_flow->user_groups->get_usergroup_by( 'id', str_replace( 'group_', '', $assignee_id ) );
+		if ( $group instanceof \WP_Term ) {
+			return $group->user_ids;
+		}
+	}
+
+	// User.
+	$user = get_user_by( 'ID', $assignee_id );
+	if ( $user instanceof \WP_User ) {
+		return [ $assignee_id ];
+	}
+
+	return [];
+}
+
+/**
+ * Get the assignee's name from an assignee ID.
+ *
+ * @param  string|int $assignee_id Mercury task assignee ID.
+ * @return string
+ */
+function get_assignee_name( $assignee_id ) : string {
+	global $edit_flow;
+
+	// Edit Flow user group.
+	if ( 'group_' === substr( $assignee_id, 0, 6 ) ) {
+		$group = $edit_flow->user_groups->get_usergroup_by( 'id', str_replace( 'group_', '', $assignee_id ) );
+		if ( $group instanceof \WP_Term ) {
+			return $group->name;
+		}
+	}
+
+	// User.
+	$user = get_user_by( 'ID', $assignee_id );
+	if ( $user instanceof \WP_User ) {
+		return $user->display_name;
+	}
+
+	return '';
+}
+
+/**
+ * Get the link for the appropriate assignments page (either
+ * personal or group) based on assignee ID.
+ *
+ * @param  string|int $assignee_id Mercury task assignee ID.
+ * @return string
+ */
+function get_assignments_link( $assignee_id ) : string {
+	global $edit_flow;
+
+	// Edit Flow user group.
+	if ( 'group_' === substr( $assignee_id, 0, 6 ) ) {
+		$group = $edit_flow->user_groups->get_usergroup_by( 'id', str_replace( 'group_', '', $assignee_id ) );
+		if ( $group instanceof \WP_Term ) {
+			// Group queue.
+			return add_query_arg(
+				[
+					'page' => str_replace( 'ef-usergroup', 'mercury-assignments', $group->slug ),
+				],
+				admin_url( 'admin.php' )
+			);
+		}
+	}
+
+	// User.
+	$user = get_user_by( 'ID', $assignee_id );
+	if ( $user instanceof \WP_User ) {
+		// Personal assignments page.
+		return admin_url( 'admin.php?page=mercury-assignments' );
+	}
+
+	return '';
 }

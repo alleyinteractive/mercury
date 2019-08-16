@@ -47,7 +47,10 @@ Assignee.propTypes = {
     assigneeOptions: PropTypes.arrayOf(
       PropTypes.shape({
         label: PropTypes.string,
-        value: PropTypes.number,
+        value: PropTypes.oneOfType([
+          PropTypes.string,
+          PropTypes.number,
+        ]),
       })
     ).isRequired,
     assigneeSelectionPermissions: PropTypes.shape({

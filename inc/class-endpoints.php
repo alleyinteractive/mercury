@@ -32,31 +32,7 @@ class Endpoints {
 	 * Register meta.
 	 */
 	public function register_meta_for_workflows() {
-
-		// Meta fields that every post has.
-		$meta_fields = [
-			'mercury_active_workflow_slug',
-			'mercury_in_progress_task_slug',
-			'mercury_in_progress_task_assignee_id',
-			'mercury_selected_task_slug',
-		];
-
-		foreach ( get_mercury_task_slugs() as $task_id => $task_slug ) {
-
-			// Add meta fields that every task has.
-			$meta_fields[] = "mercury_{$task_slug}_status";
-			$meta_fields[] = "mercury_{$task_slug}_assignee_id";
-			$meta_fields[] = "mercury_{$task_slug}_due_date";
-
-			// Add each field's slug so we can store it as meta.
-			$fields = \Mercury\GUI\Task::get_fields( $task_id );
-			$slugs = wp_list_pluck( $fields, 'slug' );
-			if ( ! empty( $slugs ) ) {
-				$meta_fields = array_merge( $meta_fields, $slugs );
-			}
-		}
-
-		array_map( [ $this, 'register_meta' ], $meta_fields );
+		array_map( [ $this, 'register_meta' ], get_mercury_meta_keys() );
 	}
 
 	/**

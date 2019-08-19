@@ -130,7 +130,7 @@ class Workflow {
 	/**
 	 * Helper to get a workflow ID from a slug.
 	 *
-	 * @param int $slug Workflow slug.
+	 * @param string $slug Workflow slug.
 	 * @return int|null
 	 */
 	public static function get_workflow_id_by_slug( string $slug ) : ?int {

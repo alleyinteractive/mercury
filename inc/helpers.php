@@ -259,3 +259,36 @@ function get_assignments_link( $assignee_id ) : string {
 
 	return '';
 }
+
+/**
+ * Get all meta keys in use by Mercury.
+ *
+ * @return array
+ */
+function get_mercury_meta_keys() : array {
+
+	// Meta fields that every post has.
+	$meta_fields = [
+		'mercury_active_workflow_slug',
+		'mercury_in_progress_task_slug',
+		'mercury_in_progress_task_assignee_id',
+		'mercury_selected_task_slug',
+	];
+
+	foreach ( get_mercury_task_slugs() as $task_id => $task_slug ) {
+
+		// Add meta fields that every task has.
+		$meta_fields[] = "mercury_{$task_slug}_status";
+		$meta_fields[] = "mercury_{$task_slug}_assignee_id";
+		$meta_fields[] = "mercury_{$task_slug}_due_date";
+
+		// Add all field slugs.
+		$fields = \Mercury\GUI\Task::get_fields( $task_id );
+		$slugs  = wp_list_pluck( $fields, 'slug' );
+		if ( ! empty( $slugs ) ) {
+			$meta_fields = array_merge( $meta_fields, $slugs );
+		}
+	}
+
+	return array_unique( $meta_fields );
+}

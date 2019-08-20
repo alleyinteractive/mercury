@@ -126,4 +126,29 @@ class Workflow {
 		$task_ids = get_post_meta( $workflow_id, 'tasks', true );
 		return $task_ids['tasks'] ?? [];
 	}
+
+	/**
+	 * Helper to get a workflow ID from a slug.
+	 *
+	 * @param string $slug Workflow slug.
+	 * @return int|null
+	 */
+	public static function get_workflow_id_by_slug( string $slug ): ?int {
+
+		$query = new \WP_Query(
+			[
+				'fields'         => 'ids',
+				'post_type'      => Post_Type::WORKFLOW_POST_TYPE,
+				'posts_per_page' => 1,
+				'meta_query'     => [
+					[
+						'key'   => 'slug',
+						'value' => $slug,
+					],
+				],
+			]
+		);
+
+		return $query->posts[0] ?? null;
+	}
 }

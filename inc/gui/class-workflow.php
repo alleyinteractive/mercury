@@ -133,7 +133,7 @@ class Workflow {
 	 * @param string $slug Workflow slug.
 	 * @return int|null
 	 */
-	public static function get_workflow_id_by_slug( string $slug ) : ?int {
+	public static function get_workflow_id_by_slug( string $slug ): ?int {
 
 		$query = new \WP_Query(
 			[

@@ -2,7 +2,7 @@
 import { task as defaultTaskState } from 'config/defaultState';
 import { getMeta, setMeta } from './meta';
 import { getActiveWorkflow } from './workflows'; // eslint-disable-line import/no-cycle
-
+import debounce from 'lodash/debounce';
 /**
  * Get a task by slug (for the current active workflow).
  *
@@ -158,20 +158,33 @@ export function completeTask(currentTaskSlug, nextTaskSlug) {
   // Setup ask and reject meta.
   updateAskReject(nextTaskSlug);
 
-  /**
-   * Action fired as a task is completing.
-   *
-   * @param {object} [currentTask] Task completing.
-   * @param {object} [nextTask].   Next task.
-   */
-  hooks.doAction(
-    'mercuryCompletedTask',
-    getTask(currentTaskSlug),
-    getTask(nextTaskSlug)
-  );
+  // /**
+  //  * Action fired as a task is completing.
+  //  *
+  //  * @param {object} [currentTask] Task completing.
+  //  * @param {object} [nextTask].   Next task.
+  //  */
+  // hooks.doAction(
+  //   'mercuryCompletedTask',
+  //   getTask(currentTaskSlug),
+  //   getTask(nextTaskSlug)
+  // );
 
   // Save the post.
-  wp.data.dispatch('core/editor').savePost();
+  hooks.addFilter(
+    'mercury.postSetMeta',
+    'mercury',
+    debounce(() => {
+      hooks.doAction(
+        'mercuryCompletedTask',
+        getTask(currentTaskSlug),
+        getTask(nextTaskSlug)
+      )
+      wp.data.dispatch('core/editor').savePost()
+  }, 500));
+
+  console.log(nextTaskSlug);
+
 }
 
 /**

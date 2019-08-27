@@ -69,6 +69,7 @@ export function setMeta(field, value) {
 
   // Only update if value has changed.
   if (stringifyValue(value) !== oldValue) {
+    console.log(field, value, oldValue);
     /**
      * Hook fired before meta is set to allow modification before setting the value.
      *
@@ -95,6 +96,7 @@ export function setMeta(field, value) {
     /**
      * Hook fired after meta is set to perform logic as a response.
      *
+     * @todo maybe deprecate in favor of below.
      * @param {mixed} [newValue] New value for this field.
      * @param {mixed} [oldValue] Old value for this field.
      * @param {string} [field] Key of the field.
@@ -105,6 +107,23 @@ export function setMeta(field, value) {
       newValue,
       oldValue,
       field
+    );
+
+    /**
+     * Hook fired after meta is set for a specific field.
+     *
+     * @param {mixed} [newValue] New value for this field.
+     * @param {mixed} [oldValue] Old value for this field.
+     * @param {function} [complete] Trigger an action to indicate any async updates as a result of this meta change are complete.
+     * @type {mixed}
+     */
+    hooks.applyFilters(
+      `mercury.postSetMeta.${field}`,
+      newValue,
+      oldValue,
+      () => {
+        hooks.doAction('mercury.postSetMetaComplete', field);
+      }
     );
   }
 

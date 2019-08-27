@@ -123,6 +123,46 @@ export function setTaskStatus(taskSlug, status) {
   setMeta(`mercury_${taskSlug}_status`, status);
 }
 
+function waitForTaskFieldUpdates(taskSlug, callback) {
+  const task = getTask(taskSlug);
+  const {
+    hooks: {
+      filters,
+      addAction,
+    },
+  } = wp;
+  const completedFieldHooks = [];
+  const createHookName = (field) => `mercury.postSetMeta.${field.slug}`;
+  const fieldsWithHooks = task.fields.filter((field) => {
+    const hookName = createHookName(field);
+
+    return (
+      Object.keys(filters).includes(hookName) &&
+      filters[hookName].handlers.length
+    );
+  });
+
+  if (fieldsWithHooks.length) {
+    addAction(
+      'mercury.postSetMetaComplete',
+      'mercury.completeTask',
+      (field) => {
+        console.log('completed field hooks', completedFieldHooks);
+
+        if (! completedFieldHooks.includes(field.slug)) {
+          completedFieldHooks.push(field.slug);
+        }
+
+        if (fieldsWithHooks.length === completedFieldHooks.length) {
+          callback();
+        }
+      }
+    )
+  } else {
+    callback();
+  }
+}
+
 /**
  * Complete a task and transition to a new one.
  *
@@ -143,20 +183,26 @@ export function completeTask(currentTaskSlug, nextTaskSlug) {
   setInProgressTaskSlug(nextTaskSlug);
   setSelectedTaskSlug(nextTaskSlug);
 
-  /**
-   * Action fired as a task is completing.
-   *
-   * @param {object} [currentTask] Task completing.
-   * @param {object} [nextTask].   Next task.
-   */
-  hooks.doAction(
-    'mercuryCompletedTask',
-    getTask(currentTaskSlug),
-    getTask(nextTaskSlug)
-  );
+  // Make sure any async updates to fields in the next task are finished before saving.
+  waitForTaskFieldUpdates(
+    nextTaskSlug,
+    () => {
+      /**
+       * Action fired as a task is completing.
+       *
+       * @param {object} [currentTask] Task completing.
+       * @param {object} [nextTask]    Next task.
+       */
+      hooks.doAction(
+        'mercuryCompletedTask',
+        getTask(currentTaskSlug),
+        getTask(nextTaskSlug)
+      );
 
-  // Save the post.
-  wp.data.dispatch('core/editor').savePost();
+      // Save the post.
+      wp.data.dispatch('core/editor').savePost();
+    }
+  );
 }
 
 /**

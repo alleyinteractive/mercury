@@ -15,7 +15,7 @@ module.exports = function getDevServer(mode, env) {
         disableHostCheck: true,
         quiet: false,
         hot: true,
-        port: 8080,
+        port: 3000,
         noInfo: false,
         contentBase: '/build',
         stats: { colors: true },

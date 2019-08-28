@@ -106,7 +106,7 @@ function enqueue_scripts() {
 	) {
 		wp_enqueue_script(
 			'mercury-workflow-js',
-			'//localhost:8080/build/js/workflow.js',
+			'//localhost:3000/build/js/workflow.js',
 			[ 'wp-api-fetch' ],
 			MERCURY_VERSION,
 			true

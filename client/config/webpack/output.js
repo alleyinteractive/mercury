@@ -12,7 +12,7 @@ module.exports = function getOutput(mode) {
     case 'development':
       return {
         path: path.join(process.cwd(), 'build'),
-        publicPath: '//localhost:8080/build/',
+        publicPath: '//localhost:3000/build/',
         filename: 'js/[name].js',
       };
   }

@@ -63,7 +63,7 @@ export function setMetaGroup(meta) {
  * @param {string} field Meta field for which to set a new value.
  * @param {string} value New value for meta field.
  */
-export function setMeta(field, value) {
+export async function setMeta(field, value) {
   const { hooks } = wp;
   const oldValue = getUnparsedMeta(field);
 
@@ -100,15 +100,32 @@ export function setMeta(field, value) {
      * @param {string} [field] Key of the field.
      * @type {mixed}
      */
-    hooks.applyFilters(
+    const postSetMetaActions = hooks.applyFilters(
       'mercury.postSetMeta',
+      [],
       newValue,
       oldValue,
       field
     );
+
+    // Resolve all postSetMeta promises.
+    if (postSetMetaActions.length) {
+      Promise.all(postSetMetaActions)
+        .then((result) => {
+          hooks.doAction('mercury.postSetMetaComplete', field, result);
+        });
+    } else {
+      hooks.doAction('mercury.postSetMetaComplete', field, newValue);
+    }
   }
 
   return value;
+}
+
+export function createPostSetMetaHandler(handler) {
+  return (actions, newValue, oldValue, field) => (
+    actions.concat(handler(newValue, oldValue, field))
+  );
 }
 
 /**

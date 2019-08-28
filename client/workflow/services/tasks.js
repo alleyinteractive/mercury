@@ -1,4 +1,6 @@
 /* eslint-disable */
+import pull from 'lodash/pull';
+import isEqual from 'lodash/isEqual';
 import { task as defaultTaskState } from 'config/defaultState';
 import { getMeta, setMeta } from './meta';
 import { getActiveWorkflow } from './workflows'; // eslint-disable-line import/no-cycle
@@ -129,8 +131,11 @@ export function setTaskStatus(taskSlug, status) {
  * @param  {string} currentTaskSlug Slug of the task to complete.
  * @param  {string} nextTaskSlug    Slug of the task to transition to.
  */
-export function completeTask(currentTaskSlug, nextTaskSlug) {
+export async function completeTask(currentTaskSlug, nextTaskSlug) {
   const { hooks } = wp;
+  const nextTask = getTask(nextTaskSlug);
+  const { fields: newTaskFields } = nextTask;
+  const newTaskFieldSlugs = newTaskFields.map((field) => field.slug);
 
   // Update the post status.
   setPostStatus(nextTaskSlug);
@@ -143,20 +148,38 @@ export function completeTask(currentTaskSlug, nextTaskSlug) {
   setInProgressTaskSlug(nextTaskSlug);
   setSelectedTaskSlug(nextTaskSlug);
 
-  /**
-   * Action fired as a task is completing.
-   *
-   * @param {object} [currentTask] Task completing.
-   * @param {object} [nextTask].   Next task.
-   */
-  hooks.doAction(
-    'mercuryCompletedTask',
-    getTask(currentTaskSlug),
-    getTask(nextTaskSlug)
-  );
+  hooks.addAction(
+    'mercury.postSetMetaComplete',
+    'mercury.completeTask',
+    async (field) => {
+      pull(newTaskFieldSlugs, field);
 
-  // Save the post.
-  wp.data.dispatch('core/editor').savePost();
+      console.log(
+        'attempting post save',
+        hooks.actions['mercury.postSetMetaComplete'],
+        field,
+        newTaskFieldSlugs,
+      );
+
+      // Once all postSetMetaComplete actions are fired for next task fields, save.
+      if (! newTaskFieldSlugs.length) {
+        // Save the post.
+        await wp.data.dispatch('core/editor').savePost();
+
+        /**
+         * Action fired as a task is completing.
+         *
+         * @param {object} [currentTask] Task completing.
+         * @param {object} [nextTask]    Next task.
+         */
+        hooks.doAction(
+          'mercury.taskCompleted',
+          getTask(currentTaskSlug),
+          nextTask
+        );
+      }
+    }
+  )
 }
 
 /**

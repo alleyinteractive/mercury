@@ -160,6 +160,18 @@ export function completeTask(currentTaskSlug, nextTaskSlug) {
 }
 
 /**
+ * Get actual slug of the Task.
+ * 
+ * eg.: nutrition-copy-edit__label-of-the-action turns into
+ * nutrition-copy-edit
+ *
+ * @param  {string} nextTaskSlug    Slug of the task.
+ */
+export function getNextTaskActualSlug(nextTaskSlug) {
+  return nextTaskSlug.replace(/__.*/gi, '');
+}
+
+/**
  * Set the post status appropriately, given a task.
  *
  * @param  {string} taskSlug Slug of the task.

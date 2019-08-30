@@ -2,7 +2,11 @@ import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Formik } from 'formik';
 import { useInProgressTaskSlug } from 'hooks/tasks';
-import { completeTask, setPostStatus } from 'services/tasks';
+import {
+  completeTask,
+  setPostStatus,
+  getNextTaskActualSlug,
+} from 'services/tasks';
 import {
   setMetaGroup,
   getInitialValues,
@@ -47,7 +51,7 @@ const Task = (props) => {
         <Formik
           onSubmit={(values, actions) => {
             setMetaGroup(values);
-            completeTask(slug, values['next-task-slug']);
+            completeTask(slug, getNextTaskActualSlug(values['next-task-slug']));
             actions.setSubmitting(false);
           }}
           initialValues={initialValues}

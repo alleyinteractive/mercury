@@ -501,11 +501,31 @@ class Task {
 					'enable_redirect' => filter_var( $transition['enable_redirect'] ?? false, FILTER_VALIDATE_BOOLEAN ),
 					'label'           => $transition['label'] ?? '',
 					'redirect_url'    => $transition['redirect_url'] ?? '',
-					'slug'            => get_post_meta( absint( $transition['task_id'] ?? 0 ), 'slug', true ),
+					'slug'            => self::create_task_slug( $transition['task_id'], $transition['label'] ),
 				];
 			},
 			$transitions
 		);
+	}
+
+	/**
+	 * Create new task slug with label.
+	 *
+	 * @param int    $task_id Task ID.
+	 * @param string $label   Task Label.
+	 * @return string
+	 */
+	public static function create_task_slug( $task_id, $label ) : string {
+		$slug = get_post_meta( absint( $task_id ?? 0 ), 'slug', true );
+
+		if ( empty( $label ) ) {
+			return $slug;
+		}
+
+		// New slug with label title sanitized.
+		$slug = $slug . '__' . sanitize_title( $label );
+
+		return $slug;
 	}
 
 	/**

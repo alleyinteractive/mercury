@@ -501,7 +501,7 @@ class Task {
 					'enable_redirect' => filter_var( $transition['enable_redirect'] ?? false, FILTER_VALIDATE_BOOLEAN ),
 					'label'           => $transition['label'] ?? '',
 					'redirect_url'    => $transition['redirect_url'] ?? '',
-					'slug'            => self::create_task_slug( $transition['task_id'], $transition['label'] ),
+					'slug'            => self::create_task_slug( $transition['task_id'] ?? 0, $transition['label'] ?? '' ),
 				];
 			},
 			$transitions

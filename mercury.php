@@ -7,7 +7,7 @@
  * Author URI:      https://alley.co
  * Text Domain:     mercury
  * Domain Path:     /languages
- * Version:         1.1.12
+ * Version:         1.1.14
  *
  * @package         Mercury
  */
@@ -17,7 +17,7 @@ namespace Mercury;
 /**
  * Current version of Mercury.
  */
-define( 'MERCURY_VERSION', '1.1.13' );
+define( 'MERCURY_VERSION', '1.1.14' );
 
 /**
  * Filesystem path to Mercury.

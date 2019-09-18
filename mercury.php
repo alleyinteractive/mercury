@@ -134,8 +134,10 @@ function enqueue_scripts() {
 				'primaryDark' => $colors['primary_dark'] ?? false,
 				'secondary' => $colors['secondary'] ?? false,
 			],
+			// phpcs:disable
 			// Note: this can be removed in WP 5.3, and replaced with
 			// `wp.data.select('core').getCurrentUser()`
+			// phpcs:enable
 			'currentUser' => wp_get_current_user(),
 		]
 	);

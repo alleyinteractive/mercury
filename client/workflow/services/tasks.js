@@ -1,4 +1,3 @@
-/* eslint-disable */
 import { task as defaultTaskState } from 'config/defaultState';
 import { getMeta, setMeta } from './meta';
 import { getActiveWorkflow } from './workflows'; // eslint-disable-line import/no-cycle
@@ -56,6 +55,73 @@ export function getInProgressTaskSlug() {
 }
 
 /**
+ * Helper to set a task's default assignee value, if
+ * an assignee hasn't already been set.
+ *
+ * @param {string} slug Slug of the active workflow.
+ * @return {string} slug Updated value.
+ */
+export function maybeSetTaskDefaultAssignee(slug) {
+  // Return if no slug is passed.
+  if (! slug) {
+    return null;
+  }
+
+  // Return if we don't need to set a default.
+  if (getMeta(`mercury_${slug}_assignee_id`)) {
+    return null;
+  }
+
+  // Get the task data, and find the default assignee.
+  const task = getTask(slug);
+
+  if (! task) {
+    return null;
+  }
+
+  const { defaultAssignee } = task.assignees;
+
+  if (! defaultAssignee) {
+    return null;
+  }
+
+  switch (defaultAssignee) {
+    case 'self':
+      // Note: this localized data can be removed in WP 5.3,
+      // and replaced with:
+      // `wp.data.select('core').getCurrentUser()`
+      return setMeta(
+        `mercury_${slug}_assignee_id`,
+        window.mercurySettings.currentUser.ID || null
+      );
+
+    case 'author':
+      return setMeta(
+        `mercury_${slug}_assignee_id`,
+        wp.data.select('core/editor').getCurrentPostAttribute('author') || null
+      );
+
+    case 'user':
+      return setMeta(
+        `mercury_${slug}_assignee_id`,
+        task.assignees.defaultUser || null
+      );
+
+    case 'group':
+      return setMeta(
+        `mercury_${slug}_assignee_id`,
+        task.assignees.defaultGroup || null
+      );
+
+    case 'none':
+    default:
+      break;
+  }
+
+  return null;
+}
+
+/**
  * Helper to set the in progress task slug.
  *
  * @param {string} slug Slug of the active workflow.
@@ -63,6 +129,7 @@ export function getInProgressTaskSlug() {
  */
 export function setInProgressTaskSlug(slug) {
   if (getTask(slug)) {
+    maybeSetTaskDefaultAssignee(slug);
     return setMeta('mercury_in_progress_task_slug', slug);
   }
   return setDefaultInProgressTaskSlug();
@@ -161,7 +228,7 @@ export function completeTask(currentTaskSlug, nextTaskSlug) {
 
 /**
  * Get actual slug of the Task.
- * 
+ *
  * eg.: nutrition-copy-edit__label-of-the-action turns into
  * nutrition-copy-edit
  *

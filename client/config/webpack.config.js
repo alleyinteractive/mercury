@@ -56,5 +56,9 @@ module.exports = (env, argv) => {
     },
     output: config.getOutput(),
     devServer: config.getDevServer(),
+    externals: {
+      react: 'React',
+      'react-dom': 'ReactDOM',
+    },
   };
 };

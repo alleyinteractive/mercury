@@ -18,7 +18,9 @@
   },
   "globals": {
     "wp": true,
-    "lodash": true
+    "lodash": true,
+    "React": true,
+    "ReactDOM": true
   },
   // Do NOT change these rules
   "rules": {

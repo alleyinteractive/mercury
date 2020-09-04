@@ -22,7 +22,7 @@
     "lodash": "^4.17.11",
     "moment": "^2.24.0",
     "nanobus": "^4.4.0",
-    "papaparse": "^4.6.1",
+    "papaparse": "^5.2.0",
     "prop-types": "^15.6.2",
     "pubsub-js": "^1.7.0",
     "react": "^16.9.0",
